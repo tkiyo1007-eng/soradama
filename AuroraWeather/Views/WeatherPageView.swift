@@ -141,10 +141,8 @@ struct RadarCardButton: View {
 struct LoadingStateView: View {
     var body: some View {
         VStack(spacing: 16) {
-            Image(systemName: "cloud.sun.fill")
-                .symbolRenderingMode(.multicolor)
-                .font(.system(size: 56))
-                .symbolEffect(.pulse)
+            WeatherIconView(kind: .partlyCloudy, isDay: true)
+                .frame(width: 56, height: 56)
             Text("天気を取得しています…")
                 .font(.callout)
                 .foregroundStyle(.white.opacity(0.85))

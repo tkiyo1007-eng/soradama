@@ -83,8 +83,10 @@ struct DetailsGrid: View {
     }
 }
 
-// MARK: - 日の出・日の入りアーク
+// MARK: - 日の出・日の入りタイムライン
 
+/// 日の出から日の入りまでの経過を横一直線のタイムラインで示す独自デザイン。
+/// (Apple 純正「天気」アプリの半円アークとは異なる表現)
 struct SunArcView: View {
     let sunrise: Date
     let sunset: Date
@@ -98,48 +100,41 @@ struct SunArcView: View {
     }
 
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 10) {
+            HStack(spacing: 8) {
+                WeatherIconView(kind: .clear, isDay: true)
+                    .frame(width: 22, height: 22)
+                Text(progress >= 1 ? "日没しました" : "日中です")
+                    .font(.footnote.weight(.medium))
+                    .foregroundStyle(.white.opacity(0.85))
+                Spacer(minLength: 0)
+            }
+
             GeometryReader { proxy in
                 let width = proxy.size.width
-                let height = proxy.size.height
-                let arcCenter = CGPoint(x: width / 2, y: height)
-                let radius = min(width / 2 - 8, height - 6)
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(Color.white.opacity(0.18))
+                        .frame(height: 8)
+                    Capsule()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color(red: 1.0, green: 0.72, blue: 0.35), Color(red: 1.0, green: 0.88, blue: 0.55)],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: max(width * progress, 8), height: 8)
 
-                ZStack {
-                    // 地平線
-                    Path { path in
-                        path.move(to: CGPoint(x: 0, y: height - 0.5))
-                        path.addLine(to: CGPoint(x: width, y: height - 0.5))
-                    }
-                    .stroke(Color.white.opacity(0.25), lineWidth: 1)
-
-                    // アーク
-                    Path { path in
-                        path.addArc(center: arcCenter, radius: radius, startAngle: .degrees(180), endAngle: .degrees(0), clockwise: false)
-                    }
-                    .stroke(
-                        LinearGradient(
-                            colors: [Color(red: 1.0, green: 0.65, blue: 0.35), Color(red: 1.0, green: 0.85, blue: 0.45), Color(red: 1.0, green: 0.65, blue: 0.35)],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        ),
-                        style: StrokeStyle(lineWidth: 2.5, lineCap: .round, dash: [1, 5])
-                    )
-
-                    // 太陽の現在位置
-                    let angle = Double.pi * (1 - progress)
-                    let sunPosition = CGPoint(
-                        x: arcCenter.x + radius * cos(angle),
-                        y: arcCenter.y - radius * sin(angle)
-                    )
                     Circle()
-                        .fill(Color(red: 1.0, green: 0.88, blue: 0.55))
-                        .frame(width: 12, height: 12)
-                        .shadow(color: Color(red: 1.0, green: 0.8, blue: 0.4).opacity(0.9), radius: 8)
-                        .position(sunPosition)
+                        .fill(Color(red: 1.0, green: 0.86, blue: 0.5))
+                        .frame(width: 16, height: 16)
+                        .shadow(color: Color(red: 1.0, green: 0.8, blue: 0.4).opacity(0.8), radius: 6)
+                        .offset(x: (width - 16) * progress)
                 }
+                .frame(maxHeight: .infinity, alignment: .center)
             }
-            .frame(height: 62)
+            .frame(height: 16)
 
             HStack {
                 VStack(alignment: .leading, spacing: 1) {
@@ -162,11 +157,15 @@ struct SunArcView: View {
             }
         }
         .frame(minHeight: 110)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("日の出 \(sunrise.timeLabel(in: timeZone))、日の入り \(sunset.timeLabel(in: timeZone))")
     }
 }
 
-// MARK: - 風向コンパス
+// MARK: - 風向インジケーター
 
+/// 風向を示す矢印バッジ。(Apple 純正「天気」アプリの目盛り付きコンパスとは異なる、
+/// バッジ+テキストのシンプルな表現)
 struct WindCompassView: View {
     let direction: Double // 風が「吹いてくる」方角(度)
     let speed: Double     // m/s
@@ -180,35 +179,23 @@ struct WindCompassView: View {
     }
 
     var body: some View {
-        HStack {
-            Spacer(minLength: 0)
+        HStack(spacing: 16) {
             ZStack {
-                // 目盛り
-                ForEach(0..<36, id: \.self) { tick in
-                    Capsule()
-                        .fill(Color.white.opacity(tick % 9 == 0 ? 0.7 : 0.25))
-                        .frame(width: 1.5, height: tick % 9 == 0 ? 8 : 4)
-                        .offset(y: -46)
-                        .rotationEffect(.degrees(Double(tick) * 10))
-                }
-                // 方位ラベル
-                ForEach([(0, "N"), (90, "E"), (180, "S"), (270, "W")], id: \.0) { degreesValue, label in
-                    Text(label)
-                        .font(.caption2.weight(.bold))
-                        .foregroundStyle(.white.opacity(degreesValue == 0 ? 1 : 0.55))
-                        .offset(y: -33)
-                        .rotationEffect(.degrees(Double(degreesValue)))
-                }
-                // 矢印(風が吹いていく方向を指す)
-                Image(systemName: "location.north.fill")
-                    .font(.system(size: 15))
+                Circle()
+                    .fill(Color.white.opacity(0.14))
+                Image(systemName: "arrow.up")
+                    .font(.system(size: 22, weight: .bold))
                     .foregroundStyle(Color(red: 0.55, green: 0.85, blue: 1.0))
-                    .offset(y: -46)
                     .rotationEffect(.degrees(direction + 180))
                     .animation(.spring(duration: 1.0), value: direction)
+            }
+            .frame(width: 52, height: 52)
 
-                // 中心の風速
-                VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(Self.directionName(direction))
+                    .font(.callout.weight(.semibold))
+                    .foregroundStyle(.white)
+                HStack(spacing: 3) {
                     Text(String(format: "%.0f", speed))
                         .font(.system(size: 24, weight: .semibold, design: .rounded))
                         .foregroundStyle(.white)
@@ -217,16 +204,18 @@ struct WindCompassView: View {
                         .foregroundStyle(.white.opacity(0.6))
                 }
             }
-            .frame(width: 110, height: 110)
             Spacer(minLength: 0)
         }
+        .frame(maxWidth: .infinity, minHeight: 110, alignment: .leading)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(Self.directionName(direction))の風、秒速\(Int(speed.rounded()))メートル")
     }
 }
 
-// MARK: - UV ゲージ
+// MARK: - UV インデックスリング
 
+/// UV 指数を円形リングで示す独自デザイン。
+/// (Apple 純正「天気」アプリの横棒ゲージとは異なるリング表現)
 struct UVGaugeView: View {
     let value: Double
 
@@ -240,45 +229,36 @@ struct UVGaugeView: View {
         }
     }
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("\(Int(value.rounded()))")
-                .font(.system(size: 34, weight: .semibold, design: .rounded))
-                .foregroundStyle(.white)
-            Text(level.0)
-                .font(.callout.weight(.semibold))
-                .foregroundStyle(level.1)
+    private var ringProgress: Double {
+        (value / 11).clamped(to: 0...1)
+    }
 
-            GeometryReader { proxy in
-                let position = (value / 11).clamped(to: 0...1) * proxy.size.width
-                ZStack(alignment: .leading) {
-                    Capsule()
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    Color(red: 0.45, green: 0.85, blue: 0.55),
-                                    Color(red: 1.0, green: 0.85, blue: 0.40),
-                                    Color(red: 1.0, green: 0.60, blue: 0.30),
-                                    Color(red: 0.95, green: 0.35, blue: 0.30),
-                                    Color(red: 0.75, green: 0.40, blue: 0.95),
-                                ],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
-                        .frame(height: 5)
-                    Circle()
-                        .fill(.white)
-                        .frame(width: 9, height: 9)
-                        .overlay(Circle().stroke(Color.black.opacity(0.3), lineWidth: 1))
-                        .offset(x: position - 4.5)
-                }
-                .frame(maxHeight: .infinity, alignment: .center)
+    var body: some View {
+        HStack(spacing: 16) {
+            ZStack {
+                Circle()
+                    .stroke(Color.white.opacity(0.18), lineWidth: 6)
+                Circle()
+                    .trim(from: 0, to: ringProgress)
+                    .stroke(level.1, style: StrokeStyle(lineWidth: 6, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
+                Text("\(Int(value.rounded()))")
+                    .font(.system(size: 20, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white)
             }
-            .frame(height: 10)
+            .frame(width: 52, height: 52)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(level.0)
+                    .font(.callout.weight(.semibold))
+                    .foregroundStyle(level.1)
+                Text("UV指数")
+                    .font(.caption2)
+                    .foregroundStyle(.white.opacity(0.6))
+            }
             Spacer(minLength: 0)
         }
-        .frame(maxWidth: .infinity, minHeight: 110, alignment: .topLeading)
+        .frame(maxWidth: .infinity, minHeight: 110, alignment: .leading)
     }
 }
 

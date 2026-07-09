@@ -48,10 +48,8 @@ private struct DailyRow: View {
                 .frame(width: 44, alignment: .leading)
 
             VStack(spacing: 1) {
-                Image(systemName: day.kind.symbolName(isDay: true))
-                    .symbolRenderingMode(.multicolor)
-                    .font(.body)
-                    .frame(height: 22)
+                WeatherIconView(kind: day.kind, isDay: true)
+                    .frame(width: 22, height: 22)
                 if let probability = day.precipitationProbability, probability >= 20 {
                     Text("\(Int(probability))%")
                         .font(.caption2.weight(.semibold))

@@ -16,10 +16,8 @@ struct HourlyForecastCard: View {
                                 .foregroundStyle(.white.opacity(index == 0 ? 1 : 0.75))
 
                             VStack(spacing: 3) {
-                                Image(systemName: hour.kind.symbolName(isDay: hour.isDay))
-                                    .symbolRenderingMode(.multicolor)
-                                    .font(.title3)
-                                    .frame(height: 26)
+                                WeatherIconView(kind: hour.kind, isDay: hour.isDay)
+                                    .frame(width: 26, height: 26)
 
                                 if let probability = hour.precipitationProbability, probability >= 20 {
                                     Text("\(Int(probability))%")

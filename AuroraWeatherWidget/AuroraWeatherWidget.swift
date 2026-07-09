@@ -118,8 +118,8 @@ struct AuroraWeatherWidgetView: View {
 
     private var circularView: some View {
         VStack(spacing: -1) {
-            Image(systemName: kind.symbolName(isDay: isDay))
-                .font(.system(size: 16, weight: .medium))
+            WeatherIconView(kind: kind, isDay: isDay)
+                .frame(width: 16, height: 16)
             Text(degrees(entry.weather?.temperature))
                 .font(.system(size: 17, weight: .semibold, design: .rounded))
         }
@@ -133,8 +133,8 @@ struct AuroraWeatherWidgetView: View {
                 .opacity(0.8)
                 .lineLimit(1)
             HStack(spacing: 5) {
-                Image(systemName: kind.symbolName(isDay: isDay))
-                    .font(.caption)
+                WeatherIconView(kind: kind, isDay: isDay)
+                    .frame(width: 14, height: 14)
                 Text(degrees(entry.weather?.temperature))
                     .font(.headline)
                     .widgetAccentable()
@@ -160,9 +160,8 @@ struct AuroraWeatherWidgetView: View {
 
             Spacer(minLength: 0)
 
-            Image(systemName: kind.symbolName(isDay: isDay))
-                .symbolRenderingMode(.multicolor)
-                .font(.title3)
+            WeatherIconView(kind: kind, isDay: isDay)
+                .frame(width: 22, height: 22)
             Text(kind.label)
                 .font(.caption.weight(.medium))
                 .lineLimit(1)
@@ -184,9 +183,8 @@ struct AuroraWeatherWidgetView: View {
                     .lineLimit(1)
                 Text(degrees(entry.weather?.temperature))
                     .font(.system(size: 40, weight: .light))
-                Image(systemName: kind.symbolName(isDay: isDay))
-                    .symbolRenderingMode(.multicolor)
-                    .font(.title3)
+                WeatherIconView(kind: kind, isDay: isDay)
+                    .frame(width: 22, height: 22)
                 Text(kind.label)
                     .font(.caption.weight(.medium))
                     .lineLimit(1)
@@ -202,9 +200,8 @@ struct AuroraWeatherWidgetView: View {
                             Text(hour.date.hourLabel(in: weather.timeZone))
                                 .font(.caption2)
                                 .opacity(0.8)
-                            Image(systemName: hour.kind.symbolName(isDay: hour.isDay))
-                                .symbolRenderingMode(.multicolor)
-                                .font(.callout)
+                            WeatherIconView(kind: hour.kind, isDay: hour.isDay)
+                                .frame(width: 18, height: 18)
                             Text("\(Int(hour.temperature.rounded()))°")
                                 .font(.caption.weight(.semibold))
                         }

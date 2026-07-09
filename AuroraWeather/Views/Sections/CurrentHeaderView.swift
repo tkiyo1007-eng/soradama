@@ -38,8 +38,8 @@ struct CurrentHeaderView: View {
                         .contentTransition(.numericText())
 
                     HStack(spacing: 8) {
-                        Image(systemName: weather.kind.symbolName(isDay: weather.isDay))
-                            .symbolRenderingMode(.multicolor)
+                        WeatherIconView(kind: weather.kind, isDay: weather.isDay)
+                            .frame(width: 26, height: 26)
                         Text(weather.kind.label)
                     }
                     .font(.title3.weight(.medium))
