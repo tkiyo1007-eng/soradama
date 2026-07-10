@@ -1,71 +1,78 @@
 import SwiftUI
 
-/// 詳細情報のグリッド: 日の出アーク・風向コンパス・UV・湿度・体感温度・気圧・視程
+/// 詳細情報の横スクロールカルーセル: 傘指数・体感温度・UV・風・湿度(視程含む)・気圧・日の出アーク
+///
+/// Apple 純正「天気」アプリの固定2列グリッドとは異なり、横スクロールの
+/// カード列として提示する。先頭に純正アプリには無い「傘指数」を独自項目として置き、
+/// 項目の組み合わせ自体も純正アプリの詳細グリッドと一致しないようにしている。
 struct DetailsGrid: View {
     let weather: WeatherBundle
     let degrees: (Double) -> String
 
-    private let columns = [GridItem(.flexible(), spacing: 14), GridItem(.flexible(), spacing: 14)]
+    private let cardWidth: CGFloat = 176
 
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 14) {
-            GlassCard(title: "日の出・日の入り", systemImage: "sunrise") {
-                SunArcView(sunrise: weather.sunrise, sunset: weather.sunset, now: Date(), timeZone: weather.timeZone)
-            }
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel("日の出 \(weather.sunrise.timeLabel(in: weather.timeZone))、日の入り \(weather.sunset.timeLabel(in: weather.timeZone))")
-            GlassCard(title: "風", systemImage: "wind") {
-                WindCompassView(direction: weather.windDirection, speed: weather.windSpeed)
-            }
-            GlassCard(title: "UV指数", systemImage: "sun.max") {
-                UVGaugeView(value: weather.uvIndex)
-            }
-            GlassCard(title: "湿度", systemImage: "humidity") {
-                HumidityView(value: weather.humidity)
-            }
-            GlassCard(title: "体感温度", systemImage: "thermometer.medium") {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(degrees(weather.apparentTemperature))
-                        .font(.system(size: 34, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.white)
-                    Text(apparentComment)
-                        .font(.footnote)
-                        .foregroundStyle(.white.opacity(0.7))
-                    Spacer(minLength: 0)
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 14) {
+                GlassCard(title: "傘指数", systemImage: "umbrella") {
+                    UmbrellaIndexView(probability: weather.days.first?.precipitationProbability)
                 }
-                .frame(maxWidth: .infinity, minHeight: 110, alignment: .topLeading)
-            }
-            GlassCard(title: "気圧", systemImage: "gauge.with.needle") {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("\(Int(weather.pressure.rounded()))")
-                        .font(.system(size: 34, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.white)
-                    + Text(" hPa")
-                        .font(.footnote.weight(.medium))
-                        .foregroundStyle(.white.opacity(0.7))
-                    Text(pressureComment)
-                        .font(.footnote)
-                        .foregroundStyle(.white.opacity(0.7))
-                    Spacer(minLength: 0)
+                .frame(width: cardWidth)
+
+                GlassCard(title: "体感温度", systemImage: "thermometer.medium") {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(degrees(weather.apparentTemperature))
+                            .font(.system(size: 30, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.white)
+                        Text(apparentComment)
+                            .font(.footnote)
+                            .foregroundStyle(.white.opacity(0.7))
+                        Spacer(minLength: 0)
+                    }
+                    .frame(minHeight: 96, alignment: .topLeading)
                 }
-                .frame(maxWidth: .infinity, minHeight: 110, alignment: .topLeading)
-            }
-        }
-        if let visibility = weather.visibility {
-            GlassCard(title: "視程", systemImage: "eye") {
-                HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text(String(format: "%.1f", visibility / 1000))
-                        .font(.system(size: 34, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.white)
-                    Text("km")
-                        .font(.footnote.weight(.medium))
-                        .foregroundStyle(.white.opacity(0.7))
-                    Spacer()
-                    Text(visibility >= 10_000 ? "とてもクリアな視界です" : visibility >= 4_000 ? "おおむね良好な視界です" : "視界が悪くなっています")
-                        .font(.footnote)
-                        .foregroundStyle(.white.opacity(0.7))
+                .frame(width: cardWidth)
+
+                GlassCard(title: "UV指数", systemImage: "sun.max") {
+                    UVGaugeView(value: weather.uvIndex)
                 }
+                .frame(width: cardWidth)
+
+                GlassCard(title: "風", systemImage: "wind") {
+                    WindCompassView(direction: weather.windDirection, speed: weather.windSpeed)
+                }
+                .frame(width: cardWidth)
+
+                GlassCard(title: "湿度", systemImage: "humidity") {
+                    HumidityView(value: weather.humidity, visibility: weather.visibility)
+                }
+                .frame(width: cardWidth)
+
+                GlassCard(title: "気圧", systemImage: "gauge.with.needle") {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("\(Int(weather.pressure.rounded()))")
+                            .font(.system(size: 30, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.white)
+                        + Text(" hPa")
+                            .font(.footnote.weight(.medium))
+                            .foregroundStyle(.white.opacity(0.7))
+                        Text(pressureComment)
+                            .font(.footnote)
+                            .foregroundStyle(.white.opacity(0.7))
+                        Spacer(minLength: 0)
+                    }
+                    .frame(minHeight: 96, alignment: .topLeading)
+                }
+                .frame(width: cardWidth)
+
+                GlassCard(title: "日の出・日の入り", systemImage: "sunrise") {
+                    SunArcView(sunrise: weather.sunrise, sunset: weather.sunset, now: Date(), timeZone: weather.timeZone)
+                }
+                .frame(width: cardWidth * 1.4)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("日の出 \(weather.sunrise.timeLabel(in: weather.timeZone))、日の入り \(weather.sunset.timeLabel(in: weather.timeZone))")
             }
+            .padding(.vertical, 2)
         }
     }
 
@@ -80,6 +87,41 @@ struct DetailsGrid: View {
         if weather.pressure >= 1020 { return "高気圧・安定した天気" }
         if weather.pressure <= 1005 { return "低気圧・天気の崩れに注意" }
         return "標準的な気圧です"
+    }
+}
+
+// MARK: - 傘指数(降水確率から「傘が要るか」を一言で伝える、そらだま独自の項目)
+
+struct UmbrellaIndexView: View {
+    let probability: Double?
+
+    private var judgement: (String, Color) {
+        guard let probability else { return ("情報なし", Color.white.opacity(0.6)) }
+        switch probability {
+        case ..<20: return ("不要でしょう", Color(red: 0.55, green: 0.85, blue: 0.6))
+        case 20..<50: return ("念のため持って", Color(red: 1.0, green: 0.82, blue: 0.4))
+        default: return ("傘が必須です", Color(red: 0.55, green: 0.75, blue: 1.0))
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline, spacing: 2) {
+                Text("\(Int((probability ?? 0).rounded()))")
+                    .font(.system(size: 30, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white)
+                Text("%")
+                    .font(.footnote.weight(.medium))
+                    .foregroundStyle(.white.opacity(0.7))
+            }
+            Text(judgement.0)
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(judgement.1)
+            Spacer(minLength: 0)
+        }
+        .frame(minHeight: 96, alignment: .topLeading)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("今日の降水確率\(Int((probability ?? 0).rounded()))パーセント、\(judgement.0)")
     }
 }
 
@@ -156,7 +198,7 @@ struct SunArcView: View {
                 }
             }
         }
-        .frame(minHeight: 110)
+        .frame(minHeight: 96)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("日の出 \(sunrise.timeLabel(in: timeZone))、日の入り \(sunset.timeLabel(in: timeZone))")
     }
@@ -206,7 +248,7 @@ struct WindCompassView: View {
             }
             Spacer(minLength: 0)
         }
-        .frame(maxWidth: .infinity, minHeight: 110, alignment: .leading)
+        .frame(minHeight: 96, alignment: .leading)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(Self.directionName(direction))の風、秒速\(Int(speed.rounded()))メートル")
     }
@@ -258,19 +300,25 @@ struct UVGaugeView: View {
             }
             Spacer(minLength: 0)
         }
-        .frame(maxWidth: .infinity, minHeight: 110, alignment: .leading)
+        .frame(minHeight: 96, alignment: .leading)
     }
 }
 
-// MARK: - 湿度
+// MARK: - 湿度(視程を併記)
 
 struct HumidityView: View {
     let value: Double
+    var visibility: Double? = nil
+
+    private var visibilityLabel: String? {
+        guard let visibility else { return nil }
+        return String(format: "視程 %.1fkm", visibility / 1000)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("\(Int(value.rounded()))%")
-                .font(.system(size: 34, weight: .semibold, design: .rounded))
+                .font(.system(size: 30, weight: .semibold, design: .rounded))
                 .foregroundStyle(.white)
 
             GeometryReader { proxy in
@@ -295,8 +343,15 @@ struct HumidityView: View {
             Text(value >= 75 ? "蒸し暑く感じられます" : value <= 35 ? "乾燥しています" : "快適な湿度です")
                 .font(.footnote)
                 .foregroundStyle(.white.opacity(0.7))
+            if let visibilityLabel {
+                Text(visibilityLabel)
+                    .font(.caption2)
+                    .foregroundStyle(.white.opacity(0.55))
+            }
             Spacer(minLength: 0)
         }
-        .frame(maxWidth: .infinity, minHeight: 110, alignment: .topLeading)
+        .frame(minHeight: 96, alignment: .topLeading)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("湿度\(Int(value.rounded()))パーセント" + (visibilityLabel.map { "、\($0)" } ?? ""))
     }
 }

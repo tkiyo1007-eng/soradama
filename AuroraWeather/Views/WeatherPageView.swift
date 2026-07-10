@@ -57,11 +57,12 @@ struct WeatherPageView: View {
                 Group {
                     HourlyForecastCard(weather: weather, degrees: viewModel.degrees)
 
+                    DetailsGrid(weather: weather, degrees: viewModel.degrees)
+
                     RadarCardButton { showRadar = true }
 
                     TemperatureChartCard(weather: weather, units: viewModel.units)
                     DailyForecastCard(weather: weather, degrees: viewModel.degrees)
-                    DetailsGrid(weather: weather, degrees: viewModel.degrees)
 
                     Text("データ提供: Open-Meteo.com / RainViewer.com")
                         .font(.caption2)

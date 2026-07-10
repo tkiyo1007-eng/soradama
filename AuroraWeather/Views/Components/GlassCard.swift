@@ -1,11 +1,15 @@
 import SwiftUI
 
-/// アプリ全体で使うガラスモーフィズムのカード。
-/// うっすらとしたハイライトの縁取りで、背景のグラデーションに溶け込む。
+/// 「そらだま」ブランドのカード。
+/// Apple 純正「天気」アプリの均一な白フチ磨りガラスとは異なり、
+/// 空色〜藍色のグラデーション縁取りと差し色のシャドウで独自のトーンを出す。
 struct GlassCard<Content: View>: View {
     var title: String?
     var systemImage: String?
     @ViewBuilder var content: Content
+
+    private let accentTop = Color(red: 0.55, green: 0.80, blue: 1.0)
+    private let accentBottom = Color(red: 0.42, green: 0.36, blue: 0.95)
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -19,25 +23,38 @@ struct GlassCard<Content: View>: View {
                         .font(.footnote.weight(.semibold))
                         .kerning(1.5)
                 }
-                .foregroundStyle(.white.opacity(0.65))
+                .foregroundStyle(accentTop.opacity(0.85))
             }
             content
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .background(
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .fill(.thinMaterial)
+        )
+        .background(
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [accentTop.opacity(0.22), accentBottom.opacity(0.18)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+        )
         .overlay(
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
                 .strokeBorder(
                     LinearGradient(
-                        colors: [.white.opacity(0.35), .white.opacity(0.05)],
+                        colors: [accentTop.opacity(0.55), accentBottom.opacity(0.4)],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ),
-                    lineWidth: 1
+                    lineWidth: 1.2
                 )
         )
-        .shadow(color: .black.opacity(0.18), radius: 18, y: 10)
+        .shadow(color: accentBottom.opacity(0.28), radius: 18, y: 10)
     }
 }
 
