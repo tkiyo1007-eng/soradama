@@ -1,7 +1,11 @@
 import SwiftUI
 
-/// 天候と昼夜に応じて変化する、アプリ全体の背景。
-/// グラデーション + 太陽/月の光 + 流れる雲 + パーティクルを重ねる。
+/// 「そらだま」ブランドの背景。
+///
+/// Apple 純正「天気」アプリは画面全体を"写実的な空"として再現する
+/// (太陽の光条・満天の星・輪郭のぼやけた雲塊が画面を横切る・雷雨時は画面全体が閃光)。
+/// そらだまはこれとは異なる視覚言語を採る: 天候はヘッダー背後の一つの「玉(オーブ)」に
+/// 集約して表現し、画面全体を写実的な空として演出することはしない。
 struct SkyBackground: View {
     let kind: WeatherKind
     let isDay: Bool
@@ -18,27 +22,10 @@ struct SkyBackground: View {
             .animation(.easeInOut(duration: 1.2), value: kind)
             .animation(.easeInOut(duration: 1.2), value: isDay)
 
-            if isDay && (kind == .clear || kind == .partlyCloudy) {
-                SunGlow()
-            }
-            if !isDay {
-                if !reduceMotion {
-                    StarField(intensity: kind == .clear ? 1.0 : 0.35)
-                }
-                if kind == .clear || kind == .partlyCloudy {
-                    MoonView()
-                }
-            }
-            if kind.hasCloudLayer {
-                if reduceMotion {
-                    StaticClouds(dark: !isDay || kind == .thunderstorm)
-                } else {
-                    DriftingClouds(dark: !isDay || kind == .thunderstorm)
-                }
-            }
-            if kind == .thunderstorm && !reduceMotion {
-                LightningFlash()
-            }
+            RibbonDrift(dark: !isDay || kind == .thunderstorm, reduceMotion: reduceMotion)
+
+            OrbMotif(kind: kind, isDay: isDay, reduceMotion: reduceMotion)
+
             if !reduceMotion {
                 WeatherParticles(kind: kind.particle)
             }
@@ -47,115 +34,72 @@ struct SkyBackground: View {
     }
 }
 
-// MARK: - 静止した雲(視差効果を減らす設定時)
+// MARK: - 空玉(そらだま)オーブ — 天候をひとつの玉に集約して表現する独自モチーフ
 
-private struct StaticClouds: View {
-    let dark: Bool
+/// Apple 純正の「写実的な太陽/月/星空」の代わりに、天候を一つの発光する玉で抽象的に示す。
+/// 玉の色・輝き・内側のきらめきが天候と昼夜で変化する。
+private struct OrbMotif: View {
+    let kind: WeatherKind
+    let isDay: Bool
+    let reduceMotion: Bool
 
-    var body: some View {
-        GeometryReader { proxy in
-            let width = proxy.size.width
-            ZStack {
-                cloudBlob(width: width * 1.1, height: 130, opacity: dark ? 0.22 : 0.5)
-                    .position(x: width * 0.35, y: proxy.size.height * 0.10)
-                cloudBlob(width: width * 0.9, height: 110, opacity: dark ? 0.16 : 0.38)
-                    .position(x: width * 0.75, y: proxy.size.height * 0.20)
-            }
+    private var glowColor: Color {
+        switch (kind, isDay) {
+        case (.clear, true), (.partlyCloudy, true):
+            return Color(red: 1.0, green: 0.86, blue: 0.55)
+        case (.clear, false), (.partlyCloudy, false):
+            return Color(red: 0.70, green: 0.78, blue: 1.0)
+        case (.thunderstorm, _):
+            return Color(red: 0.85, green: 0.70, blue: 1.0)
+        default:
+            return Color.white
         }
-        .allowsHitTesting(false)
     }
-
-    private func cloudBlob(width: Double, height: Double, opacity: Double) -> some View {
-        Ellipse()
-            .fill(dark ? Color(white: 0.65) : Color.white)
-            .frame(width: width, height: height)
-            .blur(radius: 42)
-            .opacity(opacity)
-    }
-}
-
-// MARK: - 太陽の光
-
-private struct SunGlow: View {
-    var body: some View {
-        GeometryReader { proxy in
-            let center = CGPoint(x: proxy.size.width * 0.82, y: proxy.size.height * 0.10)
-            ZStack {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [Color.white.opacity(0.85), Color.yellow.opacity(0.35), .clear],
-                            center: .center,
-                            startRadius: 6,
-                            endRadius: 190
-                        )
-                    )
-                    .frame(width: 380, height: 380)
-                    .position(center)
-                    .blendMode(.screen)
-            }
-        }
-        .allowsHitTesting(false)
-    }
-}
-
-// MARK: - 月
-
-private struct MoonView: View {
-    var body: some View {
-        GeometryReader { proxy in
-            let center = CGPoint(x: proxy.size.width * 0.80, y: proxy.size.height * 0.11)
-            ZStack {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [Color.white.opacity(0.30), .clear],
-                            center: .center,
-                            startRadius: 20,
-                            endRadius: 120
-                        )
-                    )
-                    .frame(width: 240, height: 240)
-                    .position(center)
-                Circle()
-                    .fill(Color(red: 0.95, green: 0.95, blue: 0.88))
-                    .frame(width: 54, height: 54)
-                    .overlay(
-                        // クレーター
-                        ZStack {
-                            Circle().fill(Color.black.opacity(0.08)).frame(width: 12, height: 12).offset(x: -9, y: -6)
-                            Circle().fill(Color.black.opacity(0.06)).frame(width: 8, height: 8).offset(x: 10, y: 8)
-                            Circle().fill(Color.black.opacity(0.05)).frame(width: 6, height: 6).offset(x: 4, y: -12)
-                        }
-                    )
-                    .position(center)
-                    .shadow(color: .white.opacity(0.45), radius: 22)
-            }
-        }
-        .allowsHitTesting(false)
-    }
-}
-
-// MARK: - 星空
-
-private struct StarField: View {
-    let intensity: Double
 
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 12.0)) { timeline in
-            Canvas { context, size in
-                let time = timeline.date.timeIntervalSinceReferenceDate
-                var generator = SeededRandom(seed: 42)
-                for _ in 0..<90 {
-                    let x = generator.next() * size.width
-                    let y = generator.next() * size.height * 0.55
-                    let radius = 0.6 + generator.next() * 1.3
-                    let phase = generator.next() * .pi * 2
-                    let speed = 0.4 + generator.next() * 1.1
-                    let twinkle = (sin(time * speed + phase) + 1) / 2
-                    let opacity = (0.25 + twinkle * 0.75) * intensity
-                    let rect = CGRect(x: x - radius, y: y - radius, width: radius * 2, height: radius * 2)
-                    context.fill(Path(ellipseIn: rect), with: .color(.white.opacity(opacity)))
+            GeometryReader { proxy in
+                let time = reduceMotion ? 0 : timeline.date.timeIntervalSinceReferenceDate
+                let pulse = reduceMotion ? 0 : (sin(time * 0.6) + 1) / 2
+                let center = CGPoint(x: proxy.size.width * 0.80, y: proxy.size.height * 0.11)
+
+                ZStack {
+                    // 玉の外周のにじみ
+                    Circle()
+                        .fill(
+                            RadialGradient(
+                                colors: [glowColor.opacity(0.55), glowColor.opacity(0.12), .clear],
+                                center: .center,
+                                startRadius: 4,
+                                endRadius: 150 + pulse * 14
+                            )
+                        )
+                        .frame(width: 300, height: 300)
+                        .position(center)
+                        .blendMode(.screen)
+
+                    // 玉本体(ガラス玉のような質感)
+                    Circle()
+                        .fill(
+                            RadialGradient(
+                                colors: [Color.white.opacity(0.9), glowColor.opacity(0.7), glowColor.opacity(0.25)],
+                                center: UnitPoint(x: 0.35, y: 0.3),
+                                startRadius: 2,
+                                endRadius: 46
+                            )
+                        )
+                        .frame(width: 58, height: 58)
+                        .overlay(
+                            Circle()
+                                .strokeBorder(Color.white.opacity(0.5), lineWidth: 1)
+                        )
+                        .position(center)
+                        .shadow(color: glowColor.opacity(0.6), radius: 16 + pulse * 6)
+
+                    // 玉の中のきらめき(満天の星ではなく、玉の周りだけの少数のきらめき)
+                    if !isDay {
+                        SparkleCluster(center: center, time: time, reduceMotion: reduceMotion)
+                    }
                 }
             }
         }
@@ -163,68 +107,72 @@ private struct StarField: View {
     }
 }
 
-// MARK: - 流れる雲
+/// 玉の周りだけに漂う数個のきらめき。画面全体を覆う星空ではない点が Apple 純正との違い。
+private struct SparkleCluster: View {
+    let center: CGPoint
+    let time: TimeInterval
+    let reduceMotion: Bool
 
-private struct DriftingClouds: View {
+    var body: some View {
+        Canvas { context, _ in
+            var generator = SeededRandom(seed: 11)
+            for _ in 0..<10 {
+                let angle = generator.next() * .pi * 2
+                let radius = 40 + generator.next() * 70
+                let x = center.x + cos(angle) * radius
+                let y = center.y + sin(angle) * radius * 0.7
+                let phase = generator.next() * .pi * 2
+                let twinkle = reduceMotion ? 0.6 : (sin(time * 1.4 + phase) + 1) / 2
+                let dotRadius = 1.0 + generator.next() * 1.4
+                let rect = CGRect(x: x - dotRadius, y: y - dotRadius, width: dotRadius * 2, height: dotRadius * 2)
+                context.fill(Path(ellipseIn: rect), with: .color(.white.opacity(0.25 + twinkle * 0.6)))
+            }
+        }
+        .allowsHitTesting(false)
+    }
+}
+
+// MARK: - 帯状のリボン雲 — Apple 純正のぼかし楕円の雲塊とは異なる、細い光の帯の表現
+
+private struct RibbonDrift: View {
     let dark: Bool
+    let reduceMotion: Bool
 
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 20.0)) { timeline in
             GeometryReader { proxy in
-                let time = timeline.date.timeIntervalSinceReferenceDate
+                let time = reduceMotion ? 0 : timeline.date.timeIntervalSinceReferenceDate
                 let width = proxy.size.width
+
                 ZStack {
-                    cloudBlob(width: width * 1.1, height: 130, opacity: dark ? 0.22 : 0.5)
-                        .position(
-                            x: drift(time: time, speed: 9, span: width + 400) - 200,
-                            y: proxy.size.height * 0.10
-                        )
-                    cloudBlob(width: width * 0.9, height: 110, opacity: dark ? 0.16 : 0.38)
-                        .position(
-                            x: width - (drift(time: time, speed: 6, span: width + 360) - 180),
-                            y: proxy.size.height * 0.20
-                        )
-                    cloudBlob(width: width * 0.7, height: 90, opacity: dark ? 0.12 : 0.30)
-                        .position(
-                            x: drift(time: time, speed: 4, span: width + 300) - 150,
-                            y: proxy.size.height * 0.32
-                        )
+                    ribbon(width: width, time: time, speed: 7, y: 90, thickness: 22, opacity: dark ? 0.10 : 0.22)
+                    ribbon(width: width, time: time, speed: -4.5, y: 165, thickness: 14, opacity: dark ? 0.08 : 0.16)
+                    ribbon(width: width, time: time, speed: 3, y: 235, thickness: 10, opacity: dark ? 0.06 : 0.12)
                 }
             }
         }
         .allowsHitTesting(false)
     }
 
-    private func drift(time: TimeInterval, speed: Double, span: Double) -> Double {
-        (time * speed).truncatingRemainder(dividingBy: span)
-    }
-
-    private func cloudBlob(width: Double, height: Double, opacity: Double) -> some View {
-        Ellipse()
-            .fill(dark ? Color(white: 0.65) : Color.white)
-            .frame(width: width, height: height)
-            .blur(radius: 42)
-            .opacity(opacity)
-    }
-}
-
-// MARK: - 稲光
-
-private struct LightningFlash: View {
-    var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 10.0)) { timeline in
-            let time = timeline.date.timeIntervalSinceReferenceDate
-            // 約 6 秒周期で 0.25 秒だけ閃光を出す
-            let cycle = time.truncatingRemainder(dividingBy: 6.3)
-            let flash = cycle < 0.25 ? (0.25 - cycle) / 0.25 : 0
-            Color.white
-                .opacity(flash * 0.28)
-        }
-        .allowsHitTesting(false)
+    private func ribbon(width: Double, time: TimeInterval, speed: Double, y: Double, thickness: Double, opacity: Double) -> some View {
+        let span = width + 260
+        let progress = (time * abs(speed)).truncatingRemainder(dividingBy: span)
+        let x = speed >= 0 ? progress - 130 : width - progress + 130
+        return Capsule()
+            .fill(
+                LinearGradient(
+                    colors: [.clear, Color.white.opacity(opacity), .clear],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
+            .frame(width: span, height: thickness)
+            .rotationEffect(.degrees(-3))
+            .position(x: x, y: y)
     }
 }
 
-// MARK: - 決定的な擬似乱数(フレーム間で星の位置を固定するため)
+// MARK: - 決定的な擬似乱数(フレーム間で位置を固定するため)
 
 struct SeededRandom {
     private var state: UInt64
