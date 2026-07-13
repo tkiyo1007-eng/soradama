@@ -68,7 +68,7 @@ struct DetailsGrid: View {
                 GlassCard(title: "日の出・日の入り", systemImage: "sunrise") {
                     SunArcView(sunrise: weather.sunrise, sunset: weather.sunset, now: Date(), timeZone: weather.timeZone)
                 }
-                .frame(width: cardWidth * 1.4)
+                .frame(width: cardWidth)
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel("日の出 \(weather.sunrise.timeLabel(in: weather.timeZone))、日の入り \(weather.sunset.timeLabel(in: weather.timeZone))")
             }
@@ -125,10 +125,11 @@ struct UmbrellaIndexView: View {
     }
 }
 
-// MARK: - 日の出・日の入りタイムライン
+// MARK: - 日の出・日の入りリング
 
-/// 日の出から日の入りまでの経過を横一直線のタイムラインで示す独自デザイン。
-/// (Apple 純正「天気」アプリの半円アークとは異なる表現)
+/// 日の出から日の入りまでの経過を円環リングで示す。
+/// Apple 純正「天気」アプリの、横棒トラック上を太陽の玉が移動するアークとは異なり、
+/// アプリ内の UV 指数(UVGaugeView)と同じ「リングゲージ」の語彙に統一した表現。
 struct SunArcView: View {
     let sunrise: Date
     let sunset: Date
@@ -142,63 +143,40 @@ struct SunArcView: View {
     }
 
     var body: some View {
-        VStack(spacing: 10) {
-            HStack(spacing: 8) {
+        HStack(spacing: 16) {
+            ZStack {
+                Circle()
+                    .stroke(Color.white.opacity(0.18), lineWidth: 6)
+                Circle()
+                    .trim(from: 0, to: progress)
+                    .stroke(
+                        LinearGradient(
+                            colors: [Color(red: 1.0, green: 0.72, blue: 0.35), Color(red: 1.0, green: 0.88, blue: 0.55)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        style: StrokeStyle(lineWidth: 6, lineCap: .round)
+                    )
+                    .rotationEffect(.degrees(-90))
                 WeatherIconView(kind: .clear, isDay: true)
                     .frame(width: 22, height: 22)
+            }
+            .frame(width: 52, height: 52)
+
+            VStack(alignment: .leading, spacing: 4) {
                 Text(progress >= 1 ? "日没しました" : "日中です")
-                    .font(.footnote.weight(.medium))
-                    .foregroundStyle(.white.opacity(0.85))
-                Spacer(minLength: 0)
+                    .font(.callout.weight(.semibold))
+                    .foregroundStyle(.white)
+                Text("日の出 \(sunrise.timeLabel(in: timeZone))")
+                    .font(.caption2)
+                    .foregroundStyle(.white.opacity(0.65))
+                Text("日の入り \(sunset.timeLabel(in: timeZone))")
+                    .font(.caption2)
+                    .foregroundStyle(.white.opacity(0.65))
             }
-
-            GeometryReader { proxy in
-                let width = proxy.size.width
-                ZStack(alignment: .leading) {
-                    Capsule()
-                        .fill(Color.white.opacity(0.18))
-                        .frame(height: 8)
-                    Capsule()
-                        .fill(
-                            LinearGradient(
-                                colors: [Color(red: 1.0, green: 0.72, blue: 0.35), Color(red: 1.0, green: 0.88, blue: 0.55)],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
-                        .frame(width: max(width * progress, 8), height: 8)
-
-                    Circle()
-                        .fill(Color(red: 1.0, green: 0.86, blue: 0.5))
-                        .frame(width: 16, height: 16)
-                        .shadow(color: Color(red: 1.0, green: 0.8, blue: 0.4).opacity(0.8), radius: 6)
-                        .offset(x: (width - 16) * progress)
-                }
-                .frame(maxHeight: .infinity, alignment: .center)
-            }
-            .frame(height: 16)
-
-            HStack {
-                VStack(alignment: .leading, spacing: 1) {
-                    Text("日の出")
-                        .font(.caption2)
-                        .foregroundStyle(.white.opacity(0.6))
-                    Text(sunrise.timeLabel(in: timeZone))
-                        .font(.callout.weight(.semibold))
-                        .foregroundStyle(.white)
-                }
-                Spacer()
-                VStack(alignment: .trailing, spacing: 1) {
-                    Text("日の入り")
-                        .font(.caption2)
-                        .foregroundStyle(.white.opacity(0.6))
-                    Text(sunset.timeLabel(in: timeZone))
-                        .font(.callout.weight(.semibold))
-                        .foregroundStyle(.white)
-                }
-            }
+            Spacer(minLength: 0)
         }
-        .frame(minHeight: 96)
+        .frame(minHeight: 96, alignment: .leading)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("日の出 \(sunrise.timeLabel(in: timeZone))、日の入り \(sunset.timeLabel(in: timeZone))")
     }
