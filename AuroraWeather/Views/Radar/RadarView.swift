@@ -169,6 +169,12 @@ struct RadarMapView: UIViewRepresentable {
             let overlay = MKTileOverlay(urlTemplate: tileTemplate)
             overlay.canReplaceMapContent = false
             overlay.tileSize = CGSize(width: 256, height: 256)
+            // RainViewer のタイルはズームレベル10までしか提供されないため、
+            // それ以上拡大した際は低いズームのタイルを引き伸ばして使う。
+            // 未設定のままだと「Zoom Level Not Supported」のプレースホルダー画像が
+            // そのまま表示されてしまう。
+            overlay.minimumZ = 0
+            overlay.maximumZ = 10
             map.addOverlay(overlay, level: .aboveRoads)
         }
     }
