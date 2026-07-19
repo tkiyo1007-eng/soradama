@@ -4,14 +4,11 @@
 
 ## 📍 現在の進捗メモ(セッション引き継ぎ用)
 
-- ✅ アプリ本体・Widget・Watchのビルド確認済み(実機で動作、現在地取得も成功)
-- ✅ プライバシーポリシー公開済み: https://tkiyo1007-eng.github.io/soradama/privacy.html
-- ✅ サブタイトル決定: **「空そのものが動く、美しい天気予報」**(30文字以内)
-- ⏳ **Xcodeでのアップロード時に `IDEDistribution.DistributionAppRecordProviderError error 0` が発生**
-  - 最有力の原因: App Store Connectの「マイApp」に「そらだま」がまだ作成されていない
-  - 対処: 先に手順3(下記)でApp Store Connect側にアプリを作成してから、再度 Archive → Distribute App を試す
-  - それでも直らない場合: Xcode再起動 / Xcode Settings → Accounts のApple ID確認 / App Store Connectの契約(税務・口座情報)に未同意のものがないか確認
-- 次にやること: 上記の作成 → 再アップロード → プライバシー質問票入力 → スクリーンショット撮影 → 提出
+- ✅ **v1.0.2 公開中**(2026年7月20日〜)。Apple ID `6788443049`
+- 公開済みの内容: 気象庁(JMA)モデル対応 / 雨雲レーダーのズーム上限修正(z=7実測) / 説明文復旧 / App Preview動画(6.5インチ) / キーワード強化(かわいい・きれい・デザイン・シンプル追加)
+- アーカイブ〜アップロードは CLI で可能(`xcodebuild archive` → `-exportArchive`、下の教訓メモ参照)
+- 次バージョン(1.0.3)の候補: 設定画面の新設(気温単位の切替UIは未実装)+ 朝の傘指数通知 / Apple Watchコンプリケーション
+- 成長施策の状況: プレビュー動画✅ / X告知(手動)⏳ / レビュー依頼⏳
 
 ## ✅ 設定済み(このリポジトリに含まれるもの)
 
