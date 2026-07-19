@@ -19,6 +19,15 @@ struct DetailsGrid: View {
                 }
                 .frame(width: cardWidth)
 
+                GlassCard(title: "洗濯指数", systemImage: "tshirt") {
+                    LaundryIndexView(
+                        humidity: weather.humidity,
+                        windSpeed: weather.windSpeed,
+                        precipProbability: weather.days.first?.precipitationProbability
+                    )
+                }
+                .frame(width: cardWidth)
+
                 GlassCard(title: "体感温度", systemImage: "thermometer.medium") {
                     VStack(alignment: .leading, spacing: 6) {
                         Text(degrees(weather.apparentTemperature))
@@ -122,6 +131,53 @@ struct UmbrellaIndexView: View {
         .frame(minHeight: 96, alignment: .topLeading)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("今日の降水確率\(Int((probability ?? 0).rounded()))パーセント、\(judgement.0)")
+    }
+}
+
+// MARK: - 洗濯指数(湿度・風・降水確率から外干しのしやすさを判定する、そらだま独自の項目)
+
+struct LaundryIndexView: View {
+    let humidity: Double
+    let windSpeed: Double
+    let precipProbability: Double?
+
+    /// 0〜100 のスコア。降水確率が高い/湿度が高いほど下がり、風があると少し上がる。
+    private var score: Int {
+        var value = 100.0
+        value -= (precipProbability ?? 0) * 0.9
+        value -= max(0, humidity - 40) * 0.8
+        value += min(windSpeed, 8) * 3
+        return Int(value.clamped(to: 0...100).rounded())
+    }
+
+    private var judgement: (String, Color) {
+        switch score {
+        case 80...: return ("よく乾きます", Color(red: 0.55, green: 0.85, blue: 0.6))
+        case 60..<80: return ("外干しOK", Color(red: 0.75, green: 0.88, blue: 0.55))
+        case 40..<60: return ("部屋干し推奨", Color(red: 1.0, green: 0.82, blue: 0.4))
+        case 20..<40: return ("乾きにくいです", Color(red: 1.0, green: 0.62, blue: 0.35))
+        default: return ("外干しは控えて", Color(red: 0.60, green: 0.75, blue: 1.0))
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline, spacing: 2) {
+                Text("\(score)")
+                    .font(.system(size: 30, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white)
+                Text("点")
+                    .font(.footnote.weight(.medium))
+                    .foregroundStyle(.white.opacity(0.7))
+            }
+            Text(judgement.0)
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(judgement.1)
+            Spacer(minLength: 0)
+        }
+        .frame(minHeight: 96, alignment: .topLeading)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("洗濯指数\(score)点、\(judgement.0)")
     }
 }
 

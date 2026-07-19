@@ -90,6 +90,8 @@ final class WeatherViewModel {
                 if rainAlertsEnabled {
                     notifications.scheduleRainAlert(for: bundle, placeName: place.name)
                 }
+                // 今日の空玉を記録(現在地の空だけがコレクションになる)
+                OrbStore.shared.recordToday(from: bundle, placeName: place.name)
             }
         } catch {
             errors[id] = error.localizedDescription
