@@ -46,8 +46,10 @@ struct RadarService {
         return (decoded.host, frames)
     }
 
-    /// MKTileOverlay 用の URL テンプレートを組み立てる
+    /// MKTileOverlay 用の URL テンプレートを組み立てる。
+    /// 512px タイルは同じズームレベルで 256px の2倍の解像度が得られる
+    /// (RainViewer のタイル提供上限はどちらもズームレベル7)。
     static func tileTemplate(host: String, frame: RadarFrame) -> String {
-        "\(host)\(frame.path)/256/{z}/{x}/{y}/2/1_1.png"
+        "\(host)\(frame.path)/512/{z}/{x}/{y}/2/1_1.png"
     }
 }
