@@ -52,6 +52,11 @@ struct CurrentHeaderView: View {
                     .font(.callout.weight(.medium))
                     .foregroundStyle(.white.opacity(0.85))
                     .padding(.top, 2)
+
+                    Text(OrbVoice.line(for: weather))
+                        .font(.footnote.weight(.medium))
+                        .foregroundStyle(.white.opacity(0.65))
+                        .padding(.top, 6)
                 }
                 .opacity(1 - collapseProgress * 1.6)
                 .scaleEffect(1 - collapseProgress * 0.28, anchor: .top)

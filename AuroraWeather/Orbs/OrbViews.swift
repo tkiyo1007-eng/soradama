@@ -204,6 +204,8 @@ struct OrbCollectionView: View {
                             .font(.caption)
                             .foregroundStyle(.white.opacity(0.55))
                             .padding(.top, 6)
+                        zukanSection
+                            .padding(.top, 20)
                     }
                     .padding(16)
                 }
@@ -356,6 +358,67 @@ struct OrbCollectionView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
         .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+
+    // MARK: 空玉ずかん
+
+    private var collectedKinds: Set<WeatherKind> {
+        Set(store.orbs.values.map(\.kind))
+    }
+
+    /// 図鑑表示用の代表的な玉(実際に記録された日付に関わらず、種類ごとに一定の見た目にする)
+    private func archetype(for kind: WeatherKind) -> DailyOrb {
+        DailyOrb(
+            dateKey: "archetype-\(kind.rawValue)",
+            kind: kind,
+            tempMax: 22,
+            tempMin: 16,
+            humidity: 55,
+            precipProbability: nil,
+            placeName: ""
+        )
+    }
+
+    private var zukanSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("空玉ずかん")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                Spacer()
+                Text("\(collectedKinds.count)/\(WeatherKind.allCases.count) コンプリート")
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.white.opacity(0.6))
+            }
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 4), spacing: 14) {
+                ForEach(WeatherKind.allCases, id: \.self) { kind in
+                    VStack(spacing: 5) {
+                        if collectedKinds.contains(kind) {
+                            OrbView(orb: archetype(for: kind), size: 46)
+                        } else {
+                            ZStack {
+                                Circle()
+                                    .fill(Color.white.opacity(0.06))
+                                Circle()
+                                    .strokeBorder(Color.white.opacity(0.18), style: StrokeStyle(lineWidth: 1, dash: [3, 3]))
+                                Image(systemName: "questionmark")
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(.white.opacity(0.35))
+                            }
+                            .frame(width: 46, height: 46)
+                        }
+                        Text(collectedKinds.contains(kind) ? kind.label : "？？？")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundStyle(.white.opacity(collectedKinds.contains(kind) ? 0.7 : 0.35))
+                    }
+                }
+            }
+            Text("天気を体験すると、その玉が図鑑に加わります")
+                .font(.caption2)
+                .foregroundStyle(.white.opacity(0.45))
+        }
+        .padding(16)
+        .background(Color.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 
     // MARK: 共有

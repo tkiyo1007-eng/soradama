@@ -2,7 +2,7 @@ import SwiftUI
 
 /// WMO 天気コードをデザイン上の「天候の種類」へマッピングする。
 /// 背景グラデーション・パーティクル・SF Symbols をすべてここから導出する。
-enum WeatherKind: String, Codable {
+enum WeatherKind: String, Codable, CaseIterable {
     case clear
     case partlyCloudy
     case cloudy

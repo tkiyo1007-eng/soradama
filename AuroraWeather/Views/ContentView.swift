@@ -4,6 +4,7 @@ struct ContentView: View {
     @State private var viewModel = WeatherViewModel()
     @State private var showSearch = false
     @State private var showOrbCollection = false
+    @State private var orbBounce = false
 
     var body: some View {
         ZStack {
@@ -44,11 +45,18 @@ struct ContentView: View {
             HStack {
                 Button {
                     Haptics.selection()
-                    showOrbCollection = true
+                    withAnimation(.interpolatingSpring(stiffness: 320, damping: 8)) {
+                        orbBounce = true
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                        withAnimation(.easeOut(duration: 0.2)) { orbBounce = false }
+                        showOrbCollection = true
+                    }
                 } label: {
                     MiniOrbIcon()
                         .frame(width: 40, height: 40)
                         .background(.ultraThinMaterial, in: Circle())
+                        .scaleEffect(orbBounce ? 1.35 : 1.0)
                 }
                 .accessibilityLabel("空玉コレクションを開く")
 
