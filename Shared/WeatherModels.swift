@@ -135,6 +135,14 @@ struct WeatherBundle: Codable {
     let days: [DayForecast]
 
     var todayMax: Double { days.first?.tempMax ?? temperature }
+
+    /// 直近 N 時間以内の最大降水確率。傘指数・洗濯指数のように「今から数時間」を
+    /// 判断材料にしたい場面で使う。`days.first` の「今日1日の最大値」だと、
+    /// 深夜の雨予報のせいで日中ずっと高い数値のままになるなど実感とズレるため。
+    func maxPrecipitationProbability(withinHours limit: Int) -> Double? {
+        let relevant = hours.prefix(limit).compactMap(\.precipitationProbability)
+        return relevant.max()
+    }
     var todayMin: Double { days.first?.tempMin ?? temperature }
 }
 

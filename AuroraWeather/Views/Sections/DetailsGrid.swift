@@ -15,15 +15,19 @@ struct DetailsGrid: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 14) {
                 GlassCard(title: "傘指数", systemImage: "umbrella") {
-                    UmbrellaIndexView(probability: weather.days.first?.precipitationProbability)
+                    // 「これから出かけて戻ってくるまで」の目安として、直近10時間の予報を見る
+                    // (今日1日の最大値だと、夜の雨予報のせいで日中も高い数値のままになってしまう。
+                    //  逆に短すぎると、すぐ先の時間ごとの予報と数値が食い違って見える)
+                    UmbrellaIndexView(probability: weather.maxPrecipitationProbability(withinHours: 10))
                 }
                 .frame(width: cardWidth)
 
                 GlassCard(title: "洗濯指数", systemImage: "tshirt") {
+                    // 朝に干して夕方取り込む想定で、直近14時間(日中いっぱい)の予報を見る
                     LaundryIndexView(
                         humidity: weather.humidity,
                         windSpeed: weather.windSpeed,
-                        precipProbability: weather.days.first?.precipitationProbability
+                        precipProbability: weather.maxPrecipitationProbability(withinHours: 14)
                     )
                 }
                 .frame(width: cardWidth)
@@ -130,7 +134,7 @@ struct UmbrellaIndexView: View {
         }
         .frame(minHeight: 96, alignment: .topLeading)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("今日の降水確率\(Int((probability ?? 0).rounded()))パーセント、\(judgement.0)")
+        .accessibilityLabel("これから数時間の降水確率\(Int((probability ?? 0).rounded()))パーセント、\(judgement.0)")
     }
 }
 
