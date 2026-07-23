@@ -12,7 +12,7 @@ enum OrbVoice {
         }
         // 日付でシードして、同じ日は同じセリフ・日が違えば変わる
         let key = DailyOrb.key(for: Date()) + weather.kind.label
-        var generator = SeededRandom(seed: UInt64(bitPattern: Int64(key.hashValue)))
+        var generator = SeededRandom(seed: stableSeed(for: key))
         let index = Int(generator.next() * Double(pool.count)) % max(pool.count, 1)
         return pool[index]
     }

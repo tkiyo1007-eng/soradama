@@ -30,6 +30,19 @@ struct DailyOrb: Codable, Identifiable, Equatable {
     }
 }
 
+/// `String.hashValue` はプロセス起動ごとにシードが変わり安定しないため
+/// (ハッシュフラッディング対策)、「同じ日は同じ模様・同じセリフ」という
+/// 空玉の設計を満たすには使えない。アプリの再起動をまたいでも同じ値になる
+/// FNV-1a による安定したハッシュを代わりに使う。
+func stableSeed(for string: String) -> UInt64 {
+    var hash: UInt64 = 0xcbf29ce484222325
+    for byte in string.utf8 {
+        hash ^= UInt64(byte)
+        hash = hash &* 0x100000001b3
+    }
+    return hash
+}
+
 /// 空玉のローカル保存。1年でも365件程度なので UserDefaults の JSON で十分。
 final class OrbStore {
     static let shared = OrbStore()

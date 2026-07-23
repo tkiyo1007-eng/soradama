@@ -21,7 +21,7 @@ struct OrbView: View {
     }
 
     private var seed: UInt64 {
-        UInt64(bitPattern: Int64(orb.dateKey.hashValue))
+        stableSeed(for: orb.dateKey)
     }
 
     var body: some View {
