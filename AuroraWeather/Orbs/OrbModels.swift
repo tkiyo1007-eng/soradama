@@ -11,6 +11,10 @@ struct DailyOrb: Codable, Identifiable, Equatable {
     let humidity: Double
     let precipProbability: Double?
     let placeName: String
+    /// 節目の日(雷雨・連続記録の区切り・図鑑コンプリート)は、
+    /// 玉が多面体クリスタルとして表示される特別版になる。
+    /// 既存保存データに存在しないフィールドなので、デコード時のために既定値を持たせる。
+    var isMilestone: Bool = false
 
     var id: String { dateKey }
 
@@ -59,19 +63,33 @@ final class OrbStore {
         }
     }
 
+    /// 連続記録日数がこの節目に達したとき、その日の玉がクリスタルになる。
+    private static let milestoneStreaks: Set<Int> = [7, 14, 30, 50, 100, 200, 365]
+
     /// 今日の玉を記録(同じ日は最新の取得内容で上書き)。
     /// 現在地(先頭ページ)の取得成功時に呼ばれる。
     func recordToday(from bundle: WeatherBundle, placeName: String) {
         let key = DailyOrb.key(for: Date())
         let today = bundle.days.first
+        let kind = today?.kind ?? bundle.kind
+
+        let alreadyHasKind = orbs.values.contains { $0.kind == kind }
+        let otherKindsCollected = Set(orbs.values.map(\.kind)).subtracting([kind]).count
+        let completesZukan = !alreadyHasKind && otherKindsCollected == WeatherKind.allCases.count - 1
+        let streakIncludingToday = consecutiveDays(before: Date()) + 1
+        let isMilestone = kind == .thunderstorm
+            || Self.milestoneStreaks.contains(streakIncludingToday)
+            || completesZukan
+
         let orb = DailyOrb(
             dateKey: key,
-            kind: today?.kind ?? bundle.kind,
+            kind: kind,
             tempMax: today?.tempMax ?? bundle.temperature,
             tempMin: today?.tempMin ?? bundle.temperature,
             humidity: bundle.humidity,
             precipProbability: today?.precipitationProbability,
-            placeName: placeName
+            placeName: placeName,
+            isMilestone: isMilestone
         )
         orbs[key] = orb
         persist()
@@ -83,9 +101,14 @@ final class OrbStore {
 
     /// 今日から遡って何日連続で玉があるか。
     var streak: Int {
+        orbs[DailyOrb.key(for: Date())] != nil ? consecutiveDays(before: Date()) + 1 : 0
+    }
+
+    /// 指定日の"前日"から遡って、何日連続で玉があるか(指定日自体は数えない)。
+    private func consecutiveDays(before date: Date) -> Int {
         var count = 0
-        var cursor = Date()
         let calendar = Calendar.current
+        guard var cursor = calendar.date(byAdding: .day, value: -1, to: date) else { return 0 }
         while orbs[DailyOrb.key(for: cursor)] != nil {
             count += 1
             guard let previous = calendar.date(byAdding: .day, value: -1, to: cursor) else { break }

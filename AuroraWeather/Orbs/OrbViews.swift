@@ -25,6 +25,19 @@ struct OrbView: View {
     }
 
     var body: some View {
+        Group {
+            if orb.isMilestone {
+                CrystalOrbView(orb: orb, size: size)
+            } else {
+                regularOrb
+            }
+        }
+        .accessibilityLabel(orb.isMilestone
+            ? "\(orb.dateKey)の特別な空玉クリスタル、\(orb.kind.label)"
+            : "\(orb.dateKey)の空玉、\(orb.kind.label)")
+    }
+
+    private var regularOrb: some View {
         ZStack {
             // 玉の中の空
             Circle()
@@ -71,7 +84,6 @@ struct OrbView: View {
         }
         .frame(width: size, height: size)
         .shadow(color: baseColors.first?.opacity(0.45) ?? .clear, radius: size * 0.12, y: size * 0.06)
-        .accessibilityLabel("\(orb.dateKey)の空玉、\(orb.kind.label)")
     }
 
     @ViewBuilder
@@ -164,6 +176,148 @@ private struct OrbCanvas: View {
             draw(&ctx, &generator)
         }
         .frame(width: size, height: size)
+    }
+}
+
+// MARK: - 空玉クリスタル(節目の日だけの特別版)
+
+/// 雷雨の日・連続記録の節目・空玉ずかんコンプリートの日は、
+/// 丸いガラス玉ではなく多面体のクリスタルとして表示される。
+/// Apple 純正アプリには存在しない、そらだま独自のレアリティ表現。
+struct CrystalOrbView: View {
+    let orb: DailyOrb
+    var size: CGFloat = 44
+
+    private var palette: [Color] {
+        switch orb.kind {
+        case .thunderstorm:
+            return [Color(red: 0.55, green: 0.62, blue: 1.0), Color(red: 0.72, green: 0.42, blue: 0.98), Color(red: 1.0, green: 0.60, blue: 0.30)]
+        case .snow:
+            return [Color(red: 0.70, green: 0.88, blue: 1.0), Color(red: 0.55, green: 0.68, blue: 1.0), Color(red: 1.0, green: 0.80, blue: 0.55)]
+        default:
+            return [Color(red: 0.40, green: 0.65, blue: 1.0), Color(red: 0.62, green: 0.42, blue: 0.98), Color(red: 1.0, green: 0.62, blue: 0.28)]
+        }
+    }
+
+    private var seed: UInt64 { stableSeed(for: orb.dateKey) }
+
+    var body: some View {
+        TimelineView(.animation(minimumInterval: 1.0 / 15)) { timeline in
+            let time = timeline.date.timeIntervalSinceReferenceDate
+            let pulse = (sin(time * 1.1) + 1) / 2
+
+            ZStack {
+                aura(pulse: pulse)
+                CrystalFacetSparkles(seed: seed, palette: palette, pulse: pulse)
+                    .frame(width: size * 1.5, height: size * 1.5)
+                gem(pulse: pulse)
+                core(pulse: pulse)
+            }
+            .frame(width: size, height: size)
+        }
+    }
+
+    private func aura(pulse: Double) -> some View {
+        Circle()
+            .fill(
+                RadialGradient(
+                    colors: [palette[1].opacity(0.45 + pulse * 0.15), .clear],
+                    center: .center, startRadius: 0, endRadius: size * 0.62
+                )
+            )
+            .blendMode(.screen)
+    }
+
+    private func gem(pulse: Double) -> some View {
+        let fill = LinearGradient(colors: palette, startPoint: .top, endPoint: .bottom)
+        let facetStroke = Color.white.opacity(0.4)
+        let rimStroke = Color.white.opacity(0.7)
+        let shadowColor = palette[2].opacity(0.7)
+        let shadowRadius = size * 0.10 + pulse * size * 0.04
+
+        return CrystalGemShape()
+            .fill(fill)
+            .overlay(CrystalFacetLines().stroke(facetStroke, lineWidth: max(0.6, size * 0.012)))
+            .overlay(CrystalGemShape().stroke(rimStroke, lineWidth: max(0.8, size * 0.02)))
+            .frame(width: size * 0.62, height: size * 0.86)
+            .shadow(color: shadowColor, radius: shadowRadius)
+    }
+
+    private func core(pulse: Double) -> some View {
+        Circle()
+            .fill(
+                RadialGradient(
+                    colors: [.white, palette[2].opacity(0.85), .clear],
+                    center: .center, startRadius: 0, endRadius: size * 0.13
+                )
+            )
+            .frame(width: size * 0.20, height: size * 0.20)
+            .opacity(0.75 + pulse * 0.25)
+    }
+}
+
+/// 宝石カットのような、上下に尖った六角形の輪郭。
+private struct CrystalGemShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        let w = rect.width, h = rect.height
+        var path = Path()
+        let points = [
+            CGPoint(x: w * 0.5, y: 0),
+            CGPoint(x: w, y: h * 0.30),
+            CGPoint(x: w, y: h * 0.74),
+            CGPoint(x: w * 0.5, y: h),
+            CGPoint(x: 0, y: h * 0.74),
+            CGPoint(x: 0, y: h * 0.30),
+        ]
+        path.move(to: points[0])
+        for point in points.dropFirst() { path.addLine(to: point) }
+        path.closeSubpath()
+        return path
+    }
+}
+
+/// クリスタル本体の内側に、中心から各頂点へ伸びるカット面の筋を描く。
+private struct CrystalFacetLines: Shape {
+    func path(in rect: CGRect) -> Path {
+        let w = rect.width, h = rect.height
+        let center = CGPoint(x: w * 0.5, y: h * 0.42)
+        let points = [
+            CGPoint(x: w * 0.5, y: 0),
+            CGPoint(x: w, y: h * 0.30),
+            CGPoint(x: w, y: h * 0.74),
+            CGPoint(x: w * 0.5, y: h),
+            CGPoint(x: 0, y: h * 0.74),
+            CGPoint(x: 0, y: h * 0.30),
+        ]
+        var path = Path()
+        for point in points {
+            path.move(to: center)
+            path.addLine(to: point)
+        }
+        return path
+    }
+}
+
+/// クリスタルの左右に浮かぶ小さな光の粒(参考画像のフランキング・スパークル)。
+private struct CrystalFacetSparkles: View {
+    let seed: UInt64
+    let palette: [Color]
+    let pulse: Double
+
+    var body: some View {
+        Canvas { context, size in
+            var generator = SeededRandom(seed: seed &+ 0x9E37)
+            let positions: [(CGFloat, CGFloat)] = [(0.06, 0.5), (0.94, 0.5), (0.5, 0.97)]
+            for (nx, ny) in positions {
+                let jitter = (generator.next() - 0.5) * 6
+                let x = size.width * nx
+                let y = size.height * ny + jitter
+                let radius: CGFloat = 2.2 + CGFloat(pulse) * 1.4
+                let rect = CGRect(x: x - radius, y: y - radius, width: radius * 2, height: radius * 2)
+                context.fill(Path(ellipseIn: rect), with: .color(palette[0].opacity(0.55 + pulse * 0.35)))
+            }
+        }
+        .allowsHitTesting(false)
     }
 }
 
