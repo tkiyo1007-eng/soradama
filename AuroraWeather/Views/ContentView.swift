@@ -4,6 +4,7 @@ struct ContentView: View {
     @State private var viewModel = WeatherViewModel()
     @State private var showSearch = false
     @State private var showOrbCollection = false
+    @State private var showWallpaper = false
     @State private var orbBounce = false
 
     var body: some View {
@@ -30,6 +31,16 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showOrbCollection) {
             OrbCollectionView()
+        }
+        .sheet(isPresented: $showWallpaper) {
+            if let bundle = viewModel.currentBundle, let place = viewModel.pages.first(where: { $0.id == viewModel.selectionID }) {
+                WallpaperExportView(
+                    placeName: place.name,
+                    weather: bundle,
+                    degrees: viewModel.degrees,
+                    orb: OrbStore.shared.orb(for: Date())
+                )
+            }
         }
         .task {
             await viewModel.loadInitial()
@@ -61,6 +72,20 @@ struct ContentView: View {
                 .accessibilityLabel("空玉コレクションを開く")
 
                 Spacer()
+
+                if viewModel.currentBundle != nil {
+                    Button {
+                        Haptics.selection()
+                        showWallpaper = true
+                    } label: {
+                        Image(systemName: "square.and.arrow.down")
+                            .font(.title3)
+                            .foregroundStyle(.white)
+                            .frame(width: 40, height: 40)
+                            .background(.ultraThinMaterial, in: Circle())
+                    }
+                    .accessibilityLabel("今日の空を壁紙として保存")
+                }
 
                 Button {
                     Haptics.selection()
