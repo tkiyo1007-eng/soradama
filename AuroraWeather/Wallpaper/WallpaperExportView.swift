@@ -12,6 +12,10 @@ struct WallpaperExportView: View {
     let orb: DailyOrb?
 
     @State private var saveState: SaveState = .idle
+    /// 書き出し用の高解像度画像。1242×2688 のレンダリングは重いので、
+    /// 画面表示時に一度だけ作って保存・共有で使い回す
+    /// (ShareLink は body の評価ごとに item を要求するため、都度生成すると画面がカクつく)。
+    @State private var exportImage: UIImage?
 
     private enum SaveState: Equatable {
         case idle, saving, saved, denied, failed
@@ -56,7 +60,7 @@ struct WallpaperExportView: View {
                         }
                         .disabled(saveState == .saving)
 
-                        ShareLink(item: renderImage(), preview: SharePreview("今日の空", image: renderImage())) {
+                        ShareLink(item: shareImage, preview: SharePreview("今日の空", image: shareImage)) {
                             Label("共有", systemImage: "square.and.arrow.up")
                                 .font(.callout.weight(.semibold))
                                 .foregroundStyle(.white)
@@ -77,6 +81,12 @@ struct WallpaperExportView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("閉じる") { dismiss() }
                         .foregroundStyle(.white)
+                }
+            }
+            .task {
+                // 保存・共有どちらでも使える画像を、画面を開いた時点で一度だけ用意しておく
+                if exportImage == nil {
+                    exportImage = makeExportImage()
                 }
             }
         }
@@ -110,22 +120,32 @@ struct WallpaperExportView: View {
         }
     }
 
-    private func renderImage() -> Image {
-        let composition = WallpaperComposition(placeName: placeName, weather: weather, degrees: degrees, orb: orb)
+    /// 高解像度の壁紙画像を生成する(重い処理なので呼び出し回数を絞ること)。
+    @MainActor
+    private func makeExportImage() -> UIImage? {
+        // 粒がきれいに散った状態になる時刻を固定で選び、毎回同じ絵になるようにする
+        let composition = WallpaperComposition(
+            placeName: placeName,
+            weather: weather,
+            degrees: degrees,
+            orb: orb,
+            staticTime: 1000
+        )
         let renderer = ImageRenderer(content: composition.frame(width: 1242, height: 1242 * wallpaperAspect))
         renderer.scale = 1
-        if let uiImage = renderer.uiImage {
-            return Image(uiImage: uiImage)
+        return renderer.uiImage
+    }
+
+    private var shareImage: Image {
+        if let exportImage {
+            return Image(uiImage: exportImage)
         }
         return Image(systemName: "photo")
     }
 
     private func save() {
         saveState = .saving
-        let composition = WallpaperComposition(placeName: placeName, weather: weather, degrees: degrees, orb: orb)
-        let renderer = ImageRenderer(content: composition.frame(width: 1242, height: 1242 * wallpaperAspect))
-        renderer.scale = 1
-        guard let uiImage = renderer.uiImage else {
+        guard let uiImage = exportImage ?? makeExportImage() else {
             saveState = .failed
             return
         }
@@ -156,10 +176,13 @@ private struct WallpaperComposition: View {
     let weather: WeatherBundle
     let degrees: (Double) -> String
     let orb: DailyOrb?
+    /// 画像として書き出す場合に、雨粒などのパーティクルを静止画として
+    /// 描くための固定時刻。プレビュー表示ではアニメーションさせたいので nil。
+    var staticTime: TimeInterval?
 
     var body: some View {
         ZStack {
-            SkyBackground(kind: weather.kind, isDay: weather.isDay)
+            SkyBackground(kind: weather.kind, isDay: weather.isDay, staticTime: staticTime)
 
             VStack(spacing: 0) {
                 Spacer(minLength: 0)

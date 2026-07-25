@@ -4,27 +4,39 @@ import SwiftUI
 /// 各パーティクルの軌道は時刻の純関数として計算するため、状態を持たず軽量。
 struct WeatherParticles: View {
     let kind: ParticleKind
+    /// 時刻を固定して静止画として描くためのフレーム時刻。
+    /// `ImageRenderer` は `TimelineView` の中身を描画できないため、
+    /// 壁紙の書き出しなど静止画が必要な場面ではこの値を渡して使う。
+    var staticTime: TimeInterval?
 
     var body: some View {
         if kind == .none {
             EmptyView()
+        } else if let staticTime {
+            Canvas { context, size in
+                draw(context: &context, size: size, time: staticTime)
+            }
+            .allowsHitTesting(false)
         } else {
             TimelineView(.animation) { timeline in
                 Canvas { context, size in
-                    let time = timeline.date.timeIntervalSinceReferenceDate
-                    switch kind {
-                    case .rain:
-                        drawRain(context: &context, size: size, time: time, count: 110, speed: 950, length: 16, opacity: 0.55)
-                    case .drizzle:
-                        drawRain(context: &context, size: size, time: time, count: 60, speed: 480, length: 8, opacity: 0.35)
-                    case .snow:
-                        drawSnow(context: &context, size: size, time: time)
-                    case .none:
-                        break
-                    }
+                    draw(context: &context, size: size, time: timeline.date.timeIntervalSinceReferenceDate)
                 }
             }
             .allowsHitTesting(false)
+        }
+    }
+
+    private func draw(context: inout GraphicsContext, size: CGSize, time: TimeInterval) {
+        switch kind {
+        case .rain:
+            drawRain(context: &context, size: size, time: time, count: 110, speed: 950, length: 16, opacity: 0.55)
+        case .drizzle:
+            drawRain(context: &context, size: size, time: time, count: 60, speed: 480, length: 8, opacity: 0.35)
+        case .snow:
+            drawSnow(context: &context, size: size, time: time)
+        case .none:
+            break
         }
     }
 
