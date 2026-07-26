@@ -94,7 +94,7 @@ final class WeatherViewModel {
                 OrbStore.shared.recordToday(from: bundle, placeName: place.name)
             }
         } catch {
-            errors[id] = error.localizedDescription
+            errors[id] = error.soradamaMessage
         }
     }
 

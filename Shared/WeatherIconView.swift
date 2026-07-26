@@ -174,11 +174,13 @@ struct MoonShape: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         path.addEllipse(in: rect)
+        // 切り欠き用の円。元の円に対して小さめ・控えめなオフセットにすることで、
+        // 三日月の光る部分に十分な太さを残す(細すぎると夜空の暗い背景に沈んで見えなくなる)。
         let offsetRect = CGRect(
-            x: rect.minX + rect.width * 0.32,
-            y: rect.minY - rect.height * 0.10,
-            width: rect.width * 0.92,
-            height: rect.height * 0.92
+            x: rect.minX + rect.width * 0.30,
+            y: rect.minY - rect.height * 0.16,
+            width: rect.width * 0.84,
+            height: rect.height * 0.84
         )
         path.addEllipse(in: offsetRect)
         return path

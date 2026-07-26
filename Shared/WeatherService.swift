@@ -12,6 +12,36 @@ enum WeatherServiceError: LocalizedError {
     }
 }
 
+extension Error {
+    /// ユーザーに見せる用の日本語メッセージ。
+    /// `localizedDescription` をそのまま出すと、圏外やタイムアウト時に
+    /// 「The operation couldn't be completed. (NSURLErrorDomain error -1009.)」
+    /// のような英語のシステムメッセージが表示されてしまうため、
+    /// よくある通信エラーは自前の文言に置き換える。
+    var soradamaMessage: String {
+        if let localized = self as? LocalizedError, let description = localized.errorDescription {
+            return description
+        }
+        guard let urlError = self as? URLError else {
+            return "天気データの取得に失敗しました。しばらくしてからお試しください。"
+        }
+        switch urlError.code {
+        case .notConnectedToInternet:
+            return "インターネットに接続されていません。通信環境をご確認ください。"
+        case .timedOut:
+            return "通信がタイムアウトしました。電波の良い場所でお試しください。"
+        case .networkConnectionLost:
+            return "通信が途中で切れました。もう一度お試しください。"
+        case .cannotFindHost, .cannotConnectToHost, .dnsLookupFailed:
+            return "天気情報サーバーに接続できませんでした。しばらくしてからお試しください。"
+        case .dataNotAllowed:
+            return "モバイルデータ通信が使えない設定になっています。設定をご確認ください。"
+        default:
+            return "天気データの取得に失敗しました。通信環境をご確認ください。"
+        }
+    }
+}
+
 struct WeatherService {
     private let session: URLSession = {
         let config = URLSessionConfiguration.default
