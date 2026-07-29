@@ -7,6 +7,7 @@ enum SharedStore {
     /// Signing & Capabilities で App Group を追加する場合はこの ID を使う
     static let appGroupID = "group.com.tkiyo1007.soradama"
     static let lastPlaceKey = "aurora.lastPlace"
+    static let unitsKey = "aurora.units"
 
     private static var stores: [UserDefaults] {
         var result: [UserDefaults] = [.standard]
@@ -31,5 +32,22 @@ enum SharedStore {
             }
         }
         return .fallback
+    }
+
+    /// 気温の単位を保存する。ウィジェットや Watch でも同じ単位で表示するため、
+    /// アプリ本体の UserDefaults だけでなく App Group にも書き込む。
+    static func saveUnits(_ units: UnitSystem) {
+        for store in stores {
+            store.set(units.rawValue, forKey: unitsKey)
+        }
+    }
+
+    static func units() -> UnitSystem {
+        for store in stores.reversed() {
+            if let raw = store.string(forKey: unitsKey), let units = UnitSystem(rawValue: raw) {
+                return units
+            }
+        }
+        return .celsius
     }
 }

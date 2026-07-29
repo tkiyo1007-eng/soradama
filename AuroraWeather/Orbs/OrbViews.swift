@@ -329,6 +329,11 @@ struct OrbCollectionView: View {
     @State private var selectedOrb: DailyOrb?
 
     private let store = OrbStore.shared
+
+    /// 設定で選ばれた気温の単位(摂氏/華氏)に合わせて表示する
+    private static func degrees(_ celsius: Double) -> String {
+        "\(Int(SharedStore.units().convert(celsius).rounded()))°"
+    }
     private let calendar = Calendar.current
 
     private static let monthTitleFormatter: DateFormatter = {
@@ -647,7 +652,7 @@ struct OrbCollectionView: View {
                     Text("\(orb.placeName)・\(orb.kind.label)")
                         .font(.subheadline)
                         .foregroundStyle(.white.opacity(0.8))
-                    Text("最高 \(Int(orb.tempMax.rounded()))° / 最低 \(Int(orb.tempMin.rounded()))°")
+                    Text("最高 \(Self.degrees(orb.tempMax)) / 最低 \(Self.degrees(orb.tempMin))")
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.white.opacity(0.9))
                 }

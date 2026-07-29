@@ -27,13 +27,11 @@ final class WeatherViewModel {
 
     private static let placesKey = "aurora.savedPlaces"
     private static let rainAlertsKey = "aurora.rainAlerts"
-    private static let unitsKey = "aurora.units"
 
     init() {
         primaryPlace = SharedStore.lastPlace()
         rainAlertsEnabled = UserDefaults.standard.bool(forKey: Self.rainAlertsKey)
-        units = UserDefaults.standard.string(forKey: Self.unitsKey)
-            .flatMap(UnitSystem.init(rawValue:)) ?? .celsius
+        units = SharedStore.units()
         if let data = UserDefaults.standard.data(forKey: Self.placesKey),
            let stored = try? JSONDecoder().decode([SavedPlace].self, from: data) {
             savedPlaces = stored
@@ -197,10 +195,13 @@ final class WeatherViewModel {
     // MARK: - 表示設定
 
     /// 気温の単位を変更して保存する(次回起動時も維持される)。
+    /// ウィジェットや Watch にも同じ単位を反映させるため App Group にも書き込み、
+    /// ウィジェットのタイムラインを再読み込みさせる。
     func setUnits(_ newUnits: UnitSystem) {
         guard newUnits != units else { return }
         units = newUnits
-        UserDefaults.standard.set(newUnits.rawValue, forKey: Self.unitsKey)
+        SharedStore.saveUnits(newUnits)
+        WidgetCenter.shared.reloadAllTimelines()
         Haptics.selection()
     }
 

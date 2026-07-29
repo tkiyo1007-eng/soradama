@@ -219,8 +219,10 @@ struct AuroraWeatherWidgetView: View {
         return Array(candidates.enumerated().filter { $0.offset % 2 == 0 }.map(\.element).prefix(4))
     }
 
+    /// アプリ本体で選んだ気温の単位(摂氏/華氏)に合わせて表示する。
+    /// App Group 経由で設定を読むため、アプリとウィジェットで表示が食い違わない。
     private func degrees(_ celsius: Double?) -> String {
         guard let celsius else { return "--°" }
-        return "\(Int(celsius.rounded()))°"
+        return "\(Int(SharedStore.units().convert(celsius).rounded()))°"
     }
 }

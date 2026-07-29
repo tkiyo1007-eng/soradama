@@ -47,6 +47,11 @@ final class WatchWeatherModel {
 struct WatchWeatherView: View {
     @State private var model = WatchWeatherModel()
 
+    /// iPhone 側の設定に合わせて気温を表示する(App Group 経由で単位を共有)。
+    private func degrees(_ celsius: Double) -> String {
+        "\(Int(SharedStore.units().convert(celsius).rounded()))°"
+    }
+
     var body: some View {
         Group {
             if let weather = model.weather {
@@ -103,7 +108,7 @@ struct WatchWeatherView: View {
             Text(model.placeName)
                 .font(.footnote.weight(.medium))
                 .opacity(0.85)
-            Text("\(Int(weather.temperature.rounded()))°")
+            Text(degrees(weather.temperature))
                 .font(.system(size: 46, weight: .light))
             HStack(spacing: 5) {
                 WeatherIconView(kind: weather.kind, isDay: weather.isDay)
@@ -111,7 +116,7 @@ struct WatchWeatherView: View {
                 Text(weather.kind.label)
             }
             .font(.footnote)
-            Text("最高 \(Int(weather.todayMax.rounded()))°  最低 \(Int(weather.todayMin.rounded()))°")
+            Text("最高 \(degrees(weather.todayMax))  最低 \(degrees(weather.todayMin))")
                 .font(.caption2)
                 .opacity(0.85)
                 .padding(.top, 1)
@@ -135,7 +140,7 @@ struct WatchWeatherView: View {
                             .font(.system(size: 11, weight: .semibold))
                             .foregroundStyle(Color(red: 0.55, green: 0.85, blue: 1.0))
                     }
-                    Text("\(Int(hour.temperature.rounded()))°")
+                    Text(degrees(hour.temperature))
                         .font(.caption.weight(.semibold))
                         .frame(width: 32, alignment: .trailing)
                 }
@@ -157,10 +162,10 @@ struct WatchWeatherView: View {
                     WeatherIconView(kind: day.kind, isDay: true)
                         .frame(width: 14, height: 14)
                     Spacer()
-                    Text("\(Int(day.tempMin.rounded()))°")
+                    Text(degrees(day.tempMin))
                         .font(.caption2)
                         .opacity(0.65)
-                    Text("\(Int(day.tempMax.rounded()))°")
+                    Text(degrees(day.tempMax))
                         .font(.caption.weight(.semibold))
                         .frame(width: 30, alignment: .trailing)
                 }
