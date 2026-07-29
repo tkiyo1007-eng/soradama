@@ -5,6 +5,7 @@ struct ContentView: View {
     @State private var showSearch = false
     @State private var showOrbCollection = false
     @State private var showWallpaper = false
+    @State private var showSettings = false
     @State private var orbBounce = false
 
     var body: some View {
@@ -31,6 +32,9 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showOrbCollection) {
             OrbCollectionView()
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView(viewModel: viewModel)
         }
         .sheet(isPresented: $showWallpaper) {
             if let bundle = viewModel.currentBundle, let place = viewModel.pages.first(where: { $0.id == viewModel.selectionID }) {
@@ -98,6 +102,18 @@ struct ContentView: View {
                         .background(.ultraThinMaterial, in: Circle())
                 }
                 .accessibilityLabel("都市を検索")
+
+                Button {
+                    Haptics.selection()
+                    showSettings = true
+                } label: {
+                    Image(systemName: "gearshape")
+                        .font(.title3)
+                        .foregroundStyle(.white)
+                        .frame(width: 40, height: 40)
+                        .background(.ultraThinMaterial, in: Circle())
+                }
+                .accessibilityLabel("設定")
             }
             .padding(.horizontal, 16)
             Spacer()

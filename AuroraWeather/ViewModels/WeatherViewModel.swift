@@ -16,7 +16,7 @@ final class WeatherViewModel {
     private(set) var errors: [String: String] = [:]
 
     private(set) var savedPlaces: [SavedPlace] = []
-    var units: UnitSystem = .celsius
+    private(set) var units: UnitSystem
     private(set) var rainAlertsEnabled: Bool
 
     private var primaryPlace: SavedPlace
@@ -27,10 +27,13 @@ final class WeatherViewModel {
 
     private static let placesKey = "aurora.savedPlaces"
     private static let rainAlertsKey = "aurora.rainAlerts"
+    private static let unitsKey = "aurora.units"
 
     init() {
         primaryPlace = SharedStore.lastPlace()
         rainAlertsEnabled = UserDefaults.standard.bool(forKey: Self.rainAlertsKey)
+        units = UserDefaults.standard.string(forKey: Self.unitsKey)
+            .flatMap(UnitSystem.init(rawValue:)) ?? .celsius
         if let data = UserDefaults.standard.data(forKey: Self.placesKey),
            let stored = try? JSONDecoder().decode([SavedPlace].self, from: data) {
             savedPlaces = stored
@@ -189,6 +192,16 @@ final class WeatherViewModel {
             notifications.cancel()
         }
         UserDefaults.standard.set(rainAlertsEnabled, forKey: Self.rainAlertsKey)
+    }
+
+    // MARK: - 表示設定
+
+    /// 気温の単位を変更して保存する(次回起動時も維持される)。
+    func setUnits(_ newUnits: UnitSystem) {
+        guard newUnits != units else { return }
+        units = newUnits
+        UserDefaults.standard.set(newUnits.rawValue, forKey: Self.unitsKey)
+        Haptics.selection()
     }
 
     // MARK: - 表示用フォーマット
