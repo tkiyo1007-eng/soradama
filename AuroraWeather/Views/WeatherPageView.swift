@@ -7,6 +7,10 @@ struct WeatherPageView: View {
 
     @State private var scrollOffset: CGFloat = 0
     @State private var showRadar = false
+    /// カード類を下から順番に登場させる演出用のフラグ
+    @State private var cardsAppeared = false
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var collapseProgress: Double {
         (Double(-scrollOffset) / 140).clamped(to: 0...1)
@@ -56,19 +60,25 @@ struct WeatherPageView: View {
 
                 Group {
                     HourlyForecastCard(weather: weather, degrees: viewModel.degrees)
+                        .revealed(cardsAppeared, order: 0)
 
                     DetailsGrid(weather: weather, degrees: viewModel.degrees)
+                        .revealed(cardsAppeared, order: 1)
 
                     RadarCardButton { showRadar = true }
+                        .revealed(cardsAppeared, order: 2)
 
                     TemperatureChartCard(weather: weather, units: viewModel.units)
+                        .revealed(cardsAppeared, order: 3)
                     DailyForecastCard(weather: weather, degrees: viewModel.degrees)
+                        .revealed(cardsAppeared, order: 4)
 
                     Text("データ提供: Open-Meteo.com / RainViewer.com")
                         .font(.caption2)
                         .foregroundStyle(.white.opacity(0.45))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
+                        .revealed(cardsAppeared, order: 5)
                 }
                 .padding(.horizontal, 16)
             }
@@ -82,6 +92,33 @@ struct WeatherPageView: View {
             Haptics.soft()
             await viewModel.ensureLoaded(place.id, force: true)
         }
+        .onAppear {
+            guard !cardsAppeared else { return }
+            if reduceMotion {
+                cardsAppeared = true
+            } else {
+                // ヘッダーの気温が立ち上がった直後にカードが続くよう、少し遅らせる
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
+                    cardsAppeared = true
+                }
+            }
+        }
+    }
+}
+
+// MARK: - 登場アニメーション
+
+private extension View {
+    /// カードを下からふわっと登場させる。`order` の順に少し遅れて現れることで、
+    /// 画面を開いたときに一枚ずつ積み上がるような印象になる。
+    func revealed(_ isVisible: Bool, order: Int) -> some View {
+        opacity(isVisible ? 1 : 0)
+            .offset(y: isVisible ? 0 : 18)
+            .animation(
+                .spring(response: 0.5, dampingFraction: 0.85)
+                    .delay(Double(order) * 0.06),
+                value: isVisible
+            )
     }
 }
 

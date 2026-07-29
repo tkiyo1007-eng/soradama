@@ -12,7 +12,9 @@ struct ContentView: View {
         ZStack {
             SkyBackground(
                 kind: viewModel.currentKind,
-                isDay: viewModel.currentIsDay
+                isDay: viewModel.currentIsDay,
+                sunrise: viewModel.currentBundle?.sunrise,
+                sunset: viewModel.currentBundle?.sunset
             )
 
             TabView(selection: Bindable(viewModel).selectionID) {
@@ -121,31 +123,57 @@ struct ContentView: View {
     }
 }
 
-/// トップバー用の小さなガラス玉アイコン
+/// トップバー用の小さなガラス玉アイコン。
+/// ゆっくり明滅・膨張することで「生きている」印象を与える(呼吸の演出)。
 private struct MiniOrbIcon: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
-        ZStack {
-            Circle()
-                .fill(
-                    LinearGradient(
-                        colors: [Color(red: 0.35, green: 0.65, blue: 0.98), Color(red: 0.22, green: 0.30, blue: 0.72)],
-                        startPoint: .top,
-                        endPoint: .bottom
+        TimelineView(.animation(minimumInterval: 1.0 / 20)) { timeline in
+            let breath = reduceMotion
+                ? 0.5
+                : (sin(timeline.date.timeIntervalSinceReferenceDate * 1.15) + 1) / 2
+
+            ZStack {
+                // 呼吸に合わせて外側へ広がるやわらかな光
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [Color(red: 0.55, green: 0.80, blue: 1.0).opacity(0.35 * breath), .clear],
+                            center: .center,
+                            startRadius: 2,
+                            endRadius: 16
+                        )
                     )
-                )
-            Circle()
-                .fill(
-                    RadialGradient(
-                        colors: [.white.opacity(0.8), .clear],
-                        center: UnitPoint(x: 0.32, y: 0.25),
-                        startRadius: 0,
-                        endRadius: 8
-                    )
-                )
-            Circle()
-                .strokeBorder(Color.white.opacity(0.55), lineWidth: 0.8)
+                    .frame(width: 34, height: 34)
+                    .blendMode(.screen)
+
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color(red: 0.35, green: 0.65, blue: 0.98), Color(red: 0.22, green: 0.30, blue: 0.72)],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                    Circle()
+                        .fill(
+                            RadialGradient(
+                                colors: [.white.opacity(0.65 + 0.3 * breath), .clear],
+                                center: UnitPoint(x: 0.32, y: 0.25),
+                                startRadius: 0,
+                                endRadius: 8
+                            )
+                        )
+                    Circle()
+                        .strokeBorder(Color.white.opacity(0.45 + 0.25 * breath), lineWidth: 0.8)
+                }
+                .frame(width: 22, height: 22)
+                .scaleEffect(1 + 0.05 * breath)
+            }
+            .frame(width: 34, height: 34)
         }
-        .frame(width: 22, height: 22)
     }
 }
 

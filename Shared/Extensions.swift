@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 extension Date {
     /// 指定タイムゾーンでの時刻表示("15時" 形式)
@@ -38,5 +39,28 @@ extension Date {
 extension Comparable {
     func clamped(to range: ClosedRange<Self>) -> Self {
         min(max(self, range.lowerBound), range.upperBound)
+    }
+}
+
+extension Color {
+    /// 2色を線形補間する(amount 0 で自分自身、1 で other)。
+    /// 時刻に応じた空の色を連続的に変化させるために使う。
+    func blended(with other: Color, amount: Double) -> Color {
+        let t = amount.clamped(to: 0...1)
+        let a = UIColor(self).rgba
+        let b = UIColor(other).rgba
+        return Color(
+            red: a.r + (b.r - a.r) * t,
+            green: a.g + (b.g - a.g) * t,
+            blue: a.b + (b.b - a.b) * t
+        )
+    }
+}
+
+private extension UIColor {
+    var rgba: (r: Double, g: Double, b: Double, a: Double) {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        getRed(&r, green: &g, blue: &b, alpha: &a)
+        return (Double(r), Double(g), Double(b), Double(a))
     }
 }

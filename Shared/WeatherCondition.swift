@@ -105,6 +105,75 @@ enum WeatherKind: String, Codable, CaseIterable {
         }
     }
 
+    /// 時刻に応じた空の色。日の出・日の入りを基準に、
+    /// 夜明け前 → 朝焼け → 日中 → 夕暮れ → 夜 を連続的に補間する。
+    /// 「空そのものをデザインにした」というアプリのコンセプトを、
+    /// 開く時間帯ごとに違う色として表現するためのもの。
+    func skyColors(at date: Date, sunrise: Date, sunset: Date) -> [Color] {
+        let base = skyColors(isDay: true)
+        let night = skyColors(isDay: false)
+
+        // 日の出/日の入りの前後1時間を「マジックアワー」として扱う
+        let window: TimeInterval = 3600
+        let time = date.timeIntervalSince1970
+        let riseTime = sunrise.timeIntervalSince1970
+        let setTime = sunset.timeIntervalSince1970
+
+        // 天気が悪い日は朝焼け・夕焼けの赤みを控えめにする(曇り空では実際にも映えない)
+        let warmthScale: Double
+        switch self {
+        case .clear:        warmthScale = 1.0
+        case .partlyCloudy: warmthScale = 0.8
+        case .cloudy, .fog: warmthScale = 0.45
+        default:            warmthScale = 0.3
+        }
+
+        if time < riseTime - window || time > setTime + window {
+            return night
+        }
+        if time < riseTime + window {
+            // 夜明け: 夜の色 → 朝焼け → 日中の色
+            let progress = ((time - (riseTime - window)) / (window * 2)).clamped(to: 0...1)
+            return Self.blendThroughGlow(
+                from: night, to: base, progress: progress,
+                glow: Self.dawnGlow, warmthScale: warmthScale
+            )
+        }
+        if time > setTime - window {
+            // 日暮れ: 日中の色 → 夕焼け → 夜の色
+            let progress = ((time - (setTime - window)) / (window * 2)).clamped(to: 0...1)
+            return Self.blendThroughGlow(
+                from: base, to: night, progress: progress,
+                glow: Self.duskGlow, warmthScale: warmthScale
+            )
+        }
+        return base
+    }
+
+    /// 朝焼けの色(下方が明るいオレンジ〜桃色)
+    private static let dawnGlow = [
+        Color(red: 0.16, green: 0.22, blue: 0.48),
+        Color(red: 0.72, green: 0.42, blue: 0.52),
+        Color(red: 1.00, green: 0.72, blue: 0.52),
+    ]
+
+    /// 夕焼けの色(より濃い赤・紫寄り)
+    private static let duskGlow = [
+        Color(red: 0.20, green: 0.18, blue: 0.42),
+        Color(red: 0.78, green: 0.36, blue: 0.38),
+        Color(red: 1.00, green: 0.64, blue: 0.36),
+    ]
+
+    /// from → glow → to と2段階で色を混ぜる(progress 0.5 のとき glow が最も強い)
+    private static func blendThroughGlow(
+        from: [Color], to: [Color], progress: Double, glow: [Color], warmthScale: Double
+    ) -> [Color] {
+        let straight = zip(from, to).map { $0.blended(with: $1, amount: progress) }
+        // 中間ほど glow を強く乗せる(三角波)
+        let glowAmount = (1 - abs(progress - 0.5) * 2) * warmthScale
+        return zip(straight, glow).map { $0.blended(with: $1, amount: glowAmount * 0.75) }
+    }
+
     /// パーティクル演出の種類
     var particle: ParticleKind {
         switch self {

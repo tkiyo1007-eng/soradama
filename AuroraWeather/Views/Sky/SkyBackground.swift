@@ -10,6 +10,10 @@ import SwiftUI
 struct SkyBackground: View {
     let kind: WeatherKind
     let isDay: Bool
+    /// 日の出・日の入り。渡されると、その日の時刻に応じて
+    /// 朝焼け・夕焼けを含む連続的な空の色になる。
+    var sunrise: Date?
+    var sunset: Date?
     /// 静止画として描く場合の固定時刻。壁紙の書き出しのように
     /// `ImageRenderer` で描画する場面では、`TimelineView` の中身が
     /// 描かれないため、この値を渡してアニメーションなしで構成する。
@@ -20,10 +24,18 @@ struct SkyBackground: View {
     /// 静止画モードでは「動きを減らす」設定と同じ扱いにして、時刻固定の見た目にする
     private var isStatic: Bool { staticTime != nil }
 
+    /// 日の出・日の入りが分かる場合は時刻連動の色、分からない場合は従来の昼夜2段階
+    private var colors: [Color] {
+        if let sunrise, let sunset {
+            return kind.skyColors(at: Date(), sunrise: sunrise, sunset: sunset)
+        }
+        return kind.skyColors(isDay: isDay)
+    }
+
     var body: some View {
         ZStack {
             LinearGradient(
-                colors: kind.skyColors(isDay: isDay),
+                colors: colors,
                 startPoint: .top,
                 endPoint: .bottom
             )

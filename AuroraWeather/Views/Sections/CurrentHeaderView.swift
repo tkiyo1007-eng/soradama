@@ -8,6 +8,20 @@ struct CurrentHeaderView: View {
     let degrees: (Double) -> String
     let collapseProgress: Double // 0 = 展開, 1 = 折りたたみ
 
+    /// 開いた瞬間に気温が立ち上がる演出。
+    /// 0 から実際の気温へカウントアップさせることで、
+    /// 数字が並ぶだけの画面に「作り込まれている」印象を与える。
+    ///
+    /// 表示は Int に丸めた文字列なので、`withAnimation` で Double の State を
+    /// 変えるだけでは中間値が描画されない(かつ numericText が桁変化で破綻する)。
+    /// そのため経過時間から進捗を計算し、TimelineView で毎フレーム描き直す。
+    @State private var countUpStart: Date?
+    @State private var hasAppeared = false
+
+    private static let countUpDuration: TimeInterval = 0.9
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
         VStack(spacing: 4) {
             HStack(spacing: 5) {
@@ -24,9 +38,14 @@ struct CurrentHeaderView: View {
             ZStack {
                 // 展開時: 大きな気温
                 VStack(spacing: 2) {
-                    Text(degrees(weather.temperature))
+                    temperatureText
                         .font(.system(size: 108, weight: .thin))
                         .kerning(-2)
+                        // 巨大なフォントなので、レイアウト都合で「2...」のように
+                        // 省略されないよう明示的に1行・縮小許可にする
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+                        .fixedSize(horizontal: true, vertical: false)
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [.white, .white.opacity(0.75)],
@@ -35,7 +54,8 @@ struct CurrentHeaderView: View {
                             )
                         )
                         .shadow(color: .black.opacity(0.20), radius: 12, y: 6)
-                        .contentTransition(.numericText())
+                        .scaleEffect(hasAppeared ? 1.0 : 0.88)
+                        .opacity(hasAppeared ? 1 : 0)
 
                     HStack(spacing: 8) {
                         WeatherIconView(kind: weather.kind, isDay: weather.isDay)
@@ -77,5 +97,40 @@ struct CurrentHeaderView: View {
         .padding(.top, 8)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(placeName)、\(weather.kind.label)、現在\(degrees(weather.temperature))、最高\(degrees(weather.todayMax))、最低\(degrees(weather.todayMin))")
+        .onAppear { animateIn() }
+    }
+
+    /// カウントアップ中は TimelineView で毎フレーム描き直し、
+    /// 終わったら通常の Text に戻す(常時再描画を続けない)。
+    @ViewBuilder
+    private var temperatureText: some View {
+        if let start = countUpStart {
+            TimelineView(.animation) { timeline in
+                let elapsed = timeline.date.timeIntervalSince(start)
+                let progress = (elapsed / Self.countUpDuration).clamped(to: 0...1)
+                // 終盤ほどゆっくり止まる(ease-out)
+                let eased = 1 - pow(1 - progress, 3)
+                Text(degrees(weather.temperature * eased))
+                    .onChange(of: progress) { _, newValue in
+                        if newValue >= 1 { countUpStart = nil }
+                    }
+            }
+        } else {
+            Text(degrees(weather.temperature))
+                .contentTransition(.numericText())
+        }
+    }
+
+    /// 開いた瞬間の演出。動きを減らす設定のときは即座に最終状態にする。
+    private func animateIn() {
+        guard !hasAppeared else { return }
+        guard !reduceMotion else {
+            hasAppeared = true
+            return
+        }
+        countUpStart = Date()
+        withAnimation(.spring(response: 0.55, dampingFraction: 0.78)) {
+            hasAppeared = true
+        }
     }
 }

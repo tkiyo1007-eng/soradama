@@ -182,7 +182,13 @@ private struct WallpaperComposition: View {
 
     var body: some View {
         ZStack {
-            SkyBackground(kind: weather.kind, isDay: weather.isDay, staticTime: staticTime)
+            SkyBackground(
+                kind: weather.kind,
+                isDay: weather.isDay,
+                sunrise: weather.sunrise,
+                sunset: weather.sunset,
+                staticTime: staticTime
+            )
 
             VStack(spacing: 0) {
                 Spacer(minLength: 0)
