@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B1000000000000000000000D /* AuroraWeatherWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B10000000000000000000004 /* AuroraWeatherWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C10000000000000000000014 /* SoradamaWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = C1000000000000000000000B /* SoradamaWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D1000000000000000000000A /* SoradamaWatchWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D10000000000000000000001 /* SoradamaWatchWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,6 +26,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = C1000000000000000000000C;
 			remoteInfo = SoradamaWatch;
+		};
+		D1000000000000000000000D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A10000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D10000000000000000000003;
+			remoteInfo = SoradamaWatchWidgetExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -51,12 +59,24 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D1000000000000000000000B /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D1000000000000000000000A /* SoradamaWatchWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A1000000000000000000000D /* AuroraWeather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AuroraWeather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B10000000000000000000004 /* AuroraWeatherWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AuroraWeatherWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1000000000000000000000B /* SoradamaWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoradamaWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D10000000000000000000001 /* SoradamaWatchWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SoradamaWatchWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -66,6 +86,13 @@
 				Info.plist,
 			);
 			target = B10000000000000000000005 /* AuroraWeatherWidgetExtension */;
+		};
+		D1000000000000000000000E /* Exceptions for "SoradamaWatchWidget" folder in "SoradamaWatchWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D10000000000000000000003 /* SoradamaWatchWidgetExtension */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -93,6 +120,14 @@
 			path = SoradamaWatch;
 			sourceTree = "<group>";
 		};
+		D10000000000000000000002 /* SoradamaWatchWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D1000000000000000000000E /* Exceptions for "SoradamaWatchWidget" folder in "SoradamaWatchWidgetExtension" target */,
+			);
+			path = SoradamaWatchWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +152,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D10000000000000000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -127,6 +169,7 @@
 				B10000000000000000000001 /* Shared */,
 				B10000000000000000000002 /* AuroraWeatherWidget */,
 				C1000000000000000000000A /* SoradamaWatch */,
+				D10000000000000000000002 /* SoradamaWatchWidget */,
 				A1000000000000000000000C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -137,6 +180,7 @@
 				A1000000000000000000000D /* AuroraWeather.app */,
 				B10000000000000000000004 /* AuroraWeatherWidgetExtension.appex */,
 				C1000000000000000000000B /* SoradamaWatch.app */,
+				D10000000000000000000001 /* SoradamaWatchWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,10 +245,12 @@
 				C1000000000000000000000D /* Sources */,
 				C1000000000000000000000E /* Frameworks */,
 				C1000000000000000000000F /* Resources */,
+				D1000000000000000000000B /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D1000000000000000000000C /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				C1000000000000000000000A /* SoradamaWatch */,
@@ -216,6 +262,29 @@
 			productName = SoradamaWatch;
 			productReference = C1000000000000000000000B /* SoradamaWatch.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D10000000000000000000003 /* SoradamaWatchWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D10000000000000000000007 /* Build configuration list for PBXNativeTarget "SoradamaWatchWidgetExtension" */;
+			buildPhases = (
+				D10000000000000000000004 /* Sources */,
+				D10000000000000000000005 /* Frameworks */,
+				D10000000000000000000006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				D10000000000000000000002 /* SoradamaWatchWidget */,
+				B10000000000000000000001 /* Shared */,
+			);
+			name = SoradamaWatchWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = SoradamaWatchWidgetExtension;
+			productReference = D10000000000000000000001 /* SoradamaWatchWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -256,6 +325,7 @@
 				A1000000000000000000000E /* AuroraWeather */,
 				B10000000000000000000005 /* AuroraWeatherWidgetExtension */,
 				C1000000000000000000000C /* SoradamaWatch */,
+				D10000000000000000000003 /* SoradamaWatchWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -276,6 +346,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C1000000000000000000000F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D10000000000000000000006 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -306,6 +383,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D10000000000000000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -318,6 +402,11 @@
 			isa = PBXTargetDependency;
 			target = C1000000000000000000000C /* SoradamaWatch */;
 			targetProxy = C10000000000000000000015 /* PBXContainerItemProxy */;
+		};
+		D1000000000000000000000C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D10000000000000000000003 /* SoradamaWatchWidgetExtension */;
+			targetProxy = D1000000000000000000000D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -622,6 +711,60 @@
 			};
 			name = Release;
 		};
+		D10000000000000000000008 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20;
+				DEVELOPMENT_TEAM = 5TH5JWL3M4;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SoradamaWatchWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "そらだま";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp.complication;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		D10000000000000000000009 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20;
+				DEVELOPMENT_TEAM = 5TH5JWL3M4;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SoradamaWatchWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "そらだま";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp.complication;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -657,6 +800,15 @@
 			buildConfigurations = (
 				C10000000000000000000011 /* Debug */,
 				C10000000000000000000012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D10000000000000000000007 /* Build configuration list for PBXNativeTarget "SoradamaWatchWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D10000000000000000000008 /* Debug */,
+				D10000000000000000000009 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
