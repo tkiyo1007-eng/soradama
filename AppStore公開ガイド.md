@@ -4,7 +4,7 @@
 
 ## 📍 現在の進捗メモ(セッション引き継ぎ用)
 
-**現在: v1.2.0 公開中**(2026年7月31日〜)。Apple ID `6788443049`
+**現在: v1.2.0 公開中 / v1.2.1(ビルド21)をアップロード済み・審査提出待ち**(2026年7月31日)。Apple ID `6788443049`
 
 - アーカイブ〜アップロードは CLI で可能(`xcodebuild archive` → `-exportArchive`、下の教訓メモ参照)。審査提出は Claude in Chrome で自動化しているが、ログインだけは都度ユーザーに依頼が必要
 - 次バージョンの機能候補は下の「今後の候補」を参照
@@ -24,10 +24,11 @@
 | 1.0.8 | 圏外時に英語のシステムメッセージが出る問題(→ `Error.soradamaMessage` で日本語化)/ 夜間の月アイコンが暗い背景に沈んで見えない問題(`MoonShape` の切り欠き調整) |
 | 1.1.0 | **設定画面を新設**(`Views/Settings/SettingsView.swift`)。雨の通知トグルが都市検索シート内に埋もれて見つけられなかった問題と、気温の単位切替(摂氏/華氏)が UI 不在・永続化なしで到達不能だった問題を解消 |
 | 1.2.0 | **デザイン強化3点**: ①時刻連動の空グラデーション(日の出・日の入りの前後1時間をマジックアワーとして朝焼け・夕焼けを補間、`WeatherCondition.skyColors(at:sunrise:sunset:)`)②起動時の導入アニメーション(気温のカウントアップ+カードの順次登場)③トップバーの空玉が呼吸する演出。あわせて、1.1.0 で追加した単位設定がウィジェット・Watch・空玉コレクション詳細に反映されていなかった問題を `SharedStore` 経由の共有で修正 |
+| 1.2.1 | **Apple Watch のコンプリケーション3種を追加**(円形・長方形・インライン)。「文字盤の選択に出てこない」という指摘で調べたところ、Watch アプリ本体しかなく WidgetKit 拡張が未実装だった → `SoradamaWatchWidget/` と watchOS 用拡張ターゲットを新設 |
 
 ### 今後の候補
 
-- 機能: 朝の傘指数通知 / Apple Watchコンプリケーションへの空玉表示 / 空玉ずかんに日・夜バリエーションを追加(現在は天気種8種のみ)/ 空玉コレクションの共有導線を強化
+- 機能: 朝の傘指数通知 / 空玉ずかんに日・夜バリエーションを追加(現在は天気種8種のみ)/ 空玉コレクションの共有導線を強化
 - 成長施策: プレビュー動画✅ / X告知(手動)⏳ / レビュー依頼⏳
 
 ## ✅ 設定済み(このリポジトリに含まれるもの)
@@ -188,6 +189,21 @@ App Store Connect → アプリのプライバシー:
 - 対策: 複数の textarea があるページで値を書き込む前に、**必ずラベル(このバージョンの最新情報/概要/プロモーション用テキスト)を厳密に特定**し、書き込み後に文字数カウンタで確認する。提出前に「提出物の下書き」パネルの内容も目視確認する。
 - **プロモーション用テキストは審査なしで即時変更できる**(バージョン単位のフィールドなので、公開中バージョンと審査中バージョンの両方に設定が必要な点に注意)。
 - 説明文・キーワード・スクリーンショット・プレビュー動画は**バージョンに紐付く**ため、変更にはそのバージョンの再提出が必要。審査待ち(未着手)ならキャンセル→修正→再提出のロスは小さいが、「審査中」に入ってからのキャンセルは列に並び直しになる。
+
+### Xcode プロジェクトにターゲットを手で足すときの注意(v1.2.1)
+
+`project.pbxproj` を直接編集してターゲットを追加する場合、最低限これだけ必要:
+PBXFileReference(`.appex`)/ PBXFileSystemSynchronizedRootGroup(ソースフォルダ)/ PBXNativeTarget /
+Sources・Frameworks・Resources の各フェーズ / XCBuildConfiguration ×2 と XCConfigurationList /
+親ターゲット側の PBXCopyFilesBuildPhase(dstSubfolderSpec = 13)と PBXTargetDependency /
+**PBXProject の `targets` 配列への追加**(これを忘れると `xcodebuild -list` に出てこない)。
+`Info.plist` は PBXFileSystemSynchronizedBuildFileExceptionSet で除外しないとリソースとして二重コピーされる。
+編集後は `plutil -lint project.pbxproj` と `xcodebuild -list` で検証する。
+
+**バンドルIDに `.complication` は使えなかった**: Developer Portal 側で
+`ENTITY_ERROR.ATTRIBUTE.INVALID / not available` になり App ID を登録できず署名に失敗する。
+`com.tkiyo1007.soradama.watchkitapp.widget` に変更して解決。
+なお watchOS 拡張のバンドルIDは Watch アプリのバンドルIDを接頭辞にする必要がある。
 
 ### SwiftUI で踏んだ落とし穴(v1.2.0 まで)
 - **`ImageRenderer` は `TimelineView` の中身を描画しない**。壁紙の書き出しで雨粒・雪・光の帯がすべて消えた。静止画が必要な場面は、時刻を引数で受けて `TimelineView` を通さず直接 `Canvas` で描く経路を用意する。
