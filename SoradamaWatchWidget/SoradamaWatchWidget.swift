@@ -54,11 +54,14 @@ struct SoradamaCircularComplication: Widget {
             ZStack {
                 AccessoryWidgetBackground()
                 VStack(spacing: -1) {
-                    WeatherIconView(
-                        kind: entry.weather?.kind ?? .partlyCloudy,
-                        isDay: entry.weather?.isDay ?? true
-                    )
-                    .frame(width: 14, height: 14)
+                    if let weather = entry.weather {
+                        WeatherIconView(kind: weather.kind, isDay: weather.isDay)
+                            .frame(width: 14, height: 14)
+                    } else {
+                        // 取得失敗時に晴れアイコンを捏造しない
+                        Image(systemName: "questionmark")
+                            .font(.system(size: 11, weight: .semibold))
+                    }
                     Text(degrees(entry.weather?.temperature))
                         .font(.system(size: 17, weight: .medium, design: .rounded))
                         .minimumScaleFactor(0.7)
@@ -66,6 +69,8 @@ struct SoradamaCircularComplication: Widget {
                 }
             }
             .containerBackground(.clear, for: .widget)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(entry.weather.map { "\($0.kind.label)、\(degrees($0.temperature))" } ?? "天気を取得できません")
         }
         .configurationDisplayName("天気")
         .description("現在の天気と気温を表示します。")
@@ -82,11 +87,10 @@ struct SoradamaRectangularComplication: Widget {
         StaticConfiguration(kind: kind, provider: WatchWeatherProvider()) { entry in
             VStack(alignment: .leading, spacing: 1) {
                 HStack(spacing: 4) {
-                    WeatherIconView(
-                        kind: entry.weather?.kind ?? .partlyCloudy,
-                        isDay: entry.weather?.isDay ?? true
-                    )
-                    .frame(width: 13, height: 13)
+                    if let weather = entry.weather {
+                        WeatherIconView(kind: weather.kind, isDay: weather.isDay)
+                            .frame(width: 13, height: 13)
+                    }
                     Text(entry.placeName)
                         .font(.caption2)
                         .lineLimit(1)
@@ -98,10 +102,16 @@ struct SoradamaRectangularComplication: Widget {
                         .font(.system(size: 11))
                         .opacity(0.75)
                         .lineLimit(1)
+                } else {
+                    Text("取得できません")
+                        .font(.system(size: 11))
+                        .opacity(0.75)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .containerBackground(.clear, for: .widget)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(entry.weather.map { "\(entry.placeName)、\($0.kind.label)、\(degrees($0.temperature))" } ?? "\(entry.placeName)、天気を取得できません")
         }
         .configurationDisplayName("天気(詳細)")
         .description("地点名・気温・最高最低を表示します。")

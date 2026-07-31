@@ -18,6 +18,10 @@ final class WeatherViewModel {
     private(set) var savedPlaces: [SavedPlace] = []
     private(set) var units: UnitSystem
     private(set) var rainAlertsEnabled: Bool
+    private(set) var morningAlertsEnabled: Bool
+    private(set) var streakRemindersEnabled: Bool
+    /// 今日の空玉がはじめて記録された瞬間のイベント(お祝いトースト用)
+    private(set) var lastOrbEvent: OrbRecordResult?
 
     private var primaryPlace: SavedPlace
     private let weatherService = WeatherService()
@@ -27,10 +31,14 @@ final class WeatherViewModel {
 
     private static let placesKey = "aurora.savedPlaces"
     private static let rainAlertsKey = "aurora.rainAlerts"
+    private static let morningAlertsKey = "aurora.morningAlerts"
+    private static let streakRemindersKey = "aurora.streakReminders"
 
     init() {
         primaryPlace = SharedStore.lastPlace()
         rainAlertsEnabled = UserDefaults.standard.bool(forKey: Self.rainAlertsKey)
+        morningAlertsEnabled = UserDefaults.standard.bool(forKey: Self.morningAlertsKey)
+        streakRemindersEnabled = UserDefaults.standard.bool(forKey: Self.streakRemindersKey)
         units = SharedStore.units()
         if let data = UserDefaults.standard.data(forKey: Self.placesKey),
            let stored = try? JSONDecoder().decode([SavedPlace].self, from: data) {
@@ -91,8 +99,18 @@ final class WeatherViewModel {
                 if rainAlertsEnabled {
                     notifications.scheduleRainAlert(for: bundle, placeName: place.name)
                 }
-                // 今日の空玉を記録(現在地の空だけがコレクションになる)
-                OrbStore.shared.recordToday(from: bundle, placeName: place.name)
+                if morningAlertsEnabled {
+                    notifications.scheduleMorningUmbrella(for: bundle, placeName: place.name)
+                }
+                // 今日の空玉を記録(現在地の空だけがコレクションになる)。
+                // 今日はじめての記録ならお祝いトーストを出し、ウィジェットにも反映する
+                let result = OrbStore.shared.recordToday(from: bundle, placeName: place.name)
+                if result.isFirstToday {
+                    lastOrbEvent = result
+                }
+                if streakRemindersEnabled {
+                    notifications.scheduleStreakReminder(streak: result.streak)
+                }
             }
         } catch {
             errors[id] = error.soradamaMessage
@@ -190,6 +208,36 @@ final class WeatherViewModel {
             notifications.cancel()
         }
         UserDefaults.standard.set(rainAlertsEnabled, forKey: Self.rainAlertsKey)
+    }
+
+    @MainActor
+    func setMorningAlerts(_ enabled: Bool) async {
+        if enabled {
+            let granted = await notifications.requestAuthorization()
+            morningAlertsEnabled = granted
+            if granted, let bundle = bundles[primaryPlace.id] {
+                notifications.scheduleMorningUmbrella(for: bundle, placeName: primaryPlace.name)
+            }
+        } else {
+            morningAlertsEnabled = false
+            notifications.cancelMorningUmbrella()
+        }
+        UserDefaults.standard.set(morningAlertsEnabled, forKey: Self.morningAlertsKey)
+    }
+
+    @MainActor
+    func setStreakReminders(_ enabled: Bool) async {
+        if enabled {
+            let granted = await notifications.requestAuthorization()
+            streakRemindersEnabled = granted
+            if granted {
+                notifications.scheduleStreakReminder(streak: OrbStore.shared.streak)
+            }
+        } else {
+            streakRemindersEnabled = false
+            notifications.cancelStreakReminder()
+        }
+        UserDefaults.standard.set(streakRemindersEnabled, forKey: Self.streakRemindersKey)
     }
 
     // MARK: - 表示設定

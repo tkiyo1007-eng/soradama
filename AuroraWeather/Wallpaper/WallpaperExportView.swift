@@ -194,7 +194,8 @@ private struct WallpaperComposition: View {
                 Spacer(minLength: 0)
 
                 if let orb {
-                    OrbView(orb: orb, size: 96)
+                    // staticTime がある = ImageRenderer での書き出し。TimelineView は描かれないので静止描画にする
+                    OrbView(orb: orb, size: 96, animated: staticTime == nil)
                         .padding(.bottom, 18)
                 }
 

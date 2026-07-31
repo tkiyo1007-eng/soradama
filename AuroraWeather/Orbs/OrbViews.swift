@@ -1,332 +1,15 @@
 import SwiftUI
 
-// MARK: - 空玉の描画
-
-/// その日の天気が閉じ込められたガラス玉。
-/// 天気の種類×気温×日付シードから、同じ日は常に同じ、日が違えば少し違う模様になる。
-struct OrbView: View {
-    let orb: DailyOrb
-    var size: CGFloat = 44
-
-    private var baseColors: [Color] {
-        orb.kind.skyColors(isDay: true)
-    }
-
-    /// 気温による色味(暑い日は暖色、寒い日は氷色のにじみ)
-    private var temperatureTint: Color? {
-        if orb.tempMax >= 30 { return Color(red: 1.0, green: 0.55, blue: 0.30) }
-        if orb.tempMax >= 25 { return Color(red: 1.0, green: 0.80, blue: 0.45) }
-        if orb.tempMax < 5 { return Color(red: 0.60, green: 0.85, blue: 1.0) }
-        return nil
-    }
-
-    private var seed: UInt64 {
-        stableSeed(for: orb.dateKey)
-    }
-
-    var body: some View {
-        Group {
-            if orb.isMilestone {
-                CrystalOrbView(orb: orb, size: size)
-            } else {
-                regularOrb
-            }
-        }
-        .accessibilityLabel(orb.isMilestone
-            ? "\(orb.dateKey)の特別な空玉クリスタル、\(orb.kind.label)"
-            : "\(orb.dateKey)の空玉、\(orb.kind.label)")
-    }
-
-    private var regularOrb: some View {
-        ZStack {
-            // 玉の中の空
-            Circle()
-                .fill(
-                    LinearGradient(colors: baseColors, startPoint: .top, endPoint: .bottom)
-                )
-
-            // 気温のにじみ(下方から)
-            if let tint = temperatureTint {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [tint.opacity(0.55), .clear],
-                            center: UnitPoint(x: 0.5, y: 0.95),
-                            startRadius: 0,
-                            endRadius: size * 0.75
-                        )
-                    )
-            }
-
-            // 天気の模様
-            weatherPattern
-                .clipShape(Circle())
-
-            // ガラスの質感: ハイライトとリム
-            Circle()
-                .fill(
-                    RadialGradient(
-                        colors: [.white.opacity(0.75), .white.opacity(0.0)],
-                        center: UnitPoint(x: 0.32, y: 0.24),
-                        startRadius: 0,
-                        endRadius: size * 0.34
-                    )
-                )
-            Circle()
-                .strokeBorder(
-                    LinearGradient(
-                        colors: [.white.opacity(0.85), .white.opacity(0.12)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    lineWidth: max(1, size * 0.025)
-                )
-        }
-        .frame(width: size, height: size)
-        .shadow(color: baseColors.first?.opacity(0.45) ?? .clear, radius: size * 0.12, y: size * 0.06)
-    }
-
-    @ViewBuilder
-    private var weatherPattern: some View {
-        switch orb.kind {
-        case .rain, .drizzle, .thunderstorm:
-            OrbCanvas(seed: seed, size: size) { context, generator in
-                // 雨筋
-                let count = orb.kind == .drizzle ? 4 : 6
-                for _ in 0..<count {
-                    let x = generator.next() * size
-                    let y = generator.next() * size * 0.7
-                    let length = size * (0.14 + generator.next() * 0.12)
-                    var path = Path()
-                    path.move(to: CGPoint(x: x, y: y))
-                    path.addLine(to: CGPoint(x: x + length * 0.25, y: y + length))
-                    context.stroke(
-                        path,
-                        with: .color(.white.opacity(0.5 + generator.next() * 0.3)),
-                        style: StrokeStyle(lineWidth: max(1, size * 0.03), lineCap: .round)
-                    )
-                }
-                // 雷は紫の稲妻
-                if orb.kind == .thunderstorm {
-                    let originX = size * (0.35 + generator.next() * 0.3)
-                    var bolt = Path()
-                    bolt.move(to: CGPoint(x: originX, y: size * 0.30))
-                    bolt.addLine(to: CGPoint(x: originX - size * 0.08, y: size * 0.52))
-                    bolt.addLine(to: CGPoint(x: originX + size * 0.02, y: size * 0.52))
-                    bolt.addLine(to: CGPoint(x: originX - size * 0.06, y: size * 0.74))
-                    context.stroke(
-                        bolt,
-                        with: .color(Color(red: 1.0, green: 0.92, blue: 0.55).opacity(0.9)),
-                        style: StrokeStyle(lineWidth: max(1, size * 0.035), lineCap: .round, lineJoin: .round)
-                    )
-                }
-            }
-        case .snow:
-            OrbCanvas(seed: seed, size: size) { context, generator in
-                for _ in 0..<8 {
-                    let x = generator.next() * size
-                    let y = size * 0.2 + generator.next() * size * 0.65
-                    let radius = size * (0.03 + generator.next() * 0.035)
-                    let rect = CGRect(x: x - radius, y: y - radius, width: radius * 2, height: radius * 2)
-                    context.fill(Path(ellipseIn: rect), with: .color(.white.opacity(0.55 + generator.next() * 0.4)))
-                }
-            }
-        case .fog:
-            VStack(spacing: size * 0.09) {
-                ForEach(0..<3, id: \.self) { _ in
-                    Capsule()
-                        .fill(Color.white.opacity(0.35))
-                        .frame(height: size * 0.09)
-                        .blur(radius: size * 0.045)
-                        .padding(.horizontal, size * 0.12)
-                }
-            }
-        case .cloudy, .partlyCloudy:
-            // 玉に閉じ込められた綿雲
-            Ellipse()
-                .fill(Color.white.opacity(orb.kind == .cloudy ? 0.55 : 0.4))
-                .frame(width: size * 0.55, height: size * 0.3)
-                .blur(radius: size * 0.05)
-                .offset(x: size * 0.05, y: size * 0.12)
-        case .clear:
-            // 澄んだ玉に小さなきらめき
-            OrbCanvas(seed: seed, size: size) { context, generator in
-                for _ in 0..<3 {
-                    let x = size * 0.25 + generator.next() * size * 0.5
-                    let y = size * 0.3 + generator.next() * size * 0.45
-                    let radius = size * (0.02 + generator.next() * 0.02)
-                    let rect = CGRect(x: x - radius, y: y - radius, width: radius * 2, height: radius * 2)
-                    context.fill(Path(ellipseIn: rect), with: .color(.white.opacity(0.8)))
-                }
-            }
-        }
-    }
-}
-
-/// シード付き乱数で決定的に描く Canvas ヘルパー
-private struct OrbCanvas: View {
-    let seed: UInt64
-    let size: CGFloat
-    let draw: (inout GraphicsContext, inout SeededRandom) -> Void
-
-    var body: some View {
-        Canvas { context, _ in
-            var generator = SeededRandom(seed: seed)
-            var ctx = context
-            draw(&ctx, &generator)
-        }
-        .frame(width: size, height: size)
-    }
-}
-
-// MARK: - 空玉クリスタル(節目の日だけの特別版)
-
-/// 雷雨の日・連続記録の節目・空玉ずかんコンプリートの日は、
-/// 丸いガラス玉ではなく多面体のクリスタルとして表示される。
-/// Apple 純正アプリには存在しない、そらだま独自のレアリティ表現。
-struct CrystalOrbView: View {
-    let orb: DailyOrb
-    var size: CGFloat = 44
-
-    private var palette: [Color] {
-        switch orb.kind {
-        case .thunderstorm:
-            return [Color(red: 0.55, green: 0.62, blue: 1.0), Color(red: 0.72, green: 0.42, blue: 0.98), Color(red: 1.0, green: 0.60, blue: 0.30)]
-        case .snow:
-            return [Color(red: 0.70, green: 0.88, blue: 1.0), Color(red: 0.55, green: 0.68, blue: 1.0), Color(red: 1.0, green: 0.80, blue: 0.55)]
-        default:
-            return [Color(red: 0.40, green: 0.65, blue: 1.0), Color(red: 0.62, green: 0.42, blue: 0.98), Color(red: 1.0, green: 0.62, blue: 0.28)]
-        }
-    }
-
-    private var seed: UInt64 { stableSeed(for: orb.dateKey) }
-
-    var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 15)) { timeline in
-            let time = timeline.date.timeIntervalSinceReferenceDate
-            let pulse = (sin(time * 1.1) + 1) / 2
-
-            ZStack {
-                aura(pulse: pulse)
-                CrystalFacetSparkles(seed: seed, palette: palette, pulse: pulse)
-                    .frame(width: size * 1.5, height: size * 1.5)
-                gem(pulse: pulse)
-                core(pulse: pulse)
-            }
-            .frame(width: size, height: size)
-        }
-    }
-
-    private func aura(pulse: Double) -> some View {
-        Circle()
-            .fill(
-                RadialGradient(
-                    colors: [palette[1].opacity(0.45 + pulse * 0.15), .clear],
-                    center: .center, startRadius: 0, endRadius: size * 0.62
-                )
-            )
-            .blendMode(.screen)
-    }
-
-    private func gem(pulse: Double) -> some View {
-        let fill = LinearGradient(colors: palette, startPoint: .top, endPoint: .bottom)
-        let facetStroke = Color.white.opacity(0.4)
-        let rimStroke = Color.white.opacity(0.7)
-        let shadowColor = palette[2].opacity(0.7)
-        let shadowRadius = size * 0.10 + pulse * size * 0.04
-
-        return CrystalGemShape()
-            .fill(fill)
-            .overlay(CrystalFacetLines().stroke(facetStroke, lineWidth: max(0.6, size * 0.012)))
-            .overlay(CrystalGemShape().stroke(rimStroke, lineWidth: max(0.8, size * 0.02)))
-            .frame(width: size * 0.62, height: size * 0.86)
-            .shadow(color: shadowColor, radius: shadowRadius)
-    }
-
-    private func core(pulse: Double) -> some View {
-        Circle()
-            .fill(
-                RadialGradient(
-                    colors: [.white, palette[2].opacity(0.85), .clear],
-                    center: .center, startRadius: 0, endRadius: size * 0.13
-                )
-            )
-            .frame(width: size * 0.20, height: size * 0.20)
-            .opacity(0.75 + pulse * 0.25)
-    }
-}
-
-/// 宝石カットのような、上下に尖った六角形の輪郭。
-private struct CrystalGemShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        let w = rect.width, h = rect.height
-        var path = Path()
-        let points = [
-            CGPoint(x: w * 0.5, y: 0),
-            CGPoint(x: w, y: h * 0.30),
-            CGPoint(x: w, y: h * 0.74),
-            CGPoint(x: w * 0.5, y: h),
-            CGPoint(x: 0, y: h * 0.74),
-            CGPoint(x: 0, y: h * 0.30),
-        ]
-        path.move(to: points[0])
-        for point in points.dropFirst() { path.addLine(to: point) }
-        path.closeSubpath()
-        return path
-    }
-}
-
-/// クリスタル本体の内側に、中心から各頂点へ伸びるカット面の筋を描く。
-private struct CrystalFacetLines: Shape {
-    func path(in rect: CGRect) -> Path {
-        let w = rect.width, h = rect.height
-        let center = CGPoint(x: w * 0.5, y: h * 0.42)
-        let points = [
-            CGPoint(x: w * 0.5, y: 0),
-            CGPoint(x: w, y: h * 0.30),
-            CGPoint(x: w, y: h * 0.74),
-            CGPoint(x: w * 0.5, y: h),
-            CGPoint(x: 0, y: h * 0.74),
-            CGPoint(x: 0, y: h * 0.30),
-        ]
-        var path = Path()
-        for point in points {
-            path.move(to: center)
-            path.addLine(to: point)
-        }
-        return path
-    }
-}
-
-/// クリスタルの左右に浮かぶ小さな光の粒(参考画像のフランキング・スパークル)。
-private struct CrystalFacetSparkles: View {
-    let seed: UInt64
-    let palette: [Color]
-    let pulse: Double
-
-    var body: some View {
-        Canvas { context, size in
-            var generator = SeededRandom(seed: seed &+ 0x9E37)
-            let positions: [(CGFloat, CGFloat)] = [(0.06, 0.5), (0.94, 0.5), (0.5, 0.97)]
-            for (nx, ny) in positions {
-                let jitter = (generator.next() - 0.5) * 6
-                let x = size.width * nx
-                let y = size.height * ny + jitter
-                let radius: CGFloat = 2.2 + CGFloat(pulse) * 1.4
-                let rect = CGRect(x: x - radius, y: y - radius, width: radius * 2, height: radius * 2)
-                context.fill(Path(ellipseIn: rect), with: .color(palette[0].opacity(0.55 + pulse * 0.35)))
-            }
-        }
-        .allowsHitTesting(false)
-    }
-}
-
 // MARK: - 空玉コレクション画面
 
 struct OrbCollectionView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var displayedMonth = Date()
     @State private var selectedOrb: DailyOrb?
+    /// ImageRenderer は重いので、body評価のたびに実行せず月が変わったときだけ作り直す
+    @State private var monthShareImage: Image?
+    /// 詳細モーダルで開いている玉の共有画像(玉を選び直したら作り直す)
+    @State private var orbShareImage: Image?
 
     private let store = OrbStore.shared
 
@@ -427,6 +110,7 @@ struct OrbCollectionView: View {
     private func shiftMonth(by value: Int) {
         if let shifted = calendar.date(byAdding: .month, value: value, to: displayedMonth) {
             displayedMonth = shifted
+            monthShareImage = nil // 月が変わったので共有画像を作り直す
         }
     }
 
@@ -582,23 +266,30 @@ struct OrbCollectionView: View {
 
     // MARK: 共有
 
+    @ViewBuilder
     private var shareButton: some View {
-        ShareLink(
-            item: shareImage,
-            preview: SharePreview("空玉コレクション", image: shareImage)
-        ) {
+        if let image = monthShareImage {
+            ShareLink(
+                item: image,
+                preview: SharePreview("空玉コレクション", image: image)
+            ) {
+                Image(systemName: "square.and.arrow.up")
+                    .foregroundStyle(.white)
+            }
+        } else {
+            // 画像生成が終わるまでの一瞬だけプレースホルダ
             Image(systemName: "square.and.arrow.up")
-                .foregroundStyle(.white)
+                .foregroundStyle(.white.opacity(0.4))
+                .task(id: DailyOrb.key(for: displayedMonth)) { renderMonthShareImage() }
         }
     }
 
-    private var shareImage: Image {
+    private func renderMonthShareImage() {
         let renderer = ImageRenderer(content: shareCard)
         renderer.scale = 3
         if let uiImage = renderer.uiImage {
-            return Image(uiImage: uiImage)
+            monthShareImage = Image(uiImage: uiImage)
         }
-        return Image(systemName: "circle")
     }
 
     /// X などに貼れる共有用カード
@@ -610,7 +301,7 @@ struct OrbCollectionView: View {
             LazyVGrid(columns: Array(repeating: GridItem(.fixed(34), spacing: 8), count: 7), spacing: 10) {
                 ForEach(Array(monthDays.enumerated()), id: \.offset) { _, day in
                     if let day, let orb = store.orb(for: day) {
-                        OrbView(orb: orb, size: 34)
+                        OrbView(orb: orb, size: 34, animated: false)
                     } else {
                         Circle()
                             .strokeBorder(Color.white.opacity(0.12), style: StrokeStyle(lineWidth: 1, dash: [3, 3]))
@@ -618,9 +309,14 @@ struct OrbCollectionView: View {
                     }
                 }
             }
-            Text("空玉 — 空を集める天気アプリ")
-                .font(.caption2)
-                .foregroundStyle(.white.opacity(0.55))
+            VStack(spacing: 2) {
+                Text("空玉 — 空を集める天気アプリ")
+                    .font(.caption2)
+                    .foregroundStyle(.white.opacity(0.55))
+                Text("apps.apple.com/app/id6788443049")
+                    .font(.system(size: 9))
+                    .foregroundStyle(.white.opacity(0.4))
+            }
         }
         .padding(24)
         .background(
@@ -655,14 +351,44 @@ struct OrbCollectionView: View {
                     Text("最高 \(Self.degrees(orb.tempMax)) / 最低 \(Self.degrees(orb.tempMin))")
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.white.opacity(0.9))
+                    HStack(spacing: 10) {
+                        Label("\(Int(orb.humidity))%", systemImage: "humidity")
+                        if let probability = orb.precipProbability {
+                            Label("\(Int(probability))%", systemImage: "umbrella")
+                        }
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.white.opacity(0.65))
+                    .padding(.top, 2)
                 }
-                Button("閉じる") { selectedOrb = nil }
-                    .font(.callout.weight(.semibold))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 28)
-                    .padding(.vertical, 9)
-                    .background(Color.white.opacity(0.15), in: Capsule())
-                    .padding(.bottom, 8)
+
+                Text("「\(OrbVoice.line(for: orb))」")
+                    .font(.footnote)
+                    .foregroundStyle(.white.opacity(0.75))
+                    .multilineTextAlignment(.center)
+
+                HStack(spacing: 10) {
+                    if let image = orbShareImage {
+                        ShareLink(
+                            item: image,
+                            preview: SharePreview("\(orb.dateKey)の空玉", image: image)
+                        ) {
+                            Label("共有", systemImage: "square.and.arrow.up")
+                                .font(.callout.weight(.semibold))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 22)
+                                .padding(.vertical, 9)
+                                .background(Color.white.opacity(0.15), in: Capsule())
+                        }
+                    }
+                    Button("閉じる") { selectedOrb = nil }
+                        .font(.callout.weight(.semibold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 22)
+                        .padding(.vertical, 9)
+                        .background(Color.white.opacity(0.15), in: Capsule())
+                }
+                .padding(.bottom, 8)
             }
             .padding(22)
             .background(
@@ -675,6 +401,50 @@ struct OrbCollectionView: View {
             )
             .padding(.horizontal, 44)
         }
+        .task(id: orb.dateKey) {
+            orbShareImage = nil
+            let renderer = ImageRenderer(content: singleOrbShareCard(orb))
+            renderer.scale = 3
+            if let uiImage = renderer.uiImage {
+                orbShareImage = Image(uiImage: uiImage)
+            }
+        }
+    }
+
+    /// 1日ぶんの空玉をSNSに貼れる縦型カード
+    private func singleOrbShareCard(_ orb: DailyOrb) -> some View {
+        VStack(spacing: 12) {
+            OrbView(orb: orb, size: 120, animated: false)
+                .padding(.top, 6)
+            if let date = orb.date {
+                Text(date.formatted(.dateTime.locale(Locale(identifier: "ja_JP")).year().month().day().weekday()))
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.white)
+            }
+            Text("\(orb.placeName)・\(orb.kind.label)  最高\(Self.degrees(orb.tempMax))/最低\(Self.degrees(orb.tempMin))")
+                .font(.caption)
+                .foregroundStyle(.white.opacity(0.8))
+            Text("「\(OrbVoice.line(for: orb))」")
+                .font(.caption)
+                .foregroundStyle(.white.opacity(0.7))
+            VStack(spacing: 2) {
+                Text("空玉 — 空を集める天気アプリ")
+                    .font(.caption2)
+                    .foregroundStyle(.white.opacity(0.55))
+                Text("apps.apple.com/app/id6788443049")
+                    .font(.system(size: 9))
+                    .foregroundStyle(.white.opacity(0.4))
+            }
+            .padding(.top, 2)
+        }
+        .padding(26)
+        .background(
+            LinearGradient(
+                colors: [Color(red: 0.07, green: 0.09, blue: 0.22), Color(red: 0.16, green: 0.15, blue: 0.36)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        )
     }
 }
 

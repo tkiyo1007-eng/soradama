@@ -29,7 +29,7 @@ struct WeatherPageView: View {
             }
         }
         .sheet(isPresented: $showRadar) {
-            RadarSheet(place: place)
+            RadarSheet(place: place, timeZone: viewModel.bundles[place.id]?.timeZone ?? .current)
         }
     }
 

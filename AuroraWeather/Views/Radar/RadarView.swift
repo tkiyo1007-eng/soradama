@@ -5,6 +5,8 @@ import MapKit
 
 struct RadarSheet: View {
     let place: SavedPlace
+    /// 地点のタイムゾーン(コマの時刻表示に使う。端末TZだと海外都市でズレる)
+    var timeZone: TimeZone = .current
     @Environment(\.dismiss) private var dismiss
 
     @State private var host: String?
@@ -67,7 +69,7 @@ struct RadarSheet: View {
         VStack(spacing: 10) {
             if let frame = currentFrame {
                 HStack(spacing: 8) {
-                    Text(frame.date.timeLabel(in: .current))
+                    Text(frame.date.timeLabel(in: timeZone))
                         .font(.headline.monospacedDigit())
                     Text(frame.isForecast ? "予測" : "実況")
                         .font(.caption.weight(.bold))
@@ -91,15 +93,17 @@ struct RadarSheet: View {
                 }
                 .accessibilityLabel(isPlaying ? "一時停止" : "再生")
 
-                Slider(
-                    value: Binding(
-                        get: { Double(frameIndex) },
-                        set: { frameIndex = Int($0.rounded()); isPlaying = false }
-                    ),
-                    in: 0...Double(max(frames.count - 1, 1)),
-                    step: 1
-                )
-                .accessibilityLabel("時刻の選択")
+                if frames.count > 1 {
+                    Slider(
+                        value: Binding(
+                            get: { Double(frameIndex) },
+                            set: { frameIndex = Int($0.rounded()); isPlaying = false }
+                        ),
+                        in: 0...Double(frames.count - 1),
+                        step: 1
+                    )
+                    .accessibilityLabel("時刻の選択")
+                }
             }
         }
         .padding(16)
@@ -128,6 +132,9 @@ struct RadarSheet: View {
             let result = try await RadarService().fetchFrames()
             host = result.host
             frames = result.frames
+            // まれに空配列が正常応答として返ることがあり、その場合スピナーが
+            // 永久に消えないため失敗として扱う
+            if frames.isEmpty { loadFailed = true }
             // 最新の実況フレームから開始
             frameIndex = max(frames.lastIndex(where: { !$0.isForecast }) ?? 0, 0)
         } catch {

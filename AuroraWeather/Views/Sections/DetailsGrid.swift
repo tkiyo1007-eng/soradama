@@ -224,7 +224,8 @@ struct SunArcView: View {
             .frame(width: 52, height: 52)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(progress >= 1 ? "日没しました" : "日中です")
+                // 夜明け前(now < sunrise)を「日中です」と誤表示しないよう3状態で判定
+                Text(now < sunrise ? "夜明け前です" : (now > sunset ? "日没しました" : "日中です"))
                     .font(.callout.weight(.semibold))
                     .foregroundStyle(.white)
                 Text("日の出 \(sunrise.timeLabel(in: timeZone))")
@@ -254,7 +255,11 @@ struct WindCompassView: View {
     static func directionName(_ degrees: Double) -> String {
         let names = ["北", "北北東", "北東", "東北東", "東", "東南東", "南東", "南南東",
                      "南", "南南西", "南西", "西南西", "西", "西北西", "北西", "北北西"]
-        let index = Int(((degrees + 11.25) / 22.5).rounded(.down)) % 16
+        // 負値・NaN でも配列外アクセスしないよう 0..<360 に正規化してから方位に変換
+        guard degrees.isFinite else { return names[0] }
+        let normalized = (degrees.truncatingRemainder(dividingBy: 360) + 360)
+            .truncatingRemainder(dividingBy: 360)
+        let index = Int(((normalized + 11.25) / 22.5).rounded(.down)) % 16
         return names[index]
     }
 

@@ -81,6 +81,13 @@ struct AuroraWeatherWidgetView: View {
             .containerBackground(for: .widget) {
                 if isAccessory {
                     AccessoryWidgetBackground()
+                } else if entry.weather == nil {
+                    // 取得失敗時に晴れ空の背景を出すと誤解を招くので無彩色にする
+                    LinearGradient(
+                        colors: [Color(red: 0.25, green: 0.28, blue: 0.38), Color(red: 0.15, green: 0.17, blue: 0.26)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
                 } else {
                     LinearGradient(
                         colors: kind.skyColors(isDay: isDay),
@@ -89,6 +96,12 @@ struct AuroraWeatherWidgetView: View {
                     )
                 }
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(
+                entry.weather == nil
+                    ? "\(entry.placeName)、天気を取得できません"
+                    : "\(entry.placeName)、\(kind.label)、\(degrees(entry.weather?.temperature))"
+            )
     }
 
     @ViewBuilder
@@ -109,17 +122,27 @@ struct AuroraWeatherWidgetView: View {
 
     // MARK: - ロック画面ウィジェット
 
+    @ViewBuilder
     private var inlineView: some View {
-        Label(
-            "\(degrees(entry.weather?.temperature)) \(kind.label)",
-            systemImage: kind.symbolName(isDay: isDay)
-        )
+        if entry.weather == nil {
+            Text("そらだま --°")
+        } else {
+            Label(
+                "\(degrees(entry.weather?.temperature)) \(kind.label)",
+                systemImage: kind.symbolName(isDay: isDay)
+            )
+        }
     }
 
     private var circularView: some View {
         VStack(spacing: -1) {
-            WeatherIconView(kind: kind, isDay: isDay)
-                .frame(width: 16, height: 16)
+            if entry.weather == nil {
+                Image(systemName: "questionmark")
+                    .font(.system(size: 13, weight: .semibold))
+            } else {
+                WeatherIconView(kind: kind, isDay: isDay)
+                    .frame(width: 16, height: 16)
+            }
             Text(degrees(entry.weather?.temperature))
                 .font(.system(size: 17, weight: .semibold, design: .rounded))
         }
@@ -133,8 +156,10 @@ struct AuroraWeatherWidgetView: View {
                 .opacity(0.8)
                 .lineLimit(1)
             HStack(spacing: 5) {
-                WeatherIconView(kind: kind, isDay: isDay)
-                    .frame(width: 14, height: 14)
+                if entry.weather != nil {
+                    WeatherIconView(kind: kind, isDay: isDay)
+                        .frame(width: 14, height: 14)
+                }
                 Text(degrees(entry.weather?.temperature))
                     .font(.headline)
                     .widgetAccentable()
@@ -160,9 +185,11 @@ struct AuroraWeatherWidgetView: View {
 
             Spacer(minLength: 0)
 
-            WeatherIconView(kind: kind, isDay: isDay)
-                .frame(width: 22, height: 22)
-            Text(kind.label)
+            if entry.weather != nil {
+                WeatherIconView(kind: kind, isDay: isDay)
+                    .frame(width: 22, height: 22)
+            }
+            Text(entry.weather == nil ? "取得できません" : kind.label)
                 .font(.caption.weight(.medium))
                 .lineLimit(1)
             if let weather = entry.weather {
@@ -183,9 +210,11 @@ struct AuroraWeatherWidgetView: View {
                     .lineLimit(1)
                 Text(degrees(entry.weather?.temperature))
                     .font(.system(size: 40, weight: .light))
-                WeatherIconView(kind: kind, isDay: isDay)
-                    .frame(width: 22, height: 22)
-                Text(kind.label)
+                if entry.weather != nil {
+                    WeatherIconView(kind: kind, isDay: isDay)
+                        .frame(width: 22, height: 22)
+                }
+                Text(entry.weather == nil ? "取得できません" : kind.label)
                     .font(.caption.weight(.medium))
                     .lineLimit(1)
             }
@@ -202,7 +231,7 @@ struct AuroraWeatherWidgetView: View {
                                 .opacity(0.8)
                             WeatherIconView(kind: hour.kind, isDay: hour.isDay)
                                 .frame(width: 18, height: 18)
-                            Text("\(Int(hour.temperature.rounded()))°")
+                            Text(degrees(hour.temperature))
                                 .font(.caption.weight(.semibold))
                         }
                     }

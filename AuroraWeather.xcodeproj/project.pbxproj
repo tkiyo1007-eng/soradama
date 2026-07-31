@@ -83,6 +83,7 @@
 		B10000000000000000000003 /* Exceptions for "AuroraWeatherWidget" folder in "AuroraWeatherWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AuroraWeatherWidget.entitlements,
 				Info.plist,
 			);
 			target = B10000000000000000000005 /* AuroraWeatherWidgetExtension */;
@@ -91,14 +92,32 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				SoradamaWatchWidget.entitlements,
 			);
 			target = D10000000000000000000003 /* SoradamaWatchWidgetExtension */;
+		};
+		E10000000000000000000001 /* Exceptions for "AuroraWeather" folder in "AuroraWeather" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AuroraWeather.entitlements,
+			);
+			target = A1000000000000000000000E /* AuroraWeather */;
+		};
+		E10000000000000000000002 /* Exceptions for "SoradamaWatch" folder in "SoradamaWatch" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SoradamaWatch.entitlements,
+			);
+			target = C1000000000000000000000C /* SoradamaWatch */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A1000000000000000000000A /* AuroraWeather */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E10000000000000000000001 /* Exceptions for "AuroraWeather" folder in "AuroraWeather" target */,
+			);
 			path = AuroraWeather;
 			sourceTree = "<group>";
 		};
@@ -117,6 +136,9 @@
 		};
 		C1000000000000000000000A /* SoradamaWatch */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E10000000000000000000002 /* Exceptions for "SoradamaWatch" folder in "SoradamaWatch" target */,
+			);
 			path = SoradamaWatch;
 			sourceTree = "<group>";
 		};
@@ -556,6 +578,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.1;
+				CODE_SIGN_ENTITLEMENTS = AuroraWeather/AuroraWeather.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -589,6 +612,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.1;
+				CODE_SIGN_ENTITLEMENTS = AuroraWeather/AuroraWeather.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -614,6 +638,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.2.1;
+				CODE_SIGN_ENTITLEMENTS = AuroraWeatherWidget/AuroraWeatherWidget.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -640,6 +665,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.2.1;
+				CODE_SIGN_ENTITLEMENTS = AuroraWeatherWidget/AuroraWeatherWidget.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -669,6 +695,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.1;
+				CODE_SIGN_ENTITLEMENTS = SoradamaWatch/SoradamaWatch.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -700,6 +727,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.1;
+				CODE_SIGN_ENTITLEMENTS = SoradamaWatch/SoradamaWatch.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -727,6 +755,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.2.1;
+				CODE_SIGN_ENTITLEMENTS = SoradamaWatchWidget/SoradamaWatchWidget.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -754,6 +783,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.2.1;
+				CODE_SIGN_ENTITLEMENTS = SoradamaWatchWidget/SoradamaWatchWidget.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;

@@ -17,6 +17,21 @@ enum OrbVoice {
         return pool[index]
     }
 
+    /// 過去の空玉に対する一言(コレクションの詳細表示用)。
+    /// その日と同じ日付シードを使うので、記録当日に表示された一言と概ね一致する。
+    static func line(for orb: DailyOrb) -> String {
+        var pool = lines(for: orb.kind, isDay: true)
+        if orb.tempMax >= 33 {
+            pool = hotLines
+        } else if orb.tempMax <= 2 {
+            pool = coldLines
+        }
+        let key = orb.dateKey + orb.kind.label
+        var generator = SeededRandom(seed: stableSeed(for: key))
+        let index = Int(generator.next() * Double(pool.count)) % max(pool.count, 1)
+        return pool[index]
+    }
+
     private static let hotLines = [
         "空玉、あつあつです",
         "今日の玉、湯気が出そう",

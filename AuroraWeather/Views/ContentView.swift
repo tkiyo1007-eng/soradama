@@ -1,12 +1,16 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
     @State private var viewModel = WeatherViewModel()
     @State private var showSearch = false
     @State private var showOrbCollection = false
     @State private var showWallpaper = false
     @State private var showSettings = false
     @State private var orbBounce = false
+    /// 今日の空玉が記録された瞬間のお祝いトースト
+    @State private var orbToast: OrbRecordResult?
 
     var body: some View {
         ZStack {
@@ -27,6 +31,20 @@ struct ContentView: View {
             .indexViewStyle(.page(backgroundDisplayMode: .never))
 
             topBar
+
+            if let toast = orbToast {
+                orbToastView(toast)
+            }
+
+            if !hasSeenOnboarding {
+                OnboardingView {
+                    withAnimation(.easeOut(duration: 0.4)) { hasSeenOnboarding = true }
+                    // ここではじめて位置情報の許可 → 初回読み込み → 最初の空玉の記録が走る
+                    Task { await viewModel.loadInitial() }
+                }
+                .transition(.opacity)
+                .zIndex(10)
+            }
         }
         .sheet(isPresented: $showSearch) {
             CitySearchView(viewModel: viewModel)
@@ -49,11 +67,39 @@ struct ContentView: View {
             }
         }
         .task {
-            await viewModel.loadInitial()
+            // 初回はオンボーディングの「はじめる」後に読み込む
+            // (何の説明もなく位置情報ダイアログを出さないため)
+            if hasSeenOnboarding {
+                await viewModel.loadInitial()
+            }
         }
         .onChange(of: viewModel.selectionID) { _, newID in
             Haptics.selection()
             Task { await viewModel.ensureLoaded(newID) }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            // 一晩置いて開き直したときなどに古い予報が残らないよう、
+            // 前面復帰のたびに再取得を試みる(30分以内ならensureLoadedが弾く)
+            if phase == .active {
+                Task { await viewModel.ensureLoaded(viewModel.selectionID) }
+            }
+        }
+        .onOpenURL { url in
+            // 「今日の空玉」ウィジェットのタップでコレクションを直接開く
+            if url.scheme == "soradama", url.host == "collection" {
+                showOrbCollection = true
+            }
+        }
+        .onChange(of: viewModel.lastOrbEvent) { _, event in
+            guard let event else { return }
+            Haptics.success()
+            withAnimation(.spring(duration: 0.5)) { orbToast = event }
+            Task {
+                try? await Task.sleep(for: .seconds(4))
+                withAnimation(.easeOut(duration: 0.4)) {
+                    if orbToast == event { orbToast = nil }
+                }
+            }
         }
     }
 
@@ -74,8 +120,24 @@ struct ContentView: View {
                         .frame(width: 40, height: 40)
                         .background(.ultraThinMaterial, in: Circle())
                         .scaleEffect(orbBounce ? 1.35 : 1.0)
+                        .overlay(alignment: .topTrailing) {
+                            // 連続日数バッジ。数字が見えているだけで「途切れさせたくない」動機になる
+                            let streak = OrbStore.shared.streak
+                            if streak > 1 {
+                                Text("\(streak)")
+                                    .font(.system(size: 10, weight: .bold, design: .rounded))
+                                    .foregroundStyle(.white)
+                                    .padding(.horizontal, 5)
+                                    .padding(.vertical, 1.5)
+                                    .background(
+                                        Color(red: 1.0, green: 0.55, blue: 0.30),
+                                        in: Capsule()
+                                    )
+                                    .offset(x: 6, y: -4)
+                            }
+                        }
                 }
-                .accessibilityLabel("空玉コレクションを開く")
+                .accessibilityLabel("空玉コレクションを開く。連続\(OrbStore.shared.streak)日")
 
                 Spacer()
 
@@ -120,6 +182,45 @@ struct ContentView: View {
             .padding(.horizontal, 16)
             Spacer()
         }
+    }
+
+    /// 今日の空玉が生まれた瞬間のお祝い表示。
+    /// 玉ができたことに気づけるようにし、コレクションへの導線も兼ねる。
+    private func orbToastView(_ event: OrbRecordResult) -> some View {
+        VStack {
+            Spacer()
+            Button {
+                orbToast = nil
+                showOrbCollection = true
+            } label: {
+                HStack(spacing: 10) {
+                    if let orb = OrbStore.shared.orb(for: Date()) {
+                        OrbView(orb: orb, size: 34)
+                    }
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(toastTitle(event))
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(.white)
+                        Text(event.streak > 1 ? "\(event.streak)日連続で集めています" : "タップしてコレクションを見る")
+                            .font(.caption2)
+                            .foregroundStyle(.white.opacity(0.7))
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(.ultraThinMaterial, in: Capsule())
+                .overlay(Capsule().strokeBorder(Color.white.opacity(0.25), lineWidth: 0.8))
+            }
+            .buttonStyle(.plain)
+            .padding(.bottom, 30)
+            .transition(.move(edge: .bottom).combined(with: .opacity))
+        }
+    }
+
+    private func toastTitle(_ event: OrbRecordResult) -> String {
+        if event.isMilestone { return "特別な空玉クリスタルが生まれました！" }
+        if event.isNewKind { return "新しい種類の空玉をずかんに追加！" }
+        return "今日の空玉ができました"
     }
 }
 

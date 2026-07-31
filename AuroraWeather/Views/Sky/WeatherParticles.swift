@@ -18,7 +18,8 @@ struct WeatherParticles: View {
             }
             .allowsHitTesting(false)
         } else {
-            TimelineView(.animation) { timeline in
+            // 上限なしだと ProMotion 機で120fpsまで回りバッテリーを消耗するため30fpsに制限
+            TimelineView(.animation(minimumInterval: 1.0 / 30)) { timeline in
                 Canvas { context, size in
                     draw(context: &context, size: size, time: timeline.date.timeIntervalSinceReferenceDate)
                 }

@@ -50,4 +50,82 @@ struct NotificationService {
     func cancel() {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [Self.rainAlertID])
     }
+
+    // MARK: - 朝の傘予報
+
+    static let morningAlertID = "soradama.morningUmbrella"
+
+    /// 次の朝7時に、その日の傘の要否を届ける。
+    /// 予約はアプリを開いた時点の予報に基づく(開くたびに入れ替わる)。
+    func scheduleMorningUmbrella(for weather: WeatherBundle, placeName: String) {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [Self.morningAlertID])
+
+        let calendar = Calendar.current
+        guard let fireDate = calendar.nextDate(
+            after: Date(),
+            matching: DateComponents(hour: 7, minute: 0),
+            matchingPolicy: .nextTime
+        ) else { return }
+
+        // 通知が鳴る朝7時から日中12時間ぶんの最大降水確率で判定する
+        let windowEnd = fireDate.addingTimeInterval(12 * 3600)
+        let probability = weather.hours
+            .filter { $0.date >= fireDate && $0.date <= windowEnd }
+            .compactMap(\.precipitationProbability)
+            .max()
+        guard let probability else { return }
+
+        let content = UNMutableNotificationContent()
+        switch probability {
+        case 50...:
+            content.title = "☔️ 今日は傘の出番です"
+            content.body = "\(placeName)の日中の降水確率は最大\(Int(probability))%。傘を持ってお出かけください。"
+        case 30..<50:
+            content.title = "🌂 折りたたみ傘があると安心"
+            content.body = "\(placeName)の日中の降水確率は最大\(Int(probability))%です。"
+        default:
+            content.title = "☀️ 今日は傘なしで大丈夫そう"
+            content.body = "\(placeName)の日中の降水確率は最大\(Int(probability))%。よい一日を！"
+        }
+        content.sound = .default
+
+        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        center.add(UNNotificationRequest(identifier: Self.morningAlertID, content: content, trigger: trigger))
+    }
+
+    func cancelMorningUmbrella() {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [Self.morningAlertID])
+    }
+
+    // MARK: - 連続記録リマインド
+
+    static let streakReminderID = "soradama.streakReminder"
+
+    /// 連続記録が途切れそうな夜(翌日の20時)にそっと知らせる。
+    /// 翌日アプリを開けば予約は入れ替わって鳴らない。開かなかった日だけ届く仕組み。
+    func scheduleStreakReminder(streak: Int) {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [Self.streakReminderID])
+        // 続ける動機が生まれるのは数日続いてから
+        guard streak >= 3 else { return }
+
+        let calendar = Calendar.current
+        guard let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date()),
+              let fireDate = calendar.date(bySettingHour: 20, minute: 0, second: 0, of: tomorrow) else { return }
+
+        let content = UNMutableNotificationContent()
+        content.title = "🔮 連続\(streak)日の記録が今日で途切れそうです"
+        content.body = "アプリを開くと今日の空玉を受け取れます。"
+        content.sound = .default
+
+        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        center.add(UNNotificationRequest(identifier: Self.streakReminderID, content: content, trigger: trigger))
+    }
+
+    func cancelStreakReminder() {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [Self.streakReminderID])
+    }
 }

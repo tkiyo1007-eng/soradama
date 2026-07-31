@@ -106,22 +106,6 @@ private struct RibbonDrift: View {
     }
 }
 
-// MARK: - 決定的な擬似乱数(フレーム間で位置を固定するため)
-
-struct SeededRandom {
-    private var state: UInt64
-
-    init(seed: UInt64) {
-        state = seed &+ 0x9E3779B97F4A7C15
-    }
-
-    mutating func next() -> Double {
-        state = state &* 6364136223846793005 &+ 1442695040888963407
-        let value = (state >> 33) & 0x7FFFFFFF
-        return Double(value) / Double(0x7FFFFFFF)
-    }
-}
-
 #Preview {
     SkyBackground(kind: .clear, isDay: false)
 }

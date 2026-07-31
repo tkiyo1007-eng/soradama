@@ -5,5 +5,6 @@ import SwiftUI
 struct AuroraWeatherWidgetBundle: WidgetBundle {
     var body: some Widget {
         AuroraWeatherWidget()
+        TodayOrbWidget()
     }
 }

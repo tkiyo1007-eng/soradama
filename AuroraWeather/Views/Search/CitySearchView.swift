@@ -66,6 +66,12 @@ struct CitySearchView: View {
                             Spacer()
                         }
                     }
+                } else if !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    Section {
+                        Text("「\(query)」は見つかりませんでした。表記を変えるか、通信状態をご確認ください。")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
                 // 保存済みの地点
@@ -108,7 +114,8 @@ struct CitySearchView: View {
     }
 
     private func isSaved(_ place: GeoPlace) -> Bool {
-        viewModel.savedPlaces.contains(place.asSavedPlace)
+        let id = place.asSavedPlace.id
+        return viewModel.savedPlaces.contains { $0.id == id }
     }
 
     private func select(_ place: SavedPlace) {

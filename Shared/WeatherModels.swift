@@ -149,7 +149,10 @@ struct WeatherBundle: Codable {
 // MARK: - 保存地点・設定
 
 struct SavedPlace: Codable, Identifiable, Equatable, Hashable {
-    var id: String { "\(latitude),\(longitude)" }
+    /// 現在地は測位のたびに座標の下位桁が揺れるため、座標を ID にすると
+    /// 起動ごとに別ページ扱いになりキャッシュが永遠にヒットしない。
+    /// 現在地は固定 ID にして「圏外でも前回の現在地データを表示できる」ようにする。
+    var id: String { isCurrentLocation ? "current-location" : "\(latitude),\(longitude)" }
     let name: String
     let detail: String
     let latitude: Double

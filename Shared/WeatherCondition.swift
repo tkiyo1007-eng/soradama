@@ -14,8 +14,8 @@ enum WeatherKind: String, Codable, CaseIterable {
 
     init(wmoCode: Int) {
         switch wmoCode {
-        case 0:            self = .clear
-        case 1, 2:         self = .partlyCloudy
+        case 0, 1:         self = .clear // WMO 1 は「おおむね晴れ」なので晴れ扱いにする
+        case 2:            self = .partlyCloudy
         case 3:            self = .cloudy
         case 45, 48:       self = .fog
         case 51...57:      self = .drizzle

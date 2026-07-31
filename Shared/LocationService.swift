@@ -25,7 +25,17 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     }
 
     func currentLocation() async throws -> CLLocation {
-        try await withCheckedThrowingContinuation { continuation in
+        // 権限ダイアログに答えないままバックグラウンドへ行くなどで
+        // デリゲートが呼ばれないと continuation が永久に宙吊りになり、
+        // 以降のすべての現在地取得が失敗し続ける。20秒で必ず打ち切る。
+        let timeout = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(20))
+            guard !Task.isCancelled else { return }
+            await MainActor.run { self?.resume(with: .failure(LocationError.unavailable)) }
+        }
+        defer { timeout.cancel() }
+
+        return try await withCheckedThrowingContinuation { continuation in
             guard self.continuation == nil else {
                 continuation.resume(throwing: LocationError.unavailable)
                 return
