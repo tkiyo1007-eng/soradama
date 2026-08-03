@@ -11,9 +11,28 @@ struct OrbView: View {
     /// `ImageRenderer`(壁紙・共有カード)とウィジェットは `TimelineView` の中身を
     /// 描画しないため、その文脈では必ず false にすること。
     var animated: Bool = true
+    /// 季節の景色(霞・入道雲・うろこ雲・光条)を重ねるか。
+    /// 空玉ずかんの「天気」のマスは季節に依存しない見本なので false にする。
+    var showsSeason: Bool = true
 
+    /// 玉の中の空の色。時間帯によって朝焼け・夕暮れ・夜空に変わる。
     private var baseColors: [Color] {
-        orb.kind.skyColors(isDay: true)
+        switch orb.timeOfDay {
+        case .dawn:
+            // 朝焼け: 藍から桃色へ抜ける
+            return [Color(red: 0.36, green: 0.44, blue: 0.78),
+                    Color(red: 0.98, green: 0.66, blue: 0.62),
+                    Color(red: 1.0, green: 0.85, blue: 0.68)]
+        case .dusk:
+            // 夕暮れ: 紫から橙へ落ちる
+            return [Color(red: 0.30, green: 0.26, blue: 0.60),
+                    Color(red: 0.86, green: 0.44, blue: 0.52),
+                    Color(red: 1.0, green: 0.68, blue: 0.42)]
+        case .night:
+            return orb.kind.skyColors(isDay: false)
+        case .day:
+            return orb.kind.skyColors(isDay: true)
+        }
     }
 
     /// 気温による色味(暑い日は暖色、寒い日は氷色のにじみ)
@@ -22,6 +41,16 @@ struct OrbView: View {
         if orb.tempMax >= 25 { return Color(red: 1.0, green: 0.80, blue: 0.45) }
         if orb.tempMax < 5 { return Color(red: 0.60, green: 0.85, blue: 1.0) }
         return nil
+    }
+
+    /// 季節ごとの空気感。同じ晴れでも春は霞み、秋は澄む。
+    private var seasonTint: (color: Color, opacity: Double)? {
+        switch orb.season {
+        case .spring: return (Color(red: 1.0, green: 0.85, blue: 0.90), 0.30) // 霞んだ桃色
+        case .summer: return (Color(red: 1.0, green: 0.95, blue: 0.70), 0.22) // 強い陽射し
+        case .autumn: return (Color(red: 0.45, green: 0.55, blue: 0.95), 0.20) // 高く澄んだ青
+        case .winter: return (Color(red: 0.80, green: 0.92, blue: 1.0), 0.26)  // 冴えた冷気
+        }
     }
 
     private var seed: UInt64 {
@@ -37,8 +66,8 @@ struct OrbView: View {
             }
         }
         .accessibilityLabel(orb.isMilestone
-            ? "\(orb.dateKey)の特別な空玉クリスタル、\(orb.kind.label)"
-            : "\(orb.dateKey)の空玉、\(orb.kind.label)")
+            ? "\(orb.dateKey)の特別な空玉クリスタル、\(orb.season.label)の\(orb.timeOfDay.label)、\(orb.kind.label)"
+            : "\(orb.dateKey)の空玉、\(orb.season.label)の\(orb.timeOfDay.label)、\(orb.kind.label)")
     }
 
     private var regularOrb: some View {
@@ -62,9 +91,21 @@ struct OrbView: View {
                     )
             }
 
+            // 夜の玉には星を散らす
+            if orb.timeOfDay == .night {
+                starField
+                    .clipShape(Circle())
+            }
+
             // 天気の模様
             weatherPattern
                 .clipShape(Circle())
+
+            // 季節の空気感(模様の上から薄くかぶせる)
+            if showsSeason, let season = seasonTint {
+                seasonLayer(season)
+                    .clipShape(Circle())
+            }
 
             // ガラスの質感: ハイライトとリム
             Circle()
@@ -88,6 +129,130 @@ struct OrbView: View {
         }
         .frame(width: size, height: size)
         .shadow(color: baseColors.first?.opacity(0.45) ?? .clear, radius: size * 0.12, y: size * 0.06)
+    }
+
+    /// 夜空の星。日付シードなので同じ日は同じ星並びになる。
+    private var starField: some View {
+        OrbCanvas(seed: seed &+ 0x5747, size: size) { context, generator in
+            for _ in 0..<7 {
+                let x = generator.next() * size
+                let y = generator.next() * size * 0.8
+                let radius = size * (0.012 + generator.next() * 0.018)
+                let rect = CGRect(x: x - radius, y: y - radius, width: radius * 2, height: radius * 2)
+                context.fill(Path(ellipseIn: rect), with: .color(.white.opacity(0.5 + generator.next() * 0.5)))
+            }
+        }
+    }
+
+    /// 季節の空気感を表すレイヤー。
+    /// 色だけだと季節の差が伝わらないため、季節ごとに「形のある景色」を描く。
+    @ViewBuilder
+    private func seasonLayer(_ season: (color: Color, opacity: Double)) -> some View {
+        switch orb.season {
+        case .spring:
+            // 霞: 横に流れるやわらかい帯が重なる
+            ZStack {
+                season.color.opacity(season.opacity * 0.7)
+                    .mask(
+                        LinearGradient(
+                            colors: [.clear, .white.opacity(0.8), .white],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                VStack(spacing: size * 0.10) {
+                    ForEach(0..<3, id: \.self) { index in
+                        Capsule()
+                            .fill(Color.white.opacity(0.38 - Double(index) * 0.06))
+                            .frame(height: size * 0.055)
+                            .padding(.horizontal, size * CGFloat(0.10 + Double(index) * 0.06))
+                    }
+                }
+                .offset(y: size * 0.14)
+                .blur(radius: size * 0.035)
+            }
+        case .summer:
+            // 入道雲: 下から白い塊が湧き上がる
+            ZStack {
+                RadialGradient(
+                    colors: [season.color.opacity(season.opacity + 0.10), .clear],
+                    center: UnitPoint(x: 0.28, y: 0.04),
+                    startRadius: 0,
+                    endRadius: size * 0.8
+                )
+                Canvas { context, canvasSize in
+                    var generator = SeededRandom(seed: seed &+ 0x5CE7)
+                    let baseY = canvasSize.height * 0.92
+                    // 大きさの違う円を重ねて積乱雲のシルエットを作る
+                    let blobs: [(CGFloat, CGFloat, CGFloat)] = [
+                        (0.30, 0.74, 0.26), (0.50, 0.62, 0.32), (0.70, 0.76, 0.24),
+                        (0.40, 0.86, 0.22), (0.62, 0.88, 0.20),
+                    ]
+                    for (nx, ny, nr) in blobs {
+                        let jitter = (generator.next() - 0.5) * canvasSize.width * 0.05
+                        let cx = canvasSize.width * nx + jitter
+                        let cy = min(canvasSize.height * ny, baseY)
+                        let r = canvasSize.width * nr
+                        let rect = CGRect(x: cx - r, y: cy - r, width: r * 2, height: r * 2)
+                        context.fill(Path(ellipseIn: rect), with: .color(.white.opacity(0.42)))
+                    }
+                }
+                .blur(radius: size * 0.02)
+            }
+        case .autumn:
+            // うろこ雲: 高い空に小さな雲が整列する
+            ZStack {
+                LinearGradient(
+                    colors: [season.color.opacity(season.opacity), .clear],
+                    startPoint: .top,
+                    endPoint: .center
+                )
+                Canvas { context, canvasSize in
+                    var generator = SeededRandom(seed: seed &+ 0xA07E)
+                    for row in 0..<3 {
+                        for column in 0..<4 {
+                            let x = canvasSize.width * (0.18 + Double(column) * 0.22)
+                                + (generator.next() - 0.5) * canvasSize.width * 0.04
+                            let y = canvasSize.height * (0.20 + Double(row) * 0.11)
+                            let w = canvasSize.width * 0.11
+                            let h = canvasSize.height * 0.045
+                            let rect = CGRect(x: x - w / 2, y: y - h / 2, width: w, height: h)
+                            context.fill(
+                                Path(ellipseIn: rect),
+                                with: .color(.white.opacity(0.34 - Double(row) * 0.06))
+                            )
+                        }
+                    }
+                }
+                .blur(radius: size * 0.012)
+            }
+        case .winter:
+            // 凛と冴えた空: 縁が冷たく光り、中心に細い光条が伸びる
+            ZStack {
+                Circle()
+                    .strokeBorder(season.color.opacity(season.opacity + 0.35), lineWidth: size * 0.09)
+                    .blur(radius: size * 0.045)
+                Canvas { context, canvasSize in
+                    let center = CGPoint(x: canvasSize.width * 0.5, y: canvasSize.height * 0.44)
+                    let arm = canvasSize.width * 0.30
+                    var path = Path()
+                    for angle in stride(from: 0.0, to: 360.0, by: 60.0) {
+                        let radians = angle * .pi / 180
+                        path.move(to: center)
+                        path.addLine(to: CGPoint(
+                            x: center.x + cos(radians) * arm,
+                            y: center.y + sin(radians) * arm
+                        ))
+                    }
+                    context.stroke(
+                        path,
+                        with: .color(.white.opacity(0.45)),
+                        style: StrokeStyle(lineWidth: max(0.6, canvasSize.width * 0.016), lineCap: .round)
+                    )
+                }
+                .blur(radius: size * 0.015)
+            }
+        }
     }
 
     @ViewBuilder

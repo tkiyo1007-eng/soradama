@@ -10,6 +10,10 @@ struct OrbCollectionView: View {
     @State private var monthShareImage: Image?
     /// 詳細モーダルで開いている玉の共有画像(玉を選び直したら作り直す)
     @State private var orbShareImage: Image?
+    /// ずかんでタップされたマス
+    @State private var selectedVariant: SkyVariant?
+    /// 月の振り返りカードを開いているか
+    @State private var showMonthSummary = false
 
     private let store = OrbStore.shared
 
@@ -67,6 +71,13 @@ struct OrbCollectionView: View {
             .overlay {
                 if let orb = selectedOrb {
                     orbDetail(orb)
+                } else if let variant = selectedVariant {
+                    variantDetail(variant)
+                }
+            }
+            .sheet(isPresented: $showMonthSummary) {
+                if let summary = store.summary(forMonthOf: displayedMonth) {
+                    MonthSummaryView(summary: summary, orbs: store.orbs(inMonthOf: displayedMonth))
                 }
             }
         }
@@ -182,9 +193,33 @@ struct OrbCollectionView: View {
     // MARK: 統計
 
     private var statsRow: some View {
-        HStack(spacing: 12) {
-            statCard(value: "\(store.count(inMonthOf: displayedMonth))", label: "今月の空玉")
-            statCard(value: "\(store.streak)", label: "連続日数")
+        VStack(spacing: 12) {
+            HStack(spacing: 12) {
+                statCard(value: "\(store.count(inMonthOf: displayedMonth))", label: "今月の空玉")
+                statCard(value: "\(store.streak)", label: "連続日数")
+            }
+            // その月に玉が1つでもあれば、振り返りカードを開ける
+            if store.summary(forMonthOf: displayedMonth) != nil {
+                Button {
+                    Haptics.selection()
+                    showMonthSummary = true
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "sparkles.rectangle.stack")
+                        Text("この月をふりかえる")
+                            .font(.subheadline.weight(.semibold))
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .opacity(0.6)
+                    }
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 13)
+                    .background(Color.white.opacity(0.10), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                }
+                .buttonStyle(.plain)
+            }
         }
         .padding(.top, 6)
     }
@@ -205,63 +240,132 @@ struct OrbCollectionView: View {
 
     // MARK: 空玉ずかん
 
-    private var collectedKinds: Set<WeatherKind> {
-        Set(store.orbs.values.map(\.kind))
-    }
-
-    /// 図鑑表示用の代表的な玉(実際に記録された日付に関わらず、種類ごとに一定の見た目にする)
-    private func archetype(for kind: WeatherKind) -> DailyOrb {
-        DailyOrb(
-            dateKey: "archetype-\(kind.rawValue)",
-            kind: kind,
+    /// 図鑑表示用の代表的な玉(実際に記録された日付に関わらず、一定の見た目にする)
+    private func archetype(for variant: SkyVariant, season: Season = .spring) -> DailyOrb {
+        // 季節の質感を出すため、その季節の中央あたりの日付キーを使う
+        let month = ["spring": "04", "summer": "07", "autumn": "10", "winter": "01"][season.rawValue] ?? "04"
+        return DailyOrb(
+            dateKey: "2000-\(month)-15",
+            kind: variant.kind,
             tempMax: 22,
             tempMin: 16,
             humidity: 55,
             precipProbability: nil,
-            placeName: ""
+            placeName: "",
+            timeOfDay: variant.timeOfDay
         )
     }
 
     private var zukanSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        let collected = store.collectedSkies
+        let total = SkyVariant.zukanEntries.count
+        return VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("空玉ずかん")
                     .font(.headline)
                     .foregroundStyle(.white)
                 Spacer()
-                Text("\(collectedKinds.count)/\(WeatherKind.allCases.count) コンプリート")
+                Text("\(collected.count)/\(total) コンプリート")
                     .font(.caption.weight(.medium))
                     .foregroundStyle(.white.opacity(0.6))
             }
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 4), spacing: 14) {
-                ForEach(WeatherKind.allCases, id: \.self) { kind in
-                    VStack(spacing: 5) {
-                        if collectedKinds.contains(kind) {
-                            OrbView(orb: archetype(for: kind), size: 46)
-                        } else {
-                            ZStack {
-                                Circle()
-                                    .fill(Color.white.opacity(0.06))
-                                Circle()
-                                    .strokeBorder(Color.white.opacity(0.18), style: StrokeStyle(lineWidth: 1, dash: [3, 3]))
-                                Image(systemName: "questionmark")
-                                    .font(.caption.weight(.semibold))
-                                    .foregroundStyle(.white.opacity(0.35))
+                ForEach(SkyVariant.zukanEntries) { variant in
+                    let has = collected.contains(variant)
+                    Button {
+                        guard has else { return }
+                        Haptics.selection()
+                        selectedVariant = variant
+                    } label: {
+                        VStack(spacing: 5) {
+                            if has {
+                                OrbView(orb: archetype(for: variant), size: 46, showsSeason: false)
+                            } else {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.white.opacity(0.06))
+                                    Circle()
+                                        .strokeBorder(Color.white.opacity(0.18), style: StrokeStyle(lineWidth: 1, dash: [3, 3]))
+                                    Image(systemName: "questionmark")
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(.white.opacity(0.35))
+                                }
+                                .frame(width: 46, height: 46)
                             }
-                            .frame(width: 46, height: 46)
+                            Text(has ? variant.label : "？？？")
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundStyle(.white.opacity(has ? 0.7 : 0.35))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
                         }
-                        Text(collectedKinds.contains(kind) ? kind.label : "？？？")
-                            .font(.system(size: 10, weight: .medium))
-                            .foregroundStyle(.white.opacity(collectedKinds.contains(kind) ? 0.7 : 0.35))
                     }
+                    .buttonStyle(.plain)
+                    .disabled(!has)
                 }
             }
-            Text("天気を体験すると、その玉が図鑑に加わります")
+            Text("同じ天気でも、昼と夜では別の玉になります")
                 .font(.caption2)
                 .foregroundStyle(.white.opacity(0.45))
+
+            Divider().overlay(Color.white.opacity(0.15))
+
+            seasonRow
         }
         .padding(16)
         .background(Color.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+    }
+
+    /// 季節の空とマジックアワーの収集状況
+    private var seasonRow: some View {
+        let seasons = store.collectedSeasons
+        let magic = Set(store.orbs.values.map(\.timeOfDay))
+        return VStack(alignment: .leading, spacing: 10) {
+            Text("季節の空")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.white)
+            HStack(spacing: 10) {
+                ForEach(Season.allCases, id: \.self) { season in
+                    let has = seasons.contains(season)
+                    VStack(spacing: 4) {
+                        if has {
+                            OrbView(orb: archetype(for: SkyVariant(kind: .clear, timeOfDay: .day), season: season), size: 40)
+                        } else {
+                            Circle()
+                                .strokeBorder(Color.white.opacity(0.18), style: StrokeStyle(lineWidth: 1, dash: [3, 3]))
+                                .frame(width: 40, height: 40)
+                        }
+                        Text(has ? season.skyName : season.label)
+                            .font(.system(size: 9, weight: .medium))
+                            .foregroundStyle(.white.opacity(has ? 0.7 : 0.3))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
+
+            HStack(spacing: 8) {
+                ForEach([TimeOfDay.dawn, TimeOfDay.dusk], id: \.self) { time in
+                    let has = magic.contains(time)
+                    HStack(spacing: 6) {
+                        if has {
+                            OrbView(orb: archetype(for: SkyVariant(kind: .clear, timeOfDay: time)), size: 26, showsSeason: false)
+                        } else {
+                            Circle()
+                                .strokeBorder(Color.white.opacity(0.18), style: StrokeStyle(lineWidth: 1, dash: [2, 2]))
+                                .frame(width: 26, height: 26)
+                        }
+                        Text(has ? "\(time.label)の空" : "？？？")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundStyle(.white.opacity(has ? 0.7 : 0.3))
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            Text("日の出・日の入りの前後1時間に開くと、特別な空が残ります")
+                .font(.caption2)
+                .foregroundStyle(.white.opacity(0.45))
+        }
     }
 
     // MARK: 共有
@@ -408,6 +512,53 @@ struct OrbCollectionView: View {
             if let uiImage = renderer.uiImage {
                 orbShareImage = Image(uiImage: uiImage)
             }
+        }
+    }
+
+    /// ずかんのマスをタップしたときの詳細(初めて出会った日と収集数)
+    private func variantDetail(_ variant: SkyVariant) -> some View {
+        let first = store.firstOrb(of: variant)
+        let count = store.count(of: variant)
+        return ZStack {
+            Color.black.opacity(0.55)
+                .ignoresSafeArea()
+                .onTapGesture { selectedVariant = nil }
+
+            VStack(spacing: 12) {
+                OrbView(orb: archetype(for: variant), size: 110, showsSeason: false)
+                    .padding(.top, 6)
+                Text(variant.label)
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                if let first, let date = first.date {
+                    Text("はじめて出会った日")
+                        .font(.caption2)
+                        .foregroundStyle(.white.opacity(0.55))
+                    Text(date.formatted(.dateTime.locale(Locale(identifier: "ja_JP")).year().month().day()))
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.white.opacity(0.9))
+                }
+                Text("これまでに \(count) 個")
+                    .font(.footnote)
+                    .foregroundStyle(.white.opacity(0.75))
+                Button("閉じる") { selectedVariant = nil }
+                    .font(.callout.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 26)
+                    .padding(.vertical, 9)
+                    .background(Color.white.opacity(0.15), in: Capsule())
+                    .padding(.top, 2)
+            }
+            .padding(22)
+            .background(
+                LinearGradient(
+                    colors: [Color(red: 0.10, green: 0.12, blue: 0.28), Color(red: 0.18, green: 0.17, blue: 0.40)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                ),
+                in: RoundedRectangle(cornerRadius: 28, style: .continuous)
+            )
+            .padding(.horizontal, 52)
         }
     }
 
