@@ -136,6 +136,7 @@ struct WeatherBundle: Codable {
 
     var todayMax: Double { days.first?.tempMax ?? temperature }
 
+
     /// 直近 N 時間以内の最大降水確率。傘指数・洗濯指数のように「今から数時間」を
     /// 判断材料にしたい場面で使う。`days.first` の「今日1日の最大値」だと、
     /// 深夜の雨予報のせいで日中ずっと高い数値のままになるなど実感とズレるため。

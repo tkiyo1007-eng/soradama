@@ -50,8 +50,39 @@ struct SkyBackground: View {
             if !reduceMotion || isStatic {
                 WeatherParticles(kind: kind.particle, staticTime: staticTime)
             }
+
+            // くもり・霧・雪の日中は空が白に近く、その上の白文字が読めなくなる。
+            // 空の色味は活かしたまま、文字が乗る領域だけを薄く沈めて
+            // コントラストを確保する(暗い空のときは何もしない)。
+            if brightSkyScrimOpacity > 0 {
+                LinearGradient(
+                    stops: [
+                        .init(color: .black.opacity(brightSkyScrimOpacity * 1.15), location: 0.0),
+                        .init(color: .black.opacity(brightSkyScrimOpacity * 0.55), location: 0.45),
+                        .init(color: .black.opacity(brightSkyScrimOpacity * 0.95), location: 1.0),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .animation(.easeInOut(duration: 1.2), value: kind)
+                .allowsHitTesting(false)
+            }
         }
         .ignoresSafeArea()
+    }
+
+    /// 空が明るいほど強くかける暗幕の濃さ。
+    /// グラデーション末端(画面下)の明るさから機械的に決めるので、
+    /// 天候ごとの色を変えても自動で追随する。
+    private var brightSkyScrimOpacity: Double {
+        guard let brightest = colors.last?.resolve(in: .init()) else { return 0 }
+        // ITU-R BT.601 の輝度。白文字が乗るので明るさだけを見る
+        let luminance = 0.299 * Double(brightest.red)
+            + 0.587 * Double(brightest.green)
+            + 0.114 * Double(brightest.blue)
+        // 0.55 を超えたあたりから徐々に、最大 0.30 まで沈める
+        guard luminance > 0.55 else { return 0 }
+        return min((luminance - 0.55) * 0.9, 0.30)
     }
 }
 
