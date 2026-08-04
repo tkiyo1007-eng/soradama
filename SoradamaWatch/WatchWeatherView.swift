@@ -10,6 +10,7 @@ final class WatchWeatherModel {
     var placeName: String = SharedStore.lastPlace().name
     var failed = false
     var isLoading = false
+    var errorMessage: String?
 
     private let service = WeatherService()
     private let locationService = LocationService()
@@ -20,13 +21,17 @@ final class WatchWeatherModel {
         isLoading = true
         defer { isLoading = false }
         failed = false
+        errorMessage = nil
 
-        // 現在地が取れればそれを、ダメなら前回の地点(既定: 東京)を使う
+        // iPhone 側で選んでいる地点を優先する(App Group 経由で共有)。
+        // 以前は現在地を無条件に優先していたため、iPhone で大阪を選んでいても
+        // Watch だけ現在地を表示してしまい、2つの端末で違う天気が出ていた。
         var place = SharedStore.lastPlace()
-        if let location = try? await locationService.currentLocation() {
+        if place.isCurrentLocation, let location = try? await locationService.currentLocation() {
+            // iPhone 側も「現在地」を見ているときだけ、Watch 自身の測位で座標を更新する
             place = SavedPlace(
-                name: "現在地",
-                detail: "",
+                name: place.name,
+                detail: place.detail,
                 latitude: location.coordinate.latitude,
                 longitude: location.coordinate.longitude,
                 isCurrentLocation: true
@@ -37,6 +42,8 @@ final class WatchWeatherModel {
         do {
             weather = try await service.fetch(latitude: place.latitude, longitude: place.longitude)
         } catch {
+            // 圏外の理由が分かるよう、iPhone 側と同じ日本語メッセージを使う
+            errorMessage = error.soradamaMessage
             if weather == nil { failed = true }
         }
     }
@@ -60,8 +67,9 @@ struct WatchWeatherView: View {
                 VStack(spacing: 10) {
                     Image(systemName: "wifi.exclamationmark")
                         .font(.title2)
-                    Text("取得に失敗しました")
+                    Text(model.errorMessage ?? "取得に失敗しました")
                         .font(.footnote)
+                        .multilineTextAlignment(.center)
                     Button("再試行") {
                         Task { await model.load() }
                     }

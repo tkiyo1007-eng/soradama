@@ -354,6 +354,7 @@ private struct OrbCanvas: View {
 /// 丸いガラス玉ではなく多面体のクリスタルとして表示される。
 /// Apple 純正アプリには存在しない、そらだま独自のレアリティ表現。
 struct CrystalOrbView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let orb: DailyOrb
     var size: CGFloat = 44
     /// false のとき TimelineView を使わず固定の輝きで描く(ImageRenderer・ウィジェット用)
@@ -373,7 +374,8 @@ struct CrystalOrbView: View {
     private var seed: UInt64 { stableSeed(for: orb.dateKey) }
 
     var body: some View {
-        if animated {
+        // 「動きを減らす」設定では脈動させない(コレクションに複数並ぶと特に負担が大きい)
+        if animated && !reduceMotion {
             TimelineView(.animation(minimumInterval: 1.0 / 15)) { timeline in
                 let time = timeline.date.timeIntervalSinceReferenceDate
                 crystalBody(pulse: (sin(time * 1.1) + 1) / 2)

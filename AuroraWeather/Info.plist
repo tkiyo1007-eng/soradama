@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- 配列型のキーは INFOPLIST_KEY_ 方式では渡せないため、ここで明示する。
+	     その他のキー(表示名・位置情報の説明文など)はビルド設定から自動生成されてマージされる。 -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.tkiyo1007.soradama.refresh</string>
+	</array>
+</dict>
+</plist>

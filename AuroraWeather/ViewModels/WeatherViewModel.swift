@@ -44,9 +44,15 @@ final class WeatherViewModel {
            let stored = try? JSONDecoder().decode([SavedPlace].self, from: data) {
             savedPlaces = stored
         }
-        bundles = cache.load()
         selectionID = primaryPlace.id
         rebuildPages()
+        // キャッシュ読み込みはディスクI/Oなので起動をブロックしないよう非同期に
+        Task { @MainActor in
+            let cached = await cache.load()
+            for (key, value) in cached where bundles[key] == nil {
+                bundles[key] = value
+            }
+        }
     }
 
     // MARK: - 現在ページの便宜プロパティ
@@ -92,7 +98,10 @@ final class WeatherViewModel {
             let bundle = try await weatherService.fetch(latitude: place.latitude, longitude: place.longitude)
             bundles[id] = bundle
             errors[id] = nil
-            cache.save(bundles)
+            // 表示中の地点ぶんだけ残す(削除した地点のデータが残り続けないように)
+            let keep = Set(pages.map(\.id))
+            let snapshot = bundles
+            Task.detached { await self.cache.save(snapshot, keeping: keep) }
             if id == primaryPlace.id {
                 SharedStore.saveLastPlace(place)
                 WidgetCenter.shared.reloadAllTimelines()

@@ -100,6 +100,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AuroraWeather.entitlements,
+				Info.plist,
 			);
 			target = A1000000000000000000000E /* AuroraWeather */;
 		};
@@ -566,6 +567,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "そらだま";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_FILE = AuroraWeather/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "現在地の天気を表示するために位置情報を使用します。";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "今日の空を壁紙として写真に保存するために使用します。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -600,6 +602,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "そらだま";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_FILE = AuroraWeather/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "現在地の天気を表示するために位置情報を使用します。";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "今日の空を壁紙として写真に保存するために使用します。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

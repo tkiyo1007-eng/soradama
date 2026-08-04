@@ -2,6 +2,8 @@ import SwiftUI
 
 /// 画面上部の現在気温ヘッダー。スクロール量に応じて縮小・フェードする。
 struct CurrentHeaderView: View {
+    /// 気温の巨大表示。文字サイズ設定に追従しつつ、極端に大きくならないよう上限を設ける
+    @ScaledMetric(relativeTo: .largeTitle) private var bigTempSize: CGFloat = 108
     let placeName: String
     let isCurrentLocation: Bool
     let weather: WeatherBundle
@@ -39,7 +41,7 @@ struct CurrentHeaderView: View {
                 // 展開時: 大きな気温
                 VStack(spacing: 2) {
                     temperatureText
-                        .font(.system(size: 108, weight: .thin))
+                        .font(.system(size: min(bigTempSize, 150), weight: .thin))
                         .kerning(-2)
                         // 巨大なフォントなので、レイアウト都合で「2...」のように
                         // 省略されないよう明示的に1行・縮小許可にする

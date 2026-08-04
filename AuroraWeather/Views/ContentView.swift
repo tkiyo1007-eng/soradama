@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
     @State private var viewModel = WeatherViewModel()
     @State private var showSearch = false
@@ -108,6 +109,10 @@ struct ContentView: View {
             HStack {
                 Button {
                     Haptics.selection()
+                    guard !reduceMotion else {
+                        showOrbCollection = true
+                        return
+                    }
                     withAnimation(.interpolatingSpring(stiffness: 320, damping: 8)) {
                         orbBounce = true
                     }
@@ -125,7 +130,7 @@ struct ContentView: View {
                             let streak = OrbStore.shared.streak
                             if streak > 1 {
                                 Text("\(streak)")
-                                    .font(.system(size: 10, weight: .bold, design: .rounded))
+                                    .font(.system(.caption2, design: .rounded).weight(.bold))
                                     .foregroundStyle(.white)
                                     .padding(.horizontal, 5)
                                     .padding(.vertical, 1.5)

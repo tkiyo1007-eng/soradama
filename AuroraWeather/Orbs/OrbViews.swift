@@ -184,7 +184,7 @@ struct OrbCollectionView: View {
                     .frame(width: 38, height: 38)
             }
             Text("\(dayNumber)")
-                .font(.system(size: 10, weight: .medium))
+                .font(.caption2)
                 .foregroundStyle(.white.opacity(isFuture ? 0.25 : 0.6))
         }
         .frame(height: 52)
@@ -227,7 +227,7 @@ struct OrbCollectionView: View {
     private func statCard(value: String, label: String) -> some View {
         VStack(spacing: 2) {
             Text(value)
-                .font(.system(size: 26, weight: .bold, design: .rounded))
+                .font(.system(.title, design: .rounded).weight(.bold))
                 .foregroundStyle(.white)
             Text(label)
                 .font(.caption)
@@ -293,7 +293,7 @@ struct OrbCollectionView: View {
                                 .frame(width: 46, height: 46)
                             }
                             Text(has ? variant.label : "？？？")
-                                .font(.system(size: 10, weight: .medium))
+                                .font(.caption2)
                                 .foregroundStyle(.white.opacity(has ? 0.7 : 0.35))
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.8)
@@ -356,7 +356,7 @@ struct OrbCollectionView: View {
                                 .frame(width: 26, height: 26)
                         }
                         Text(has ? "\(time.label)の空" : "？？？")
-                            .font(.system(size: 10, weight: .medium))
+                            .font(.caption2)
                             .foregroundStyle(.white.opacity(has ? 0.7 : 0.3))
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)

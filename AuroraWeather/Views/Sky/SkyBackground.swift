@@ -24,10 +24,15 @@ struct SkyBackground: View {
     /// 静止画モードでは「動きを減らす」設定と同じ扱いにして、時刻固定の見た目にする
     private var isStatic: Bool { staticTime != nil }
 
+    /// アプリを開いたままでも空の色が時刻に追随するよう、1分ごとに更新する。
+    /// 以前は View 生成時の `Date()` を使う純粋計算だったため、
+    /// 夕暮れをまたいでも色が変わらなかった。
+    @State private var now = Date()
+
     /// 日の出・日の入りが分かる場合は時刻連動の色、分からない場合は従来の昼夜2段階
     private var colors: [Color] {
         if let sunrise, let sunset {
-            return kind.skyColors(at: Date(), sunrise: sunrise, sunset: sunset)
+            return kind.skyColors(at: now, sunrise: sunrise, sunset: sunset)
         }
         return kind.skyColors(isDay: isDay)
     }
@@ -69,6 +74,14 @@ struct SkyBackground: View {
             }
         }
         .ignoresSafeArea()
+        .task(id: isStatic) {
+            // 静止画の書き出し中は時計を動かさない
+            guard !isStatic else { return }
+            while !Task.isCancelled {
+                now = Date()
+                try? await Task.sleep(for: .seconds(60))
+            }
+        }
     }
 
     /// 空が明るいほど強くかける暗幕の濃さ。

@@ -60,25 +60,25 @@ struct WeatherPageView: View {
 
                 Group {
                     HourlyForecastCard(weather: weather, degrees: viewModel.degrees)
-                        .revealed(cardsAppeared, order: 0)
+                        .revealed(cardsAppeared, order: 0, reduceMotion: reduceMotion)
 
-                    DetailsGrid(weather: weather, degrees: viewModel.degrees)
-                        .revealed(cardsAppeared, order: 1)
+                    DetailsGrid(weather: weather, degrees: viewModel.degrees, units: viewModel.units)
+                        .revealed(cardsAppeared, order: 1, reduceMotion: reduceMotion)
 
                     RadarCardButton { showRadar = true }
-                        .revealed(cardsAppeared, order: 2)
+                        .revealed(cardsAppeared, order: 2, reduceMotion: reduceMotion)
 
                     TemperatureChartCard(weather: weather, units: viewModel.units)
-                        .revealed(cardsAppeared, order: 3)
+                        .revealed(cardsAppeared, order: 3, reduceMotion: reduceMotion)
                     DailyForecastCard(weather: weather, degrees: viewModel.degrees)
-                        .revealed(cardsAppeared, order: 4)
+                        .revealed(cardsAppeared, order: 4, reduceMotion: reduceMotion)
 
                     Text("データ提供: Open-Meteo.com / RainViewer.com")
                         .font(.caption2)
                         .foregroundStyle(.white.opacity(0.45))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
-                        .revealed(cardsAppeared, order: 5)
+                        .revealed(cardsAppeared, order: 5, reduceMotion: reduceMotion)
                 }
                 .padding(.horizontal, 16)
             }
@@ -111,12 +111,15 @@ struct WeatherPageView: View {
 private extension View {
     /// カードを下からふわっと登場させる。`order` の順に少し遅れて現れることで、
     /// 画面を開いたときに一枚ずつ積み上がるような印象になる。
-    func revealed(_ isVisible: Bool, order: Int) -> some View {
-        opacity(isVisible ? 1 : 0)
-            .offset(y: isVisible ? 0 : 18)
+    func revealed(_ isVisible: Bool, order: Int, reduceMotion: Bool = false) -> some View {
+        // 「動きを減らす」設定ではスライドインもフェードもさせない
+        opacity(isVisible || reduceMotion ? 1 : 0)
+            .offset(y: (isVisible || reduceMotion) ? 0 : 18)
             .animation(
-                .spring(response: 0.5, dampingFraction: 0.85)
-                    .delay(Double(order) * 0.06),
+                reduceMotion
+                    ? nil
+                    : .spring(response: 0.5, dampingFraction: 0.85)
+                        .delay(Double(order) * 0.06),
                 value: isVisible
             )
     }
@@ -196,7 +199,8 @@ struct ErrorStateView: View {
     var body: some View {
         VStack(spacing: 14) {
             Image(systemName: "wifi.exclamationmark")
-                .font(.system(size: 44))
+                .font(.system(.largeTitle))
+                .imageScale(.large)
                 .foregroundStyle(.white.opacity(0.9))
             Text(message)
                 .font(.callout)

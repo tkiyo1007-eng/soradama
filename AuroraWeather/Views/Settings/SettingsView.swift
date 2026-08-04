@@ -21,7 +21,7 @@ struct SettingsView: View {
                             Text(unit.label).tag(unit)
                         }
                     } label: {
-                        Label("気温の単位", systemImage: "thermometer.medium")
+                        Label("単位", systemImage: "thermometer.medium")
                     }
                     .pickerStyle(.menu)
                 } header: {
@@ -50,7 +50,7 @@ struct SettingsView: View {
                 } header: {
                     Text("通知")
                 } footer: {
-                    Text("いずれもアプリを開いた時点の予報・記録をもとにお知らせします。雨の通知は降り出しの約30分前(降水確率50%以上)、傘予報は毎朝7時、リマインドは連続3日以上の記録が途切れそうな夜8時に届きます。")
+                    Text("雨の通知は降り出しの約30分前(降水確率50%以上)、傘予報は毎朝7時、リマインドは連続3日以上の記録が途切れそうな夜8時に届きます。アプリを開いていない間もバックグラウンドで予報を取り直し、最新の内容に合わせて通知します。")
                 }
 
                 Section {

@@ -1,32 +1,40 @@
 import Foundation
 import SwiftUI
 
-extension Date {
-    /// 指定タイムゾーンでの時刻表示("15時" 形式)
-    func hourLabel(in timeZone: TimeZone) -> String {
+/// `DateFormatter` の生成は重い。毎時カード25件・10日間予報・チャート軸で
+/// 再描画のたびに作り直していたため、書式とタイムゾーンの組でキャッシュする。
+private enum DateFormatterCache {
+    private static let lock = NSLock()
+    private static var cache: [String: DateFormatter] = [:]
+
+    static func formatter(_ format: String, _ timeZone: TimeZone) -> DateFormatter {
+        let key = "\(format)|\(timeZone.identifier)"
+        lock.lock()
+        defer { lock.unlock() }
+        if let cached = cache[key] { return cached }
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ja_JP")
         formatter.timeZone = timeZone
-        formatter.dateFormat = "H時"
-        return formatter.string(from: self)
+        formatter.dateFormat = format
+        cache[key] = formatter
+        return formatter
+    }
+}
+
+extension Date {
+    /// 指定タイムゾーンでの時刻表示("15時" 形式)
+    func hourLabel(in timeZone: TimeZone) -> String {
+        DateFormatterCache.formatter("H時", timeZone).string(from: self)
     }
 
     /// "5:03" のような短い時刻
     func timeLabel(in timeZone: TimeZone) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ja_JP")
-        formatter.timeZone = timeZone
-        formatter.dateFormat = "H:mm"
-        return formatter.string(from: self)
+        DateFormatterCache.formatter("H:mm", timeZone).string(from: self)
     }
 
     /// 曜日("月" など)
     func weekdayLabel(in timeZone: TimeZone) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ja_JP")
-        formatter.timeZone = timeZone
-        formatter.dateFormat = "E"
-        return formatter.string(from: self)
+        DateFormatterCache.formatter("E", timeZone).string(from: self)
     }
 
     func isSameDay(as other: Date, in timeZone: TimeZone) -> Bool {

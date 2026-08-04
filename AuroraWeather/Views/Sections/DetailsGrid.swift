@@ -8,8 +8,13 @@ import SwiftUI
 struct DetailsGrid: View {
     let weather: WeatherBundle
     let degrees: (Double) -> String
+    /// 気温以外(風速・気圧・視程)も同じ単位系で表示するために受け取る
+    var units: UnitSystem = .celsius
 
-    private let cardWidth: CGFloat = 176
+    /// カード幅・高さは文字サイズ設定に追従させる。
+    /// 固定値のままだと、大きな文字設定で説明文が折り返して見切れていた。
+    @ScaledMetric(relativeTo: .body) private var cardWidth: CGFloat = 176
+    @ScaledMetric(relativeTo: .body) private var cardMinHeight: CGFloat = 96
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -35,14 +40,14 @@ struct DetailsGrid: View {
                 GlassCard(title: "体感温度", systemImage: "thermometer.medium") {
                     VStack(alignment: .leading, spacing: 6) {
                         Text(degrees(weather.apparentTemperature))
-                            .font(.system(size: 30, weight: .semibold, design: .rounded))
+                            .font(.system(.title, design: .rounded).weight(.semibold))
                             .foregroundStyle(.white)
                         Text(apparentComment)
                             .font(.footnote)
                             .foregroundStyle(.white.opacity(0.7))
                         Spacer(minLength: 0)
                     }
-                    .frame(minHeight: 96, alignment: .topLeading)
+                    .frame(minHeight: cardMinHeight, alignment: .topLeading)
                 }
                 .frame(width: cardWidth)
 
@@ -52,21 +57,21 @@ struct DetailsGrid: View {
                 .frame(width: cardWidth)
 
                 GlassCard(title: "風", systemImage: "wind") {
-                    WindCompassView(direction: weather.windDirection, speed: weather.windSpeed)
+                    WindCompassView(direction: weather.windDirection, speed: weather.windSpeed, units: units)
                 }
                 .frame(width: cardWidth)
 
                 GlassCard(title: "湿度", systemImage: "humidity") {
-                    HumidityView(value: weather.humidity, visibility: weather.visibility)
+                    HumidityView(value: weather.humidity, visibility: weather.visibility, units: units)
                 }
                 .frame(width: cardWidth)
 
                 GlassCard(title: "気圧", systemImage: "gauge.with.needle") {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("\(Int(weather.pressure.rounded()))")
-                            .font(.system(size: 30, weight: .semibold, design: .rounded))
+                        Text(String(format: "%.\(units.pressureFractionDigits)f", units.pressure(weather.pressure)))
+                            .font(.system(.title, design: .rounded).weight(.semibold))
                             .foregroundStyle(.white)
-                        + Text(" hPa")
+                        + Text(" \(units.pressureUnit)")
                             .font(.footnote.weight(.medium))
                             .foregroundStyle(.white.opacity(0.7))
                         Text(pressureComment)
@@ -74,7 +79,7 @@ struct DetailsGrid: View {
                             .foregroundStyle(.white.opacity(0.7))
                         Spacer(minLength: 0)
                     }
-                    .frame(minHeight: 96, alignment: .topLeading)
+                    .frame(minHeight: cardMinHeight, alignment: .topLeading)
                 }
                 .frame(width: cardWidth)
 
@@ -106,6 +111,7 @@ struct DetailsGrid: View {
 // MARK: - 傘指数(降水確率から「傘が要るか」を一言で伝える、そらだま独自の項目)
 
 struct UmbrellaIndexView: View {
+    @ScaledMetric(relativeTo: .body) private var cardMinHeight: CGFloat = 96
     let probability: Double?
 
     private var judgement: (String, Color) {
@@ -121,7 +127,7 @@ struct UmbrellaIndexView: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .firstTextBaseline, spacing: 2) {
                 Text("\(Int((probability ?? 0).rounded()))")
-                    .font(.system(size: 30, weight: .semibold, design: .rounded))
+                    .font(.system(.title, design: .rounded).weight(.semibold))
                     .foregroundStyle(.white)
                 Text("%")
                     .font(.footnote.weight(.medium))
@@ -132,7 +138,7 @@ struct UmbrellaIndexView: View {
                 .foregroundStyle(judgement.1)
             Spacer(minLength: 0)
         }
-        .frame(minHeight: 96, alignment: .topLeading)
+        .frame(minHeight: cardMinHeight, alignment: .topLeading)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("これから数時間の降水確率\(Int((probability ?? 0).rounded()))パーセント、\(judgement.0)")
     }
@@ -141,6 +147,7 @@ struct UmbrellaIndexView: View {
 // MARK: - 洗濯指数(湿度・風・降水確率から外干しのしやすさを判定する、そらだま独自の項目)
 
 struct LaundryIndexView: View {
+    @ScaledMetric(relativeTo: .body) private var cardMinHeight: CGFloat = 96
     let humidity: Double
     let windSpeed: Double
     let precipProbability: Double?
@@ -168,7 +175,7 @@ struct LaundryIndexView: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .firstTextBaseline, spacing: 2) {
                 Text("\(score)")
-                    .font(.system(size: 30, weight: .semibold, design: .rounded))
+                    .font(.system(.title, design: .rounded).weight(.semibold))
                     .foregroundStyle(.white)
                 Text("点")
                     .font(.footnote.weight(.medium))
@@ -179,7 +186,7 @@ struct LaundryIndexView: View {
                 .foregroundStyle(judgement.1)
             Spacer(minLength: 0)
         }
-        .frame(minHeight: 96, alignment: .topLeading)
+        .frame(minHeight: cardMinHeight, alignment: .topLeading)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("洗濯指数\(score)点、\(judgement.0)")
     }
@@ -191,6 +198,7 @@ struct LaundryIndexView: View {
 /// Apple 純正「天気」アプリの、横棒トラック上を太陽の玉が移動するアークとは異なり、
 /// アプリ内の UV 指数(UVGaugeView)と同じ「リングゲージ」の語彙に統一した表現。
 struct SunArcView: View {
+    @ScaledMetric(relativeTo: .body) private var cardMinHeight: CGFloat = 96
     let sunrise: Date
     let sunset: Date
     let now: Date
@@ -237,7 +245,7 @@ struct SunArcView: View {
             }
             Spacer(minLength: 0)
         }
-        .frame(minHeight: 96, alignment: .leading)
+        .frame(minHeight: cardMinHeight, alignment: .leading)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("日の出 \(sunrise.timeLabel(in: timeZone))、日の入り \(sunset.timeLabel(in: timeZone))")
     }
@@ -248,8 +256,11 @@ struct SunArcView: View {
 /// 風向を示す矢印バッジ。(Apple 純正「天気」アプリの目盛り付きコンパスとは異なる、
 /// バッジ+テキストのシンプルな表現)
 struct WindCompassView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @ScaledMetric(relativeTo: .body) private var cardMinHeight: CGFloat = 96
     let direction: Double // 風が「吹いてくる」方角(度)
-    let speed: Double     // m/s
+    let speed: Double     // m/s(表示時に units で変換する)
+    var units: UnitSystem = .celsius
 
     /// 16方位の日本語名(VoiceOver 用)
     static func directionName(_ degrees: Double) -> String {
@@ -269,10 +280,10 @@ struct WindCompassView: View {
                 Circle()
                     .fill(Color.white.opacity(0.14))
                 Image(systemName: "arrow.up")
-                    .font(.system(size: 22, weight: .bold))
+                    .font(.system(.title2).weight(.bold))
                     .foregroundStyle(Color(red: 0.55, green: 0.85, blue: 1.0))
                     .rotationEffect(.degrees(direction + 180))
-                    .animation(.spring(duration: 1.0), value: direction)
+                    .animation(reduceMotion ? nil : .spring(duration: 1.0), value: direction)
             }
             .frame(width: 52, height: 52)
 
@@ -281,17 +292,17 @@ struct WindCompassView: View {
                     .font(.callout.weight(.semibold))
                     .foregroundStyle(.white)
                 HStack(spacing: 3) {
-                    Text(String(format: "%.0f", speed))
-                        .font(.system(size: 24, weight: .semibold, design: .rounded))
+                    Text(String(format: "%.0f", units.windSpeed(speed)))
+                        .font(.system(.title2, design: .rounded).weight(.semibold))
                         .foregroundStyle(.white)
-                    Text("m/s")
+                    Text(units.windSpeedUnit)
                         .font(.caption2)
                         .foregroundStyle(.white.opacity(0.6))
                 }
             }
             Spacer(minLength: 0)
         }
-        .frame(minHeight: 96, alignment: .leading)
+        .frame(minHeight: cardMinHeight, alignment: .leading)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(Self.directionName(direction))の風、秒速\(Int(speed.rounded()))メートル")
     }
@@ -302,6 +313,7 @@ struct WindCompassView: View {
 /// UV 指数を円形リングで示す独自デザイン。
 /// (Apple 純正「天気」アプリの横棒ゲージとは異なるリング表現)
 struct UVGaugeView: View {
+    @ScaledMetric(relativeTo: .body) private var cardMinHeight: CGFloat = 96
     let value: Double
 
     private var level: (String, Color) {
@@ -328,7 +340,7 @@ struct UVGaugeView: View {
                     .stroke(level.1, style: StrokeStyle(lineWidth: 6, lineCap: .round))
                     .rotationEffect(.degrees(-90))
                 Text("\(Int(value.rounded()))")
-                    .font(.system(size: 20, weight: .semibold, design: .rounded))
+                    .font(.system(.title3, design: .rounded).weight(.semibold))
                     .foregroundStyle(.white)
             }
             .frame(width: 52, height: 52)
@@ -343,25 +355,27 @@ struct UVGaugeView: View {
             }
             Spacer(minLength: 0)
         }
-        .frame(minHeight: 96, alignment: .leading)
+        .frame(minHeight: cardMinHeight, alignment: .leading)
     }
 }
 
 // MARK: - 湿度(視程を併記)
 
 struct HumidityView: View {
+    @ScaledMetric(relativeTo: .body) private var cardMinHeight: CGFloat = 96
     let value: Double
     var visibility: Double? = nil
+    var units: UnitSystem = .celsius
 
     private var visibilityLabel: String? {
         guard let visibility else { return nil }
-        return String(format: "視程 %.1fkm", visibility / 1000)
+        return String(format: "視程 %.1f%@", units.distance(visibility), units.distanceUnit)
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("\(Int(value.rounded()))%")
-                .font(.system(size: 30, weight: .semibold, design: .rounded))
+                .font(.system(.title, design: .rounded).weight(.semibold))
                 .foregroundStyle(.white)
 
             GeometryReader { proxy in
@@ -393,7 +407,7 @@ struct HumidityView: View {
             }
             Spacer(minLength: 0)
         }
-        .frame(minHeight: 96, alignment: .topLeading)
+        .frame(minHeight: cardMinHeight, alignment: .topLeading)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("湿度\(Int(value.rounded()))パーセント" + (visibilityLabel.map { "、\($0)" } ?? ""))
     }

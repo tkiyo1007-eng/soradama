@@ -163,15 +163,44 @@ struct SavedPlace: Codable, Identifiable, Equatable, Hashable {
     static let fallback = SavedPlace(name: "東京", detail: "日本", latitude: 35.6895, longitude: 139.6917)
 }
 
+/// 表示に使う単位系。気温だけでなく風速・気圧・距離もまとめて切り替える。
+/// 華氏を選ぶのは主にヤード・ポンド圏のユーザーなので、
+/// 気温だけ華氏で風速が m/s のままだと表示がちぐはぐになる。
 enum UnitSystem: String, Codable, CaseIterable, Identifiable {
     case celsius
     case fahrenheit
 
     var id: String { rawValue }
-    var label: String { self == .celsius ? "摂氏 (°C)" : "華氏 (°F)" }
+    var label: String { self == .celsius ? "メートル法 (°C・m/s)" : "ヤード・ポンド法 (°F・mph)" }
     var suffix: String { self == .celsius ? "°C" : "°F" }
 
     func convert(_ celsius: Double) -> Double {
         self == .celsius ? celsius : celsius * 9 / 5 + 32
     }
+
+    // MARK: 風速
+
+    /// m/s を表示用の値に変換する(華氏側は mph)
+    func windSpeed(_ metersPerSecond: Double) -> Double {
+        self == .celsius ? metersPerSecond : metersPerSecond * 2.236936
+    }
+    var windSpeedUnit: String { self == .celsius ? "m/s" : "mph" }
+
+    // MARK: 気圧
+
+    /// hPa を表示用の値に変換する(華氏側は inHg)
+    func pressure(_ hectopascals: Double) -> Double {
+        self == .celsius ? hectopascals : hectopascals * 0.02952998
+    }
+    var pressureUnit: String { self == .celsius ? "hPa" : "inHg" }
+    /// inHg は小数第2位まで見せないと変化が分からない
+    var pressureFractionDigits: Int { self == .celsius ? 0 : 2 }
+
+    // MARK: 距離(視程)
+
+    /// メートルを表示用の値に変換する(華氏側はマイル)
+    func distance(_ meters: Double) -> Double {
+        self == .celsius ? meters / 1000 : meters / 1609.344
+    }
+    var distanceUnit: String { self == .celsius ? "km" : "mi" }
 }

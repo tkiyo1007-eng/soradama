@@ -5,6 +5,13 @@ struct DailyForecastCard: View {
     let weather: WeatherBundle
     let degrees: (Double) -> String
 
+    /// キャッシュ表示中は先頭が昨日以前になりうるので、実日付で「今日」を判定する
+    private func isToday(_ day: DayForecast) -> Bool {
+        var calendar = Calendar.current
+        calendar.timeZone = weather.timeZone
+        return calendar.isDate(day.date, inSameDayAs: Date())
+    }
+
     private var weekMin: Double { weather.days.map(\.tempMin).min() ?? 0 }
     private var weekMax: Double { weather.days.map(\.tempMax).max() ?? 1 }
 
@@ -14,10 +21,10 @@ struct DailyForecastCard: View {
                 ForEach(Array(weather.days.enumerated()), id: \.element.id) { index, day in
                     DailyRow(
                         day: day,
-                        isToday: index == 0,
+                        isToday: isToday(day),
                         weekMin: weekMin,
                         weekMax: weekMax,
-                        currentTemperature: index == 0 ? weather.temperature : nil,
+                        currentTemperature: isToday(day) ? weather.temperature : nil,
                         timeZone: weather.timeZone,
                         degrees: degrees
                     )
