@@ -10,8 +10,10 @@ struct ContentView: View {
     @State private var showWallpaper = false
     @State private var showSettings = false
     @State private var orbBounce = false
-    /// 今日の空玉が記録された瞬間のお祝いトースト
+    /// 今日の空玉が記録された瞬間のお祝いトースト(通常の日)
     @State private var orbToast: OrbRecordResult?
+    /// 節気・満月・連続記録の節目だけに出す、画面いっぱいのお祝い
+    @State private var celebration: OrbRecordResult?
 
     var body: some View {
         ZStack {
@@ -35,6 +37,15 @@ struct ContentView: View {
 
             if let toast = orbToast {
                 orbToastView(toast)
+            }
+
+            if let celebration, let orb = OrbStore.shared.orb(for: Date()) {
+                OrbCelebrationView(orb: orb, event: celebration) {
+                    withAnimation(.easeOut(duration: 0.35)) { self.celebration = nil }
+                    showOrbCollection = true
+                }
+                .transition(.opacity)
+                .zIndex(20)
             }
 
             if !hasSeenOnboarding {
@@ -94,11 +105,18 @@ struct ContentView: View {
         .onChange(of: viewModel.lastOrbEvent) { _, event in
             guard let event else { return }
             Haptics.success()
-            withAnimation(.spring(duration: 0.5)) { orbToast = event }
-            Task {
-                try? await Task.sleep(for: .seconds(4))
-                withAnimation(.easeOut(duration: 0.4)) {
-                    if orbToast == event { orbToast = nil }
+            // 節気・満月・連続記録の節目は画面いっぱいのお祝い、それ以外はトースト。
+            // 毎日派手に出すと特別さが薄れるので、ここで出し分ける
+            let isSpecial = event.solarTerm != nil || event.isFullMoon || event.isMilestone
+            if isSpecial {
+                withAnimation(.easeIn(duration: 0.3)) { celebration = event }
+            } else {
+                withAnimation(.spring(duration: 0.5)) { orbToast = event }
+                Task {
+                    try? await Task.sleep(for: .seconds(4))
+                    withAnimation(.easeOut(duration: 0.4)) {
+                        if orbToast == event { orbToast = nil }
+                    }
                 }
             }
         }

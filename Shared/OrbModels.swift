@@ -104,6 +104,25 @@ struct DailyOrb: Codable, Identifiable, Equatable {
         return Season.of(month: Calendar.current.component(.month, from: date))
     }
 
+    /// その日が二十四節気にあたるなら、その節気。過去の玉にもさかのぼって効く。
+    var solarTerm: SolarTerm? {
+        guard let date else { return nil }
+        return SolarTerm.on(date)
+    }
+
+    /// その日の月相。夜の玉にだけ意味を持つ。
+    /// 日付キーは 0 時を指すが、月は夜に見るものなので 21 時基準で判定する。
+    var moonPhase: MoonPhase? {
+        guard let date, timeOfDay == .night else { return nil }
+        let evening = Calendar.current.date(bySettingHour: 21, minute: 0, second: 0, of: date) ?? date
+        return MoonPhase.on(evening)
+    }
+
+    /// 節気の日・満月の夜は、それだけで特別な一日として扱う
+    var isSpecialDay: Bool {
+        solarTerm != nil || moonPhase == .fullMoon
+    }
+
     static let keyFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .gregorian)
@@ -159,6 +178,10 @@ struct OrbRecordResult: Equatable {
     let isMilestone: Bool
     /// この記録で図鑑に新しい種類が加わったか
     let isNewKind: Bool
+    /// その日が二十四節気にあたる場合の節気
+    var solarTerm: SolarTerm? = nil
+    /// 満月の夜だった場合に true
+    var isFullMoon: Bool = false
 }
 
 /// 空玉のローカル保存。1年でも365件程度なので UserDefaults の JSON で十分。
@@ -208,9 +231,14 @@ final class OrbStore {
         let otherKindsCollected = Set(orbs.values.map(\.kind)).subtracting([kind]).count
         let completesZukan = !alreadyHasKind && otherKindsCollected == WeatherKind.allCases.count - 1
         let streakIncludingToday = consecutiveDays(before: Date()) + 1
+        // 節気の日と満月の夜も「特別な一日」としてクリスタルにする
+        let now = Date()
+        let isSpecialDay = SolarTerm.on(now) != nil
+            || (!bundle.isDay && MoonPhase.on(now) == .fullMoon)
         let isMilestone = kind == .thunderstorm
             || Self.milestoneStreaks.contains(streakIncludingToday)
             || completesZukan
+            || isSpecialDay
 
         let orb = DailyOrb(
             dateKey: key,
@@ -234,7 +262,9 @@ final class OrbStore {
             isFirstToday: isFirstToday,
             streak: streakIncludingToday,
             isMilestone: isMilestone,
-            isNewKind: !alreadyHasKind
+            isNewKind: !alreadyHasKind,
+            solarTerm: orb.solarTerm,
+            isFullMoon: orb.moonPhase == MoonPhase.fullMoon
         )
     }
 

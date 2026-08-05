@@ -466,6 +466,23 @@ struct OrbCollectionView: View {
                     .padding(.top, 2)
                 }
 
+                // その日が節気・満月なら、それを主役として見せる
+                if let term = orb.solarTerm {
+                    VStack(spacing: 2) {
+                        Text(term.label)
+                            .font(.system(.title3, design: .serif).weight(.semibold))
+                            .foregroundStyle(Color(red: term.accent.r, green: term.accent.g, blue: term.accent.b))
+                        Text(term.poem)
+                            .font(.caption)
+                            .foregroundStyle(.white.opacity(0.7))
+                            .multilineTextAlignment(.center)
+                    }
+                } else if let phase = orb.moonPhase, phase != .newMoon {
+                    Text(phase.label)
+                        .font(.system(.subheadline, design: .serif).weight(.medium))
+                        .foregroundStyle(Color(red: 1.0, green: 0.95, blue: 0.8))
+                }
+
                 Text("「\(OrbVoice.line(for: orb))」")
                     .font(.footnote)
                     .foregroundStyle(.white.opacity(0.75))

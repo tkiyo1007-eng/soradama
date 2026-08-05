@@ -107,6 +107,13 @@ struct OrbView: View {
                     .clipShape(Circle())
             }
 
+            // その夜の月。夜空の主役なので、雲や季節のレイヤーより手前に描く
+            // (夏の入道雲レイヤーの下に置くと月が隠れてしまう)
+            if orb.timeOfDay == .night, let phase = orb.moonPhase, phase != .newMoon {
+                moonView(phase)
+                    .clipShape(Circle())
+            }
+
             // ガラスの質感: ハイライトとリム
             Circle()
                 .fill(
@@ -142,6 +149,54 @@ struct OrbView: View {
                 context.fill(Path(ellipseIn: rect), with: .color(.white.opacity(0.5 + generator.next() * 0.5)))
             }
         }
+    }
+
+    /// その夜の月。満ち欠けを影で表現する。
+    /// 満月の夜だけは、まわりに淡い暈(かさ)が広がる特別な見た目になる。
+    private func moonView(_ phase: MoonPhase) -> some View {
+        // カレンダーの小さな玉(38pt)でも満ち欠けが分かる大きさにする
+        let moonSize = size * 0.32
+        // 影の円を横にずらして満ち欠けを作る。ずらした幅がそのまま光る部分の幅になるので、
+        // 満ちているほど大きくずらす(illumination をそのまま使う)
+        let shadowShift = moonSize * phase.illumination
+
+        return ZStack {
+            // 満月だけ、まわりに淡い暈(かさ)を広げる
+            if phase == .fullMoon {
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [Color(red: 1.0, green: 0.98, blue: 0.86).opacity(0.55), .clear],
+                            center: .center, startRadius: 0, endRadius: moonSize * 1.6
+                        )
+                    )
+                    .frame(width: moonSize * 3.2, height: moonSize * 3.2)
+                    .blendMode(.screen)
+            }
+
+            // 月本体。Canvas で「白い円から影の円を引く」ことで満ち欠けを作る。
+            // blendMode(.destinationOut) はレイヤーの重なり方に左右されやすいので、
+            // 描画を Canvas に閉じ込めて確実に切り抜く。
+            Canvas { context, canvasSize in
+                let rect = CGRect(origin: .zero, size: canvasSize)
+                context.drawLayer { layer in
+                    layer.fill(Path(ellipseIn: rect), with: .color(Color(red: 1.0, green: 0.98, blue: 0.88)))
+                    if phase != .fullMoon {
+                        let shifted = rect.offsetBy(
+                            dx: (phase.isWaxing ? -1 : 1) * shadowShift,
+                            dy: 0
+                        )
+                        layer.blendMode = .destinationOut
+                        layer.fill(Path(ellipseIn: shifted), with: .color(.black))
+                    }
+                }
+            }
+            .frame(width: moonSize, height: moonSize)
+            .shadow(color: Color(red: 1.0, green: 0.95, blue: 0.8).opacity(0.85), radius: moonSize * 0.45)
+        }
+        .frame(width: size, height: size)
+        // 玉の右上に置く
+        .offset(x: size * 0.20, y: -size * 0.20)
     }
 
     /// 季節の空気感を表すレイヤー。
