@@ -51,6 +51,13 @@
 - **BGAppRefreshTask**: アプリを開かない日でも通知を組み直す。**配列型の Info.plist キー(`UIBackgroundModes` / `BGTaskSchedulerPermittedIdentifiers`)は `INFOPLIST_KEY_` 方式では渡せない**ため `AuroraWeather/Info.plist` を新設した(この落とし穴に注意)
 - Watch が常に現在地でiPhoneと食い違う問題 / オフライン時に過去が「今」と出る問題 / 空の色が時刻に追随しない問題 / DateFormatter の都度生成 / WeatherCache の肥大とメインスレッド書き込み
 
+### 公式サイト
+
+- **https://tkiyo1007-eng.github.io/soradama/** (2026年8月8日公開)。`index.html` と `assets/` をリポジトリのルートに置いている
+- **`.nojekyll` が必須**。これが無いと GitHub Pages が Jekyll でビルドし、`README.md` がトップページとして配信されて `index.html` と `assets/` が 404 になる(実際に踏んだ)
+- スクロール演出は IntersectionObserver + CSS transition。ただし **JS が動かないと永久に見えない作りは危険**なので、`.js` クラスが付いたときだけ伏せる + 3秒後に取りこぼしを必ず表示、の二重の保険をかけている
+- 掲載画像は Web 用に軽量化(スクショ4枚+アイコンで計356KB)。アプリのスクショを差し替えたらここも更新する
+
 ### 今後の候補
 
 - 品質(1.3.0調査で見つかった未対応分): 空の色が開きっぱなしだと時刻で更新されない / オフライン表示で過去の時刻が「今」と出る / 明るい空(雪・くもり日中)で白文字が読みにくい / Dynamic Type非対応(固定ptフォント) / 雨通知のBGAppRefreshTask化(現状アプリを開いた時のみ予約) / Watchが常に現在地固定でiPhoneの選択地点と食い違う / 風速・気圧・視程の単位換算が摂氏華氏に連動しない / DateFormatterを表示ごとに生成 / WeatherCacheの無制限肥大
