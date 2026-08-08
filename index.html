@@ -142,19 +142,19 @@ h2{font-size:clamp(1.55rem,4.4vw,2.4rem);line-height:1.35;font-weight:800;letter
 .card:nth-child(4) .glyph svg{stroke:#78e6c8}
 
 /* スクリーンショット ---------------------------------------------- */
-.shots{display:flex;gap:20px;margin-top:44px;overflow-x:auto;padding:6px 22px 22px;
-  scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
-.shots::-webkit-scrollbar{height:5px}
-.shots::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:99px}
-.shot{flex:0 0 auto;width:220px;scroll-snap-align:center;text-align:center}
-.shot img{width:100%;border-radius:26px;display:block;
+/* 横一列に4枚並べると1枚が小さくなりすぎて中身が読めなかったため、
+   2列×2行にして大きく見せる。モバイルは1列。 */
+.shots{display:grid;gap:26px 30px;margin-top:44px;justify-content:center;
+  grid-template-columns:repeat(2,280px)}
+.shot{text-align:center}
+/* height:auto を省くと、width/height 属性の値がそのまま高さになり、
+   画像の読み込みが終わるまでレイアウトが大きく崩れる */
+.shot img{width:100%;height:auto;aspect-ratio:573/1240;border-radius:30px;display:block;
   border:1px solid rgba(255,255,255,.14);
   box-shadow:0 22px 54px rgba(0,0,0,.5)}
-.shot figcaption{margin-top:13px;font-size:.83rem;color:var(--faint)}
-@media(min-width:900px){
-  /* 4枚が一度に収まる幅にする。大きすぎると画面からはみ出して全体が見えない */
-  .shots{justify-content:center;overflow:visible;padding-left:0;padding-right:0}
-  .shot{width:192px}
+.shot figcaption{margin-top:13px;font-size:.88rem;color:var(--dim)}
+@media(max-width:680px){
+  .shots{grid-template-columns:minmax(0,300px)}
 }
 
 /* おすすめ -------------------------------------------------------- */
@@ -253,11 +253,11 @@ footer a:hover{color:var(--sky);border-bottom-color:rgba(124,196,255,.5)}
     <p class="eyebrow reveal">Screens</p>
     <h2 class="reveal">開くたび、少しうれしい画面を。</h2>
   </div>
-  <div class="shots reveal">
-    <figure class="shot"><img src="assets/shot1.jpg" alt="今日の空。気温と傘指数・洗濯指数が並ぶメイン画面" loading="lazy" width="800" height="1731"><figcaption>今日の空</figcaption></figure>
-    <figure class="shot"><img src="assets/shot2.jpg" alt="ひと月ぶんの空玉が並ぶコレクションのカレンダー" loading="lazy" width="800" height="1731"><figcaption>空玉コレクション</figcaption></figure>
-    <figure class="shot"><img src="assets/shot3.jpg" alt="集めた空模様が並ぶ空玉ずかん" loading="lazy" width="800" height="1731"><figcaption>空玉ずかん</figcaption></figure>
-    <figure class="shot"><img src="assets/shot4.jpg" alt="その月の空をまとめた振り返りカード" loading="lazy" width="800" height="1731"><figcaption>今月の振り返り</figcaption></figure>
+  <div class="wrap shots">
+    <figure class="shot reveal"><img src="assets/shot1.jpg" alt="今日の空。気温と傘指数・洗濯指数が並ぶメイン画面" loading="lazy" width="573" height="1240"><figcaption>今日の空</figcaption></figure>
+    <figure class="shot reveal"><img src="assets/shot2.jpg" alt="ひと月ぶんの空玉が並ぶコレクションのカレンダー" loading="lazy" width="573" height="1240"><figcaption>空玉コレクション</figcaption></figure>
+    <figure class="shot reveal"><img src="assets/shot3.jpg" alt="集めた空模様が並ぶ空玉ずかん" loading="lazy" width="573" height="1240"><figcaption>空玉ずかん</figcaption></figure>
+    <figure class="shot reveal"><img src="assets/shot4.jpg" alt="その月の空をまとめた振り返りカード" loading="lazy" width="573" height="1240"><figcaption>今月の振り返り</figcaption></figure>
   </div>
 </section>
 
