@@ -110,6 +110,13 @@ struct DailyOrb: Codable, Identifiable, Equatable {
         return SolarTerm.on(date)
     }
 
+    /// 月がどれだけ満ちているか(0 = 新月、1 = 満月)。玉に描く形はこの連続値を使う。
+    var moonIllumination: Double? {
+        guard let date, timeOfDay == .night else { return nil }
+        let evening = Calendar.current.date(bySettingHour: 21, minute: 0, second: 0, of: date) ?? date
+        return MoonPhase.illumination(at: evening)
+    }
+
     /// その日の月相。夜の玉にだけ意味を持つ。
     /// 日付キーは 0 時を指すが、月は夜に見るものなので 21 時基準で判定する。
     var moonPhase: MoonPhase? {

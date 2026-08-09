@@ -83,24 +83,65 @@ enum SolarTerm: String, Codable, CaseIterable {
         }
     }
 
-    /// その年の各節気のおおよその日付(月, 日)。
-    /// 実際には年によって1日前後ずれるが、暦の計算式を持ち込むほどの
-    /// 精度は必要ないので、国立天文台の暦要項でよく使われる代表日を用いる。
-    private static let approximateDates: [(SolarTerm, Int, Int)] = [
-        (.risshun, 2, 4), (.usui, 2, 19), (.keichitsu, 3, 6), (.shunbun, 3, 21),
-        (.seimei, 4, 5), (.kokuu, 4, 20), (.rikka, 5, 6), (.shoman, 5, 21),
-        (.boshu, 6, 6), (.geshi, 6, 21), (.shosho, 7, 7), (.taisho, 7, 23),
-        (.risshu, 8, 8), (.shosho2, 8, 23), (.hakuro, 9, 8), (.shubun, 9, 23),
-        (.kanro, 10, 8), (.soko, 10, 24), (.ritto, 11, 7), (.shosetsu, 11, 22),
-        (.taisetsu, 12, 7), (.toji, 12, 22), (.shokan, 1, 6), (.daikan, 1, 20),
-    ]
+    /// 各節気に対応する太陽黄経(度)。立春の 315 度から 15 度ずつ進む。
+    var solarLongitude: Double {
+        switch self {
+        case .risshun:  return 315
+        case .usui:     return 330
+        case .keichitsu: return 345
+        case .shunbun:  return 0
+        case .seimei:   return 15
+        case .kokuu:    return 30
+        case .rikka:    return 45
+        case .shoman:   return 60
+        case .boshu:    return 75
+        case .geshi:    return 90
+        case .shosho:   return 105
+        case .taisho:   return 120
+        case .risshu:   return 135
+        case .shosho2:  return 150
+        case .hakuro:   return 165
+        case .shubun:   return 180
+        case .kanro:    return 195
+        case .soko:     return 210
+        case .ritto:    return 225
+        case .shosetsu: return 240
+        case .taisetsu: return 255
+        case .toji:     return 270
+        case .shokan:   return 285
+        case .daikan:   return 300
+        }
+    }
 
     /// その日が節気にあたるなら返す。
-    static func on(_ date: Date) -> SolarTerm? {
-        let calendar = Calendar.current
-        let month = calendar.component(.month, from: date)
-        let day = calendar.component(.day, from: date)
-        return approximateDates.first { $0.1 == month && $0.2 == day }?.0
+    ///
+    /// 節気は「太陽黄経が15度の倍数になる瞬間」で決まり、年によって日付が1日前後ずれる。
+    /// 以前は代表日を固定値で持っていたためズレを取りこぼしていたので、
+    /// 実際に黄経を計算して判定するようにした。
+    static func on(_ date: Date, timeZone: TimeZone = .current) -> SolarTerm? {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        // その日の始まりと終わり(ローカル時刻)
+        guard let dayStart = calendar.date(from: calendar.dateComponents([.year, .month, .day], from: date)),
+              let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart) else { return nil }
+
+        // 節気の瞬間がこの一日の中に入っていれば、その日が節気の日
+        let startLongitude = Astronomy.solarLongitude(dayStart)
+        let endLongitude = Astronomy.solarLongitude(dayEnd)
+
+        for term in SolarTerm.allCases {
+            let target = term.solarLongitude
+            // 15度刻みの境界をこの一日でまたいだか(0度をまたぐ春分も扱えるようにする)
+            let crossed: Bool
+            if startLongitude <= endLongitude {
+                crossed = startLongitude < target && target <= endLongitude
+            } else {
+                // 360→0 をまたぐ日
+                crossed = target > startLongitude || target <= endLongitude
+            }
+            if crossed { return term }
+        }
+        return nil
     }
 }
 
@@ -146,27 +187,30 @@ enum MoonPhase: String, Codable, CaseIterable {
         }
     }
 
-    /// 朔望月(29.530588日)を基準に、既知の新月からの経過で求める。
-    /// 分単位の精度は要らないので、平均朔望月による近似で十分。
+    /// 月と太陽の黄経差から求める。
+    ///
+    /// 以前は平均朔望月による近似だったため、実際の満月と半日ほどずれることがあった。
+    /// 黄経差 0 度が新月、90 度が上弦、180 度が満月、270 度が下弦。
     static func on(_ date: Date) -> MoonPhase {
-        // 2000年1月6日 18:14 UTC が新月
-        let knownNewMoon = Date(timeIntervalSince1970: 947182440)
-        let synodicMonth: Double = 29.530588853
-        let days = date.timeIntervalSince(knownNewMoon) / 86400
-        var age = days.truncatingRemainder(dividingBy: synodicMonth)
-        if age < 0 { age += synodicMonth }
-
-        let phase = age / synodicMonth // 0..<1
-        switch phase {
-        case ..<0.0325:  return .newMoon
-        case ..<0.2175:  return .waxingCrescent
-        case ..<0.2825:  return .firstQuarter
-        case ..<0.4675:  return .waxingGibbous
-        case ..<0.5325:  return .fullMoon
-        case ..<0.7175:  return .waningGibbous
-        case ..<0.7825:  return .lastQuarter
-        case ..<0.9675:  return .waningCrescent
+        let angle = Astronomy.moonPhaseAngle(date)
+        // 各相の中心から ±11.25 度(朔望月のおよそ 1/32)を「その相」とみなす
+        switch angle {
+        case ..<11.25:   return .newMoon
+        case ..<78.75:   return .waxingCrescent
+        case ..<101.25:  return .firstQuarter
+        case ..<168.75:  return .waxingGibbous
+        case ..<191.25:  return .fullMoon
+        case ..<258.75:  return .waningGibbous
+        case ..<281.25:  return .lastQuarter
+        case ..<348.75:  return .waningCrescent
         default:         return .newMoon
         }
+    }
+
+    /// 満ちている割合を黄経差から連続値で求める(0 = 新月、1 = 満月)。
+    /// 玉に描く月の形はこの値を使うので、相の区分より滑らかに変化する。
+    static func illumination(at date: Date) -> Double {
+        let angle = Astronomy.moonPhaseAngle(date) * .pi / 180
+        return (1 - cos(angle)) / 2
     }
 }

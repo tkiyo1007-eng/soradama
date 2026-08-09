@@ -109,8 +109,9 @@ struct OrbView: View {
 
             // その夜の月。夜空の主役なので、雲や季節のレイヤーより手前に描く
             // (夏の入道雲レイヤーの下に置くと月が隠れてしまう)
-            if orb.timeOfDay == .night, let phase = orb.moonPhase, phase != .newMoon {
-                moonView(phase)
+            if orb.timeOfDay == .night, let phase = orb.moonPhase, phase != .newMoon,
+               let illumination = orb.moonIllumination {
+                moonView(phase, illumination: illumination)
                     .clipShape(Circle())
             }
 
@@ -153,12 +154,14 @@ struct OrbView: View {
 
     /// その夜の月。満ち欠けを影で表現する。
     /// 満月の夜だけは、まわりに淡い暈(かさ)が広がる特別な見た目になる。
-    private func moonView(_ phase: MoonPhase) -> some View {
+    private func moonView(_ phase: MoonPhase, illumination: Double) -> some View {
         // カレンダーの小さな玉(38pt)でも満ち欠けが分かる大きさにする
         let moonSize = size * 0.32
         // 影の円を横にずらして満ち欠けを作る。ずらした幅がそのまま光る部分の幅になるので、
         // 満ちているほど大きくずらす(illumination をそのまま使う)
-        let shadowShift = moonSize * phase.illumination
+        // 相の区分(0.25刻み)ではなく実際の月齢から連続的に決めるので、
+        // 同じ「三日月」でも日ごとに少しずつ形が変わる
+        let shadowShift = moonSize * illumination
 
         return ZStack {
             // 満月だけ、まわりに淡い暈(かさ)を広げる
