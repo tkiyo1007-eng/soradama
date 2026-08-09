@@ -4,6 +4,7 @@ import CoreLocation
 import WidgetKit
 
 @Observable
+@MainActor
 final class WeatherViewModel {
     /// 表示するページ(先頭: 現在地または前回の地点、以降: マイシティ)
     private(set) var pages: [SavedPlace] = []
@@ -63,7 +64,6 @@ final class WeatherViewModel {
 
     // MARK: - 読み込み
 
-    @MainActor
     func loadInitial() async {
         // 現在地の解決を試み、拒否/失敗時は前回の地点(既定: 東京)を使う
         if let located = await resolveCurrentLocation() {
@@ -81,7 +81,6 @@ final class WeatherViewModel {
     }
 
     /// 指定ページのデータを(未取得または30分以上古い場合に)取得する
-    @MainActor
     func ensureLoaded(_ id: String, force: Bool = false) async {
         guard let place = pages.first(where: { $0.id == id }) else { return }
         if !force,
@@ -127,7 +126,6 @@ final class WeatherViewModel {
     }
 
     /// 検索結果から地点を選択(未保存ならマイシティへ追加してからページ移動)
-    @MainActor
     func selectSearched(_ place: SavedPlace) async {
         if place.id != primaryPlace.id, !savedPlaces.contains(where: { $0.id == place.id }) {
             savedPlaces.append(place)
@@ -139,7 +137,6 @@ final class WeatherViewModel {
         await ensureLoaded(place.id)
     }
 
-    @MainActor
     func useCurrentLocation() async {
         guard let located = await resolveCurrentLocation() else {
             errors[selectionID] = errors[selectionID] ?? LocationError.denied.localizedDescription
@@ -204,7 +201,6 @@ final class WeatherViewModel {
 
     // MARK: - 雨の通知
 
-    @MainActor
     func setRainAlerts(_ enabled: Bool) async {
         if enabled {
             let granted = await notifications.requestAuthorization()
@@ -219,7 +215,6 @@ final class WeatherViewModel {
         UserDefaults.standard.set(rainAlertsEnabled, forKey: Self.rainAlertsKey)
     }
 
-    @MainActor
     func setMorningAlerts(_ enabled: Bool) async {
         if enabled {
             let granted = await notifications.requestAuthorization()
@@ -234,7 +229,6 @@ final class WeatherViewModel {
         UserDefaults.standard.set(morningAlertsEnabled, forKey: Self.morningAlertsKey)
     }
 
-    @MainActor
     func setStreakReminders(_ enabled: Bool) async {
         if enabled {
             let granted = await notifications.requestAuthorization()

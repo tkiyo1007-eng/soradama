@@ -5,6 +5,7 @@ import CoreLocation
 // MARK: - Watch 用ビューモデル
 
 @Observable
+@MainActor
 final class WatchWeatherModel {
     var weather: WeatherBundle?
     var placeName: String = SharedStore.lastPlace().name
@@ -15,7 +16,6 @@ final class WatchWeatherModel {
     private let service = WeatherService()
     private let locationService = LocationService()
 
-    @MainActor
     func load() async {
         guard !isLoading else { return }
         isLoading = true

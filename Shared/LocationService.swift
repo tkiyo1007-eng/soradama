@@ -13,7 +13,12 @@ enum LocationError: LocalizedError {
     }
 }
 
-/// CLLocationManager を async/await でワンショット利用するラッパー
+/// CLLocationManager を async/await でワンショット利用するラッパー。
+///
+/// `continuation` はデリゲート(CoreLocation のスレッド)とタイムアウト用の Task の
+/// 両方から触られるため、クラスごとメインアクターに閉じて競合を防いでいる。
+/// デリゲートメソッドは nonisolated で受けて、中でメインアクターへ渡し直す。
+@MainActor
 final class LocationService: NSObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
     private var continuation: CheckedContinuation<CLLocation, Error>?
@@ -31,7 +36,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
         let timeout = Task { [weak self] in
             try? await Task.sleep(for: .seconds(20))
             guard !Task.isCancelled else { return }
-            await MainActor.run { self?.resume(with: .failure(LocationError.unavailable)) }
+            self?.resume(with: .failure(LocationError.unavailable))
         }
         defer { timeout.cancel() }
 
@@ -59,28 +64,39 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     }
 
     // MARK: CLLocationManagerDelegate
+    //
+    // CoreLocation はメインスレッドで呼ぶとは限らないため nonisolated で受け、
+    // 状態に触る処理はメインアクターへ移す。
 
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        guard continuation != nil else { return }
-        switch manager.authorizationStatus {
-        case .authorizedWhenInUse, .authorizedAlways:
-            manager.requestLocation()
-        case .denied, .restricted:
-            resume(with: .failure(LocationError.denied))
-        default:
-            break
+    nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status = manager.authorizationStatus
+        Task { @MainActor [weak self] in
+            guard let self, self.continuation != nil else { return }
+            switch status {
+            case .authorizedWhenInUse, .authorizedAlways:
+                self.manager.requestLocation()
+            case .denied, .restricted:
+                self.resume(with: .failure(LocationError.denied))
+            default:
+                break
+            }
         }
     }
 
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
-            resume(with: .success(location))
-        } else {
-            resume(with: .failure(LocationError.unavailable))
+    nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations.first
+        Task { @MainActor [weak self] in
+            if let location {
+                self?.resume(with: .success(location))
+            } else {
+                self?.resume(with: .failure(LocationError.unavailable))
+            }
         }
     }
 
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        resume(with: .failure(LocationError.unavailable))
+    nonisolated func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        Task { @MainActor [weak self] in
+            self?.resume(with: .failure(LocationError.unavailable))
+        }
     }
 }
