@@ -34,6 +34,13 @@
 			remoteGlobalIDString = D10000000000000000000003;
 			remoteInfo = SoradamaWatchWidgetExtension;
 		};
+		F100000000000000000000B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A10000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A1000000000000000000000E;
+			remoteInfo = AuroraWeather;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -77,6 +84,7 @@
 		B10000000000000000000004 /* AuroraWeatherWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AuroraWeatherWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1000000000000000000000B /* SoradamaWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoradamaWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D10000000000000000000001 /* SoradamaWatchWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SoradamaWatchWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F10000000000000000000002 /* AuroraWeatherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AuroraWeatherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -151,6 +159,11 @@
 			path = SoradamaWatchWidget;
 			sourceTree = "<group>";
 		};
+		F10000000000000000000003 /* AuroraWeatherTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AuroraWeatherTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +195,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F10000000000000000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -193,6 +213,7 @@
 				B10000000000000000000002 /* AuroraWeatherWidget */,
 				C1000000000000000000000A /* SoradamaWatch */,
 				D10000000000000000000002 /* SoradamaWatchWidget */,
+				F10000000000000000000003 /* AuroraWeatherTests */,
 				A1000000000000000000000C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -204,6 +225,7 @@
 				B10000000000000000000004 /* AuroraWeatherWidgetExtension.appex */,
 				C1000000000000000000000B /* SoradamaWatch.app */,
 				D10000000000000000000001 /* SoradamaWatchWidgetExtension.appex */,
+				F10000000000000000000002 /* AuroraWeatherTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -309,6 +331,29 @@
 			productReference = D10000000000000000000001 /* SoradamaWatchWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		F10000000000000000000001 /* AuroraWeatherTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F10000000000000000000007 /* Build configuration list for PBXNativeTarget "AuroraWeatherTests" */;
+			buildPhases = (
+				F10000000000000000000004 /* Sources */,
+				F10000000000000000000005 /* Frameworks */,
+				F10000000000000000000006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F100000000000000000000A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F10000000000000000000003 /* AuroraWeatherTests */,
+			);
+			name = AuroraWeatherTests;
+			packageProductDependencies = (
+			);
+			productName = AuroraWeatherTests;
+			productReference = F10000000000000000000002 /* AuroraWeatherTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -349,6 +394,7 @@
 				B10000000000000000000005 /* AuroraWeatherWidgetExtension */,
 				C1000000000000000000000C /* SoradamaWatch */,
 				D10000000000000000000003 /* SoradamaWatchWidgetExtension */,
+				F10000000000000000000001 /* AuroraWeatherTests */,
 			);
 		};
 /* End PBXProject section */
@@ -376,6 +422,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D10000000000000000000006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F10000000000000000000006 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -413,6 +466,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F10000000000000000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -430,6 +490,11 @@
 			isa = PBXTargetDependency;
 			target = D10000000000000000000003 /* SoradamaWatchWidgetExtension */;
 			targetProxy = D1000000000000000000000D /* PBXContainerItemProxy */;
+		};
+		F100000000000000000000A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A1000000000000000000000E /* AuroraWeather */;
+			targetProxy = F100000000000000000000B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -798,6 +863,44 @@
 			};
 			name = Release;
 		};
+		F10000000000000000000008 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 23;
+				DEVELOPMENT_TEAM = 5TH5JWL3M4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AuroraWeather.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AuroraWeather";
+			};
+			name = Debug;
+		};
+		F1000000000000000000009 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 23;
+				DEVELOPMENT_TEAM = 5TH5JWL3M4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AuroraWeather.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AuroraWeather";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -842,6 +945,15 @@
 			buildConfigurations = (
 				D10000000000000000000008 /* Debug */,
 				D10000000000000000000009 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F10000000000000000000007 /* Build configuration list for PBXNativeTarget "AuroraWeatherTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F10000000000000000000008 /* Debug */,
+				F1000000000000000000009 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
