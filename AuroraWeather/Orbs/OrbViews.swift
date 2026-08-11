@@ -367,7 +367,7 @@ struct OrbCollectionView: View {
                                 .strokeBorder(Color.white.opacity(0.18), style: StrokeStyle(lineWidth: 1, dash: [2, 2]))
                                 .frame(width: 26, height: 26)
                         }
-                        Text(has ? "\(time.label)の空" : "？？？")
+                        Text(has ? String(localized: "\(time.label)の空") : String(localized: "？？？"))
                             .font(.caption2)
                             .foregroundStyle(.white.opacity(has ? 0.7 : 0.3))
                     }
@@ -411,7 +411,7 @@ struct OrbCollectionView: View {
     /// X などに貼れる共有用カード
     private var shareCard: some View {
         VStack(spacing: 14) {
-            Text(Self.monthTitleFormatter.string(from: displayedMonth) + "の空")
+            Text(String(localized: "\(Self.monthTitleFormatter.string(from: displayedMonth))の空"))
                 .font(.headline)
                 .foregroundStyle(.white)
             LazyVGrid(columns: Array(repeating: GridItem(.fixed(34), spacing: 8), count: 7), spacing: 10) {

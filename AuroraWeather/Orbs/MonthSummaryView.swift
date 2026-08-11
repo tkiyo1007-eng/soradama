@@ -50,7 +50,7 @@ struct MonthSummaryView: View {
                     if let shareImage {
                         ShareLink(
                             item: shareImage,
-                            preview: SharePreview("\(Self.monthFormatter.string(from: summary.month))の空", image: shareImage)
+                            preview: SharePreview(String(localized: "\(Self.monthFormatter.string(from: summary.month))の空"), image: shareImage)
                         ) {
                             Image(systemName: "square.and.arrow.up")
                                 .foregroundStyle(.white)
@@ -77,7 +77,8 @@ struct MonthSummaryView: View {
     private var card: some View {
         VStack(spacing: 16) {
             VStack(spacing: 3) {
-                Text(Self.monthFormatter.string(from: summary.month) + "の空")
+                // 連結だと翻訳されない。補間を含む1つのキーとして訳せるようにする
+                Text(String(localized: "\(Self.monthFormatter.string(from: summary.month))の空"))
                     .font(.title3.weight(.bold))
                     .foregroundStyle(.white)
                 Text(summary.headline)

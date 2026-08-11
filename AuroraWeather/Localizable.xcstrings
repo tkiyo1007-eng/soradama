@@ -2391,6 +2391,36 @@
         }
       }
     },
+    "湿度%lldパーセント": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humidity %lld percent"
+          }
+        }
+      }
+    },
+    "湿度%lldパーセント、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humidity %lld percent, %@"
+          }
+        }
+      }
+    },
+    "湿度%1$lldパーセント、%2$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humidity %1$lld percent, %2$@"
+          }
+        }
+      }
+    },
     "満月": {
       "localizations": {
         "en": {

@@ -409,6 +409,10 @@ struct HumidityView: View {
         }
         .frame(minHeight: cardMinHeight, alignment: .topLeading)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("湿度\(Int(value.rounded()))パーセント" + (visibilityLabel.map { "、\($0)" } ?? ""))
+        .accessibilityLabel(
+            // 連結すると翻訳対象にならないので、補間を含む1つのキーにまとめる
+            visibilityLabel.map { String(localized: "湿度\(Int(value.rounded()))パーセント、\($0)") }
+                ?? String(localized: "湿度\(Int(value.rounded()))パーセント")
+        )
     }
 }

@@ -626,7 +626,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -644,7 +644,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 1.6.1;
 				CODE_SIGN_ENTITLEMENTS = AuroraWeather/AuroraWeather.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -661,7 +661,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -679,7 +679,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 1.6.1;
 				CODE_SIGN_ENTITLEMENTS = AuroraWeather/AuroraWeather.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -694,7 +694,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AuroraWeatherWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "そらだま";
@@ -705,7 +705,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 1.6.1;
 				CODE_SIGN_ENTITLEMENTS = AuroraWeatherWidget/AuroraWeatherWidget.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -721,7 +721,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AuroraWeatherWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "そらだま";
@@ -732,7 +732,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 1.6.1;
 				CODE_SIGN_ENTITLEMENTS = AuroraWeatherWidget/AuroraWeatherWidget.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -749,7 +749,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "そらだま";
@@ -762,7 +762,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 1.6.1;
 				CODE_SIGN_ENTITLEMENTS = SoradamaWatch/SoradamaWatch.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -781,7 +781,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "そらだま";
@@ -794,7 +794,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 1.6.1;
 				CODE_SIGN_ENTITLEMENTS = SoradamaWatch/SoradamaWatch.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -811,7 +811,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SoradamaWatchWidget/Info.plist;
@@ -822,7 +822,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 1.6.1;
 				CODE_SIGN_ENTITLEMENTS = SoradamaWatchWidget/SoradamaWatchWidget.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -839,7 +839,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SoradamaWatchWidget/Info.plist;
@@ -850,7 +850,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 1.6.1;
 				CODE_SIGN_ENTITLEMENTS = SoradamaWatchWidget/SoradamaWatchWidget.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -868,11 +868,11 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 1.6.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -887,11 +887,11 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 1.6.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
