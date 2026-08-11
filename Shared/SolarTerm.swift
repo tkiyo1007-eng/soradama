@@ -12,60 +12,60 @@ enum SolarTerm: String, Codable, CaseIterable {
 
     var label: String {
         switch self {
-        case .risshun:  return "立春"
-        case .usui:     return "雨水"
-        case .keichitsu: return "啓蟄"
-        case .shunbun:  return "春分"
-        case .seimei:   return "清明"
-        case .kokuu:    return "穀雨"
-        case .rikka:    return "立夏"
-        case .shoman:   return "小満"
-        case .boshu:    return "芒種"
-        case .geshi:    return "夏至"
-        case .shosho:   return "小暑"
-        case .taisho:   return "大暑"
-        case .risshu:   return "立秋"
-        case .shosho2:  return "処暑"
-        case .hakuro:   return "白露"
-        case .shubun:   return "秋分"
-        case .kanro:    return "寒露"
-        case .soko:     return "霜降"
-        case .ritto:    return "立冬"
-        case .shosetsu: return "小雪"
-        case .taisetsu: return "大雪"
-        case .toji:     return "冬至"
-        case .shokan:   return "小寒"
-        case .daikan:   return "大寒"
+        case .risshun:  return String(localized: "立春")
+        case .usui:     return String(localized: "雨水")
+        case .keichitsu: return String(localized: "啓蟄")
+        case .shunbun:  return String(localized: "春分")
+        case .seimei:   return String(localized: "清明")
+        case .kokuu:    return String(localized: "穀雨")
+        case .rikka:    return String(localized: "立夏")
+        case .shoman:   return String(localized: "小満")
+        case .boshu:    return String(localized: "芒種")
+        case .geshi:    return String(localized: "夏至")
+        case .shosho:   return String(localized: "小暑")
+        case .taisho:   return String(localized: "大暑")
+        case .risshu:   return String(localized: "立秋")
+        case .shosho2:  return String(localized: "処暑")
+        case .hakuro:   return String(localized: "白露")
+        case .shubun:   return String(localized: "秋分")
+        case .kanro:    return String(localized: "寒露")
+        case .soko:     return String(localized: "霜降")
+        case .ritto:    return String(localized: "立冬")
+        case .shosetsu: return String(localized: "小雪")
+        case .taisetsu: return String(localized: "大雪")
+        case .toji:     return String(localized: "冬至")
+        case .shokan:   return String(localized: "小寒")
+        case .daikan:   return String(localized: "大寒")
         }
     }
 
     /// その節気の意味を、空にまつわる一言で。
     var poem: String {
         switch self {
-        case .risshun:  return "こよみの上では、今日から春です"
-        case .usui:     return "雪が雨に変わるころ。空がゆるみます"
-        case .keichitsu: return "土の中の虫も目を覚ますころ"
-        case .shunbun:  return "昼と夜の長さが、ちょうど同じになる日"
-        case .seimei:   return "空も草木も、すべてが清らかに明るいころ"
-        case .kokuu:    return "穀物を育てる雨が降るころ"
-        case .rikka:    return "こよみの上では、今日から夏です"
-        case .shoman:   return "草木が生い茂り、天地に満ちるころ"
-        case .boshu:    return "そろそろ梅雨の入り口です"
-        case .geshi:    return "一年でいちばん、昼が長い日"
-        case .shosho:   return "梅雨が明け、本格的な暑さが始まるころ"
-        case .taisho:   return "一年でいちばん暑さがきびしいころ"
-        case .risshu:   return "こよみの上では、今日から秋です"
-        case .shosho2:  return "暑さがやわらぎ、風に秋を感じるころ"
-        case .hakuro:   return "草に白い露が結ぶころ。空が高くなります"
-        case .shubun:   return "昼と夜の長さが、ふたたび同じになる日"
-        case .kanro:    return "露が冷たく感じられるころ"
-        case .soko:     return "朝に霜が降りはじめるころ"
-        case .ritto:    return "こよみの上では、今日から冬です"
-        case .shosetsu: return "初雪の便りが届きはじめるころ"
-        case .taisetsu: return "本格的に雪が降り積もるころ"
-        case .toji:     return "一年でいちばん、夜が長い日"
-        case .shokan:   return "寒さがいよいよ本番を迎えるころ"
-        case .daikan:   return "一年でいちばん寒さがきびしいころ"
+        case .risshun:  return String(localized: "こよみの上では、今日から春です")
+        case .usui:     return String(localized: "雪が雨に変わるころ。空がゆるみます")
+        case .keichitsu: return String(localized: "土の中の虫も目を覚ますころ")
+        case .shunbun:  return String(localized: "昼と夜の長さが、ちょうど同じになる日")
+        case .seimei:   return String(localized: "空も草木も、すべてが清らかに明るいころ")
+        case .kokuu:    return String(localized: "穀物を育てる雨が降るころ")
+        case .rikka:    return String(localized: "こよみの上では、今日から夏です")
+        case .shoman:   return String(localized: "草木が生い茂り、天地に満ちるころ")
+        case .boshu:    return String(localized: "そろそろ梅雨の入り口です")
+        case .geshi:    return String(localized: "一年でいちばん、昼が長い日")
+        case .shosho:   return String(localized: "梅雨が明け、本格的な暑さが始まるころ")
+        case .taisho:   return String(localized: "一年でいちばん暑さがきびしいころ")
+        case .risshu:   return String(localized: "こよみの上では、今日から秋です")
+        case .shosho2:  return String(localized: "暑さがやわらぎ、風に秋を感じるころ")
+        case .hakuro:   return String(localized: "草に白い露が結ぶころ。空が高くなります")
+        case .shubun:   return String(localized: "昼と夜の長さが、ふたたび同じになる日")
+        case .kanro:    return String(localized: "露が冷たく感じられるころ")
+        case .soko:     return String(localized: "朝に霜が降りはじめるころ")
+        case .ritto:    return String(localized: "こよみの上では、今日から冬です")
+        case .shosetsu: return String(localized: "初雪の便りが届きはじめるころ")
+        case .taisetsu: return String(localized: "本格的に雪が降り積もるころ")
+        case .toji:     return String(localized: "一年でいちばん、夜が長い日")
+        case .shokan:   return String(localized: "寒さがいよいよ本番を迎えるころ")
+        case .daikan:   return String(localized: "一年でいちばん寒さがきびしいころ")
         }
     }
 
@@ -154,14 +154,14 @@ enum MoonPhase: String, Codable, CaseIterable {
 
     var label: String {
         switch self {
-        case .newMoon:         return "新月"
-        case .waxingCrescent:  return "三日月"
-        case .firstQuarter:    return "上弦の月"
-        case .waxingGibbous:   return "十三夜"
-        case .fullMoon:        return "満月"
-        case .waningGibbous:   return "寝待月"
-        case .lastQuarter:     return "下弦の月"
-        case .waningCrescent:  return "有明月"
+        case .newMoon:         return String(localized: "新月")
+        case .waxingCrescent:  return String(localized: "三日月")
+        case .firstQuarter:    return String(localized: "上弦の月")
+        case .waxingGibbous:   return String(localized: "十三夜")
+        case .fullMoon:        return String(localized: "満月")
+        case .waningGibbous:   return String(localized: "寝待月")
+        case .lastQuarter:     return String(localized: "下弦の月")
+        case .waningCrescent:  return String(localized: "有明月")
         }
     }
 

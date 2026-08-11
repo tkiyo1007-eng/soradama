@@ -1,6 +1,21 @@
 import Foundation
 
 struct GeocodingService {
+    /// 地名を返してもらう言語。
+    ///
+    /// ここを "ja" で固定していたため、英語で使っていても検索結果だけ
+    /// 「ロンドン / イングランド / 英国」と日本語で出ていた。
+    /// Open-Meteo の geocoding が対応するのは主要言語のみなので、
+    /// 端末の言語が対応外なら英語に落とす。
+    static func languageCode(for locale: Locale) -> String {
+        let supported: Set<String> = ["en", "de", "fr", "es", "it", "pt", "ru", "tr", "hi", "ja", "zh"]
+        let code = locale.language.languageCode?.identifier ?? "en"
+        // 対応外の言語は英語に落とす。日本語に落とすと、読めない人のほうが多い。
+        return supported.contains(code) ? code : "en"
+    }
+
+    private var language: String { Self.languageCode(for: .current) }
+
     func search(_ query: String) async throws -> [GeoPlace] {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard trimmed.count >= 1 else { return [] }
@@ -9,7 +24,7 @@ struct GeocodingService {
         components?.queryItems = [
             .init(name: "name", value: trimmed),
             .init(name: "count", value: "12"),
-            .init(name: "language", value: "ja"),
+            .init(name: "language", value: language),
             .init(name: "format", value: "json"),
         ]
         guard let url = components?.url else { return [] }

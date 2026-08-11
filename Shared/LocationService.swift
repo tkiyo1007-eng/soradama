@@ -7,8 +7,8 @@ enum LocationError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .denied:      return "位置情報へのアクセスが許可されていません。"
-        case .unavailable: return "現在地を取得できませんでした。"
+        case .denied:      return String(localized: "位置情報へのアクセスが許可されていません。")
+        case .unavailable: return String(localized: "現在地を取得できませんでした。")
         }
     }
 }

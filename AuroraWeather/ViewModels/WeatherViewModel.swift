@@ -268,7 +268,7 @@ final class WeatherViewModel {
 enum CLGeocoderBox {
     static func reverseGeocode(_ location: CLLocation) async throws -> CLPlacemark? {
         let geocoder = CLGeocoder()
-        let placemarks = try await geocoder.reverseGeocodeLocation(location, preferredLocale: Locale(identifier: "ja_JP"))
+        let placemarks = try await geocoder.reverseGeocodeLocation(location, preferredLocale: Locale.current)
         return placemarks.first
     }
 }

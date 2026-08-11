@@ -31,14 +31,23 @@ enum WeatherKind: String, Codable, CaseIterable {
     /// 日本語の天気ラベル
     var label: String {
         switch self {
-        case .clear:         return "晴れ"
-        case .partlyCloudy:  return "晴れ時々くもり"
-        case .cloudy:        return "くもり"
-        case .fog:           return "霧"
-        case .drizzle:       return "霧雨"
-        case .rain:          return "雨"
-        case .snow:          return "雪"
-        case .thunderstorm:  return "雷雨"
+        case .clear:         return String(localized: "晴れ")
+        case .partlyCloudy:  return String(localized: "晴れ時々くもり")
+        case .cloudy:        return String(localized: "くもり")
+        case .fog:           return String(localized: "霧")
+        case .drizzle:       return String(localized: "霧雨")
+        case .rain:          return String(localized: "雨")
+        case .snow:          return String(localized: "雪")
+        case .thunderstorm:  return String(localized: "雷雨")
+        }
+    }
+
+    /// 今この瞬間、空から何も降っていない天気か。
+    /// 「晴れ」なのに傘指数が高い、という組み合わせを見つけるのに使う。
+    var isDry: Bool {
+        switch self {
+        case .clear, .partlyCloudy, .cloudy, .fog: return true
+        case .drizzle, .rain, .snow, .thunderstorm: return false
         }
     }
 

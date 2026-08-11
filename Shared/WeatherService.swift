@@ -6,8 +6,8 @@ enum WeatherServiceError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .badURL:      return "リクエストの生成に失敗しました。"
-        case .badResponse: return "天気データの取得に失敗しました。通信環境をご確認ください。"
+        case .badURL:      return String(localized: "リクエストの生成に失敗しました。")
+        case .badResponse: return String(localized: "天気データの取得に失敗しました。通信環境をご確認ください。")
         }
     }
 }
@@ -23,21 +23,21 @@ extension Error {
             return description
         }
         guard let urlError = self as? URLError else {
-            return "天気データの取得に失敗しました。しばらくしてからお試しください。"
+            return String(localized: "天気データの取得に失敗しました。しばらくしてからお試しください。")
         }
         switch urlError.code {
         case .notConnectedToInternet:
-            return "インターネットに接続されていません。通信環境をご確認ください。"
+            return String(localized: "インターネットに接続されていません。通信環境をご確認ください。")
         case .timedOut:
-            return "通信がタイムアウトしました。電波の良い場所でお試しください。"
+            return String(localized: "通信がタイムアウトしました。電波の良い場所でお試しください。")
         case .networkConnectionLost:
-            return "通信が途中で切れました。もう一度お試しください。"
+            return String(localized: "通信が途中で切れました。もう一度お試しください。")
         case .cannotFindHost, .cannotConnectToHost, .dnsLookupFailed:
-            return "天気情報サーバーに接続できませんでした。しばらくしてからお試しください。"
+            return String(localized: "天気情報サーバーに接続できませんでした。しばらくしてからお試しください。")
         case .dataNotAllowed:
-            return "モバイルデータ通信が使えない設定になっています。設定をご確認ください。"
+            return String(localized: "モバイルデータ通信が使えない設定になっています。設定をご確認ください。")
         default:
-            return "天気データの取得に失敗しました。通信環境をご確認ください。"
+            return String(localized: "天気データの取得に失敗しました。通信環境をご確認ください。")
         }
     }
 }

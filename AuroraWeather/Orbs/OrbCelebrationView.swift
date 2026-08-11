@@ -16,17 +16,17 @@ struct OrbCelebrationView: View {
 
     /// 見出し。節気 > 満月 > 連続記録の節目 の順に優先する。
     private var title: String {
-        if let term = event.solarTerm { return "今日は\(term.label)" }
-        if event.isFullMoon { return "満月の夜です" }
-        if event.streak >= 7 { return "\(event.streak)日連続、達成" }
-        return "特別な空玉が生まれました"
+        if let term = event.solarTerm { return String(localized: "今日は\(term.label)") }
+        if event.isFullMoon { return String(localized: "満月の夜です") }
+        if event.streak >= 7 { return String(localized: "\(event.streak)日連続、達成") }
+        return String(localized: "特別な空玉が生まれました")
     }
 
     private var message: String {
         if let term = event.solarTerm { return term.poem }
-        if event.isFullMoon { return "まんまるの月が、玉のなかに映りました" }
-        if event.streak >= 7 { return "毎日の空が、これだけ集まりました" }
-        return "今日の空は、少し特別なかたちで残ります"
+        if event.isFullMoon { return String(localized: "まんまるの月が、玉のなかに映りました") }
+        if event.streak >= 7 { return String(localized: "毎日の空が、これだけ集まりました") }
+        return String(localized: "今日の空は、少し特別なかたちで残ります")
     }
 
     /// 演出の基調色。節気なら季節の色、満月なら月の色。

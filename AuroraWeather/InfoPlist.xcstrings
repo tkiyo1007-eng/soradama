@@ -1,0 +1,50 @@
+{
+  "sourceLanguage": "ja",
+  "strings": {
+    "AuroraWeather": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AuroraWeather"
+          }
+        }
+      },
+      "comment": "Bundle name"
+    },
+    "そらだま": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soradama"
+          }
+        }
+      },
+      "comment": "Bundle display name"
+    },
+    "現在地の天気を表示するために位置情報を使用します。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your location is used to show the weather where you are."
+          }
+        }
+      },
+      "comment": "Privacy - Location When In Use Usage Description"
+    },
+    "今日の空を壁紙として写真に保存するために使用します。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Used to save today's sky to your photo library as wallpaper."
+          }
+        }
+      },
+      "comment": "Privacy - Photo Library Additions Usage Description"
+    }
+  },
+  "version": "1.0"
+}

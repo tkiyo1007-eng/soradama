@@ -7,34 +7,43 @@ private enum DateFormatterCache {
     private static let lock = NSLock()
     private static var cache: [String: DateFormatter] = [:]
 
-    static func formatter(_ format: String, _ timeZone: TimeZone) -> DateFormatter {
-        let key = "\(format)|\(timeZone.identifier)"
+    /// - Parameter template: true なら書式を「テンプレート」として扱い、
+    ///   並び順や12/24時間表記を端末のロケールに合わせて組み立て直す。
+    ///   日本語で "15時" になるものが、英語では "3 PM" になる。
+    static func formatter(_ format: String, _ timeZone: TimeZone, template: Bool = false) -> DateFormatter {
+        // ロケールもキーに含める。設定アプリで言語を変えて戻ってきたとき、
+        // 古い言語の書式を使い続けてしまわないように。
+        let key = "\(template ? "T:" : "")\(format)|\(timeZone.identifier)|\(Locale.current.identifier)"
         lock.lock()
         defer { lock.unlock() }
         if let cached = cache[key] { return cached }
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ja_JP")
+        formatter.locale = Locale.current
         formatter.timeZone = timeZone
-        formatter.dateFormat = format
+        if template {
+            formatter.setLocalizedDateFormatFromTemplate(format)
+        } else {
+            formatter.dateFormat = format
+        }
         cache[key] = formatter
         return formatter
     }
 }
 
 extension Date {
-    /// 指定タイムゾーンでの時刻表示("15時" 形式)
+    /// 指定タイムゾーンでの時刻表示(日本語なら "15時"、英語なら "3 PM")
     func hourLabel(in timeZone: TimeZone) -> String {
-        DateFormatterCache.formatter("H時", timeZone).string(from: self)
+        DateFormatterCache.formatter("j", timeZone, template: true).string(from: self)
     }
 
-    /// "5:03" のような短い時刻
+    /// 分まで含む短い時刻(日本語なら "5:03"、英語なら "5:03 AM")
     func timeLabel(in timeZone: TimeZone) -> String {
-        DateFormatterCache.formatter("H:mm", timeZone).string(from: self)
+        DateFormatterCache.formatter("jmm", timeZone, template: true).string(from: self)
     }
 
-    /// 曜日("月" など)
+    /// 曜日("月" / "Mon")
     func weekdayLabel(in timeZone: TimeZone) -> String {
-        DateFormatterCache.formatter("E", timeZone).string(from: self)
+        DateFormatterCache.formatter("E", timeZone, template: true).string(from: self)
     }
 
     func isSameDay(as other: Date, in timeZone: TimeZone) -> Bool {

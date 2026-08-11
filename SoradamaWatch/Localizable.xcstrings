@@ -1,0 +1,1056 @@
+{
+  "sourceLanguage": "ja",
+  "strings": {
+    "%@の特別な空玉クリスタル、%@の%@、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Special sky crystal for %@, %@, %@, %@"
+          }
+        }
+      }
+    },
+    "%1$@の特別な空玉クリスタル、%2$@の%3$@、%4$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Special sky crystal for %1$@, %2$@, %3$@, %4$@"
+          }
+        }
+      }
+    },
+    "%@の空玉、%@の%@、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky orb for %@, %@, %@, %@"
+          }
+        }
+      }
+    },
+    "%1$@の空玉、%2$@の%3$@、%4$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky orb for %1$@, %2$@, %3$@, %4$@"
+          }
+        }
+      }
+    },
+    "%lld%%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%%"
+          }
+        }
+      }
+    },
+    "いろんな空があったひと月でした": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A month of many different skies"
+          }
+        }
+      }
+    },
+    "くもり": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudy"
+          }
+        }
+      }
+    },
+    "こよみの上では、今日から冬です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By the old calendar, winter begins today"
+          }
+        }
+      }
+    },
+    "こよみの上では、今日から夏です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By the old calendar, summer begins today"
+          }
+        }
+      }
+    },
+    "こよみの上では、今日から春です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By the old calendar, spring begins today"
+          }
+        }
+      }
+    },
+    "こよみの上では、今日から秋です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By the old calendar, autumn begins today"
+          }
+        }
+      }
+    },
+    "そろそろ梅雨の入り口です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The rainy season is at the door"
+          }
+        }
+      }
+    },
+    "よく晴れたひと月でした": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A month of clear skies"
+          }
+        }
+      }
+    },
+    "インターネットに接続されていません。通信環境をご確認ください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You're offline. Please check your connection."
+          }
+        }
+      }
+    },
+    "メートル法 (°C・m/s)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metric (°C, m/s)"
+          }
+        }
+      }
+    },
+    "モバイルデータ通信が使えない設定になっています。設定をご確認ください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cellular data is turned off for this app. Please check Settings."
+          }
+        }
+      }
+    },
+    "ヤード・ポンド法 (°F・mph)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imperial (°F, mph)"
+          }
+        }
+      }
+    },
+    "リクエストの生成に失敗しました。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't build the request."
+          }
+        }
+      }
+    },
+    "一年でいちばん、夜が長い日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The longest night of the year"
+          }
+        }
+      }
+    },
+    "一年でいちばん、昼が長い日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The longest day of the year"
+          }
+        }
+      }
+    },
+    "一年でいちばん寒さがきびしいころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The deepest cold of the year"
+          }
+        }
+      }
+    },
+    "一年でいちばん暑さがきびしいころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The fiercest heat of the year"
+          }
+        }
+      }
+    },
+    "三日月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crescent moon"
+          }
+        }
+      }
+    },
+    "上弦の月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First quarter"
+          }
+        }
+      }
+    },
+    "下弦の月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last quarter"
+          }
+        }
+      }
+    },
+    "位置情報へのアクセスが許可されていません。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Location access isn't allowed."
+          }
+        }
+      }
+    },
+    "入道雲の空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Towering clouds"
+          }
+        }
+      }
+    },
+    "再試行": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try again"
+          }
+        }
+      }
+    },
+    "冬": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Winter"
+          }
+        }
+      }
+    },
+    "冬至": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toji (winter solstice)"
+          }
+        }
+      }
+    },
+    "凛と冴えた空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crisp winter sky"
+          }
+        }
+      }
+    },
+    "処暑": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shosho (heat subsides)"
+          }
+        }
+      }
+    },
+    "初雪の便りが届きはじめるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Word of the first snow starts to arrive"
+          }
+        }
+      }
+    },
+    "十三夜": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waxing gibbous"
+          }
+        }
+      }
+    },
+    "取得中…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading…"
+          }
+        }
+      }
+    },
+    "啓蟄": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keichitsu (insects awaken)"
+          }
+        }
+      }
+    },
+    "土の中の虫も目を覚ますころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Even the insects underground are waking"
+          }
+        }
+      }
+    },
+    "夏": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summer"
+          }
+        }
+      }
+    },
+    "夏至": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geshi (summer solstice)"
+          }
+        }
+      }
+    },
+    "夕暮れ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dusk"
+          }
+        }
+      }
+    },
+    "夜": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night"
+          }
+        }
+      }
+    },
+    "大寒": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daikan (greater cold)"
+          }
+        }
+      }
+    },
+    "大暑": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taisho (greater heat)"
+          }
+        }
+      }
+    },
+    "大雪": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taisetsu (greater snow)"
+          }
+        }
+      }
+    },
+    "天気データの取得に失敗しました。しばらくしてからお試しください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't load the forecast. Please try again in a moment."
+          }
+        }
+      }
+    },
+    "天気データの取得に失敗しました。通信環境をご確認ください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't load the forecast. Please check your connection."
+          }
+        }
+      }
+    },
+    "天気情報サーバーに接続できませんでした。しばらくしてからお試しください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't reach the weather server. Please try again in a moment."
+          }
+        }
+      }
+    },
+    "寒さがいよいよ本番を迎えるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The cold settles in for real"
+          }
+        }
+      }
+    },
+    "寒露": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kanro (cold dew)"
+          }
+        }
+      }
+    },
+    "寝待月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waning gibbous"
+          }
+        }
+      }
+    },
+    "小寒": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shokan (lesser cold)"
+          }
+        }
+      }
+    },
+    "小暑": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shosho (lesser heat)"
+          }
+        }
+      }
+    },
+    "小満": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shoman (lesser fullness)"
+          }
+        }
+      }
+    },
+    "小雪": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shosetsu (lesser snow)"
+          }
+        }
+      }
+    },
+    "新月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New moon"
+          }
+        }
+      }
+    },
+    "日本": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Japan"
+          }
+        }
+      }
+    },
+    "春": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spring"
+          }
+        }
+      }
+    },
+    "春分": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shunbun (spring equinox)"
+          }
+        }
+      }
+    },
+    "昼": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day"
+          }
+        }
+      }
+    },
+    "昼と夜の長さが、ちょうど同じになる日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The day when light and dark are exactly equal"
+          }
+        }
+      }
+    },
+    "昼と夜の長さが、ふたたび同じになる日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The day when light and dark are equal once more"
+          }
+        }
+      }
+    },
+    "晴れ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
+          }
+        }
+      }
+    },
+    "晴れ時々くもり": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partly cloudy"
+          }
+        }
+      }
+    },
+    "暑さがやわらぎ、風に秋を感じるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The heat eases, and autumn arrives on the wind"
+          }
+        }
+      }
+    },
+    "更新": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh"
+          }
+        }
+      }
+    },
+    "最高 %@  最低 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %@  L %@"
+          }
+        }
+      }
+    },
+    "最高 %1$@  最低 %2$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %1$@  L %2$@"
+          }
+        }
+      }
+    },
+    "有明月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waning crescent"
+          }
+        }
+      }
+    },
+    "朝に霜が降りはじめるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frost begins to settle in the mornings"
+          }
+        }
+      }
+    },
+    "朝焼け": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dawn"
+          }
+        }
+      }
+    },
+    "本格的に雪が降り積もるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snow begins to pile up in earnest"
+          }
+        }
+      }
+    },
+    "東京": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tokyo"
+          }
+        }
+      }
+    },
+    "梅雨が明け、本格的な暑さが始まるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The rains lift, and the real heat begins"
+          }
+        }
+      }
+    },
+    "清明": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seimei (clear and bright)"
+          }
+        }
+      }
+    },
+    "満月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full moon"
+          }
+        }
+      }
+    },
+    "特別な空に出会えたひと月でした": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A month with some rare skies in it"
+          }
+        }
+      }
+    },
+    "現在地を取得できませんでした。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't find your location."
+          }
+        }
+      }
+    },
+    "白露": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hakuro (white dew)"
+          }
+        }
+      }
+    },
+    "秋": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autumn"
+          }
+        }
+      }
+    },
+    "秋分": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shubun (autumn equinox)"
+          }
+        }
+      }
+    },
+    "穀物を育てる雨が降るころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The rain that feeds the grain is falling"
+          }
+        }
+      }
+    },
+    "穀雨": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kokuu (grain rain)"
+          }
+        }
+      }
+    },
+    "空も草木も、すべてが清らかに明るいころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky and green alike turn clear and bright"
+          }
+        }
+      }
+    },
+    "空を集めはじめました": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You've started collecting the sky"
+          }
+        }
+      }
+    },
+    "立冬": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ritto (start of winter)"
+          }
+        }
+      }
+    },
+    "立夏": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rikka (start of summer)"
+          }
+        }
+      }
+    },
+    "立春": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Risshun (start of spring)"
+          }
+        }
+      }
+    },
+    "立秋": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Risshu (start of autumn)"
+          }
+        }
+      }
+    },
+    "芒種": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boshu (grain in ear)"
+          }
+        }
+      }
+    },
+    "草に白い露が結ぶころ。空が高くなります": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "White dew gathers on the grass, and the sky lifts"
+          }
+        }
+      }
+    },
+    "草木が生い茂り、天地に満ちるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything green grows thick and fills the world"
+          }
+        }
+      }
+    },
+    "通信がタイムアウトしました。電波の良い場所でお試しください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The connection timed out. Try again where the signal is stronger."
+          }
+        }
+      }
+    },
+    "通信が途中で切れました。もう一度お試しください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The connection dropped. Please try again."
+          }
+        }
+      }
+    },
+    "雨": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rain"
+          }
+        }
+      }
+    },
+    "雨の記憶が多いひと月でした": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A month that remembers the rain"
+          }
+        }
+      }
+    },
+    "雨水": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usui (rain water)"
+          }
+        }
+      }
+    },
+    "雪": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snow"
+          }
+        }
+      }
+    },
+    "雪が雨に変わるころ。空がゆるみます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snow turns to rain, and the sky loosens its grip"
+          }
+        }
+      }
+    },
+    "雷雨": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thunderstorm"
+          }
+        }
+      }
+    },
+    "霜降": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soko (frost falls)"
+          }
+        }
+      }
+    },
+    "霞の空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hazy sky"
+          }
+        }
+      }
+    },
+    "霧": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fog"
+          }
+        }
+      }
+    },
+    "霧雨": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drizzle"
+          }
+        }
+      }
+    },
+    "露が冷たく感じられるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The dew has turned cold"
+          }
+        }
+      }
+    },
+    "高く澄んだ空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High, clear sky"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -241,9 +241,9 @@ struct ContentView: View {
     }
 
     private func toastTitle(_ event: OrbRecordResult) -> String {
-        if event.isMilestone { return "特別な空玉クリスタルが生まれました！" }
-        if event.isNewKind { return "新しい種類の空玉をずかんに追加！" }
-        return "今日の空玉ができました"
+        if event.isMilestone { return String(localized: "特別な空玉クリスタルが生まれました！") }
+        if event.isNewKind { return String(localized: "新しい種類の空玉をずかんに追加！") }
+        return String(localized: "今日の空玉ができました")
     }
 }
 

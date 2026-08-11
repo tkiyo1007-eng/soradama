@@ -73,7 +73,7 @@ struct WeatherPageView: View {
                     DailyForecastCard(weather: weather, degrees: viewModel.degrees)
                         .revealed(cardsAppeared, order: 4, reduceMotion: reduceMotion)
 
-                    Text("データ提供: Open-Meteo.com / RainViewer.com")
+                    Text("データ提供: Open-Meteo.com / 気象庁")
                         .font(.caption2)
                         .foregroundStyle(.white.opacity(0.45))
                         .frame(maxWidth: .infinity)

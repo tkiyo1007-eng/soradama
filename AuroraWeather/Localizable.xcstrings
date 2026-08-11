@@ -1,0 +1,3286 @@
+{
+  "sourceLanguage": "ja",
+  "strings": {
+    " ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " "
+          }
+        }
+      }
+    },
+    " %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " %@"
+          }
+        }
+      }
+    },
+    "%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%"
+          }
+        }
+      }
+    },
+    "%@、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@"
+          }
+        }
+      }
+    },
+    "%1$@、%2$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@"
+          }
+        }
+      }
+    },
+    "%@、%@、現在%@、最高%@、最低%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@, now %@, high %@, low %@"
+          }
+        }
+      }
+    },
+    "%1$@、%2$@、現在%3$@、最高%4$@、最低%5$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@, now %3$@, high %4$@, low %5$@"
+          }
+        }
+      }
+    },
+    "%@。%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@. %@"
+          }
+        }
+      }
+    },
+    "%1$@。%2$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@. %2$@"
+          }
+        }
+      }
+    },
+    "%@の特別な空玉クリスタル、%@の%@、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Special sky crystal for %@, %@, %@, %@"
+          }
+        }
+      }
+    },
+    "%1$@の特別な空玉クリスタル、%2$@の%3$@、%4$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Special sky crystal for %1$@, %2$@, %3$@, %4$@"
+          }
+        }
+      }
+    },
+    "%@の空玉、%@の%@、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky orb for %@, %@, %@, %@"
+          }
+        }
+      }
+    },
+    "%1$@の空玉、%2$@の%3$@、%4$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky orb for %1$@, %2$@, %3$@, %4$@"
+          }
+        }
+      }
+    },
+    "%@の風、秒速%lldメートル": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wind from the %@ at %lld meters per second"
+          }
+        }
+      }
+    },
+    "%1$@の風、秒速%2$lldメートル": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wind from the %1$@ at %2$lld meters per second"
+          }
+        }
+      }
+    },
+    "%@・%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@"
+          }
+        }
+      }
+    },
+    "%1$@・%2$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "%@・%@  最高%@/最低%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@  H %@ / L %@"
+          }
+        }
+      }
+    },
+    "%1$@・%2$@  最高%3$@/最低%4$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · %2$@  H %3$@ / L %4$@"
+          }
+        }
+      }
+    },
+    "%lld/%lld コンプリート": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/%lld collected"
+          }
+        }
+      }
+    },
+    "%1$lld/%2$lld コンプリート": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld/%2$lld collected"
+          }
+        }
+      }
+    },
+    "%@の空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The sky over %@"
+          }
+        }
+      }
+    },
+    "%@の空玉": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky orb from %@"
+          }
+        }
+      }
+    },
+    "%lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld"
+          }
+        }
+      }
+    },
+    "%lld%%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%%"
+          }
+        }
+      }
+    },
+    "%lld°": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld°"
+          }
+        }
+      }
+    },
+    "%lld日連続、達成": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld-day streak reached"
+          }
+        }
+      }
+    },
+    "%lld日連続で集めています": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You're on a %lld-day streak"
+          }
+        }
+      }
+    },
+    "10日間予報": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10-day forecast"
+          }
+        }
+      }
+    },
+    "UV指数": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "UV Index"
+          }
+        }
+      }
+    },
+    "apps.apple.com/app/id6788443049": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "apps.apple.com/app/id6788443049"
+          }
+        }
+      }
+    },
+    "|": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "|"
+          }
+        }
+      }
+    },
+    "「%@」": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@”"
+          }
+        }
+      }
+    },
+    "「%@」は見つかりませんでした。表記を変えるか、通信状態をご確認ください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No results for “%@”. Try a different spelling, or check your connection."
+          }
+        }
+      }
+    },
+    "あなたの空を教えてください": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tell us where your sky is"
+          }
+        }
+      }
+    },
+    "ありがとうございます。\nこの空は、あなたのおかげで続きます。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thank you.\nThis sky keeps going because of you."
+          }
+        }
+      }
+    },
+    "いちばん寒かったのは %@の %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The coldest day was %@, at %@"
+          }
+        }
+      }
+    },
+    "いちばん寒かったのは %1$@の %2$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The coldest day was %1$@, at %2$@"
+          }
+        }
+      }
+    },
+    "いちばん暑かったのは %@の %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The hottest day was %@, at %@"
+          }
+        }
+      }
+    },
+    "いちばん暑かったのは %1$@の %2$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The hottest day was %1$@, at %2$@"
+          }
+        }
+      }
+    },
+    "いつも支えてくださって、本当にありがとうございます。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thank you, truly, for supporting this all along."
+          }
+        }
+      }
+    },
+    "いまは応援を受け取れません": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tips aren't available right now"
+          }
+        }
+      }
+    },
+    "いろんな空があったひと月でした": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A month of many different skies"
+          }
+        }
+      }
+    },
+    "くもり": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudy"
+          }
+        }
+      }
+    },
+    "このあと空が崩れそうです": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The sky looks like it will turn"
+          }
+        }
+      }
+    },
+    "このアプリについて": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About"
+          }
+        }
+      }
+    },
+    "この地域の雨雲レーダーはありません": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No rain radar for this area"
+          }
+        }
+      }
+    },
+    "この月をふりかえる": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Look back on this month"
+          }
+        }
+      }
+    },
+    "この画像を共有すると、ひと月の空をそのまま人に見せられます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share this image to show someone a whole month of sky"
+          }
+        }
+      }
+    },
+    "こまかい雨が降っています": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A fine rain is falling"
+          }
+        }
+      }
+    },
+    "こよみの上では、今日から冬です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By the old calendar, winter begins today"
+          }
+        }
+      }
+    },
+    "こよみの上では、今日から夏です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By the old calendar, summer begins today"
+          }
+        }
+      }
+    },
+    "こよみの上では、今日から春です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By the old calendar, spring begins today"
+          }
+        }
+      }
+    },
+    "こよみの上では、今日から秋です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By the old calendar, autumn begins today"
+          }
+        }
+      }
+    },
+    "これから数時間の降水確率%lldパーセント、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld percent chance of rain in the next few hours, %@"
+          }
+        }
+      }
+    },
+    "これから数時間の降水確率%1$lldパーセント、%2$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld percent chance of rain in the next few hours, %2$@"
+          }
+        }
+      }
+    },
+    "これまで %lld 回の応援をいただきました": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You've supported %lld times"
+          }
+        }
+      }
+    },
+    "これまでに %lld 個": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld so far"
+          }
+        }
+      }
+    },
+    "その日の空を、小さなガラス玉に\n閉じ込める天気アプリです": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A weather app that seals each day's sky\ninside a small glass orb"
+          }
+        }
+      }
+    },
+    "そらだま": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soradama"
+          }
+        }
+      }
+    },
+    "そろそろ梅雨の入り口です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The rainy season is at the door"
+          }
+        }
+      }
+    },
+    "ちいさな空玉": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Small Orb"
+          }
+        }
+      }
+    },
+    "つぎへ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
+          }
+        }
+      }
+    },
+    "とても大きな支えになります": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A truly generous gesture"
+          }
+        }
+      }
+    },
+    "はじめて出会った日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The day you first saw it"
+          }
+        }
+      }
+    },
+    "はじめる": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get started"
+          }
+        }
+      }
+    },
+    "はれた日の空玉": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Clear-Sky Orb"
+          }
+        }
+      }
+    },
+    "また来てくださって、ありがとうございます。\n空玉はこれからも増えていきます。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thank you for coming back.\nThe collection will keep growing."
+          }
+        }
+      }
+    },
+    "まんまるの月が、玉のなかに映りました": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A perfectly round moon settled inside the orb"
+          }
+        }
+      }
+    },
+    "もう一度読み込む": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reload"
+          }
+        }
+      }
+    },
+    "やわらかい光の一日です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A day of soft, gentle light"
+          }
+        }
+      }
+    },
+    "よく乾きます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dries beautifully"
+          }
+        }
+      }
+    },
+    "よく晴れたひと月でした": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A month of clear skies"
+          }
+        }
+      }
+    },
+    "アプリを開いた日の空が、玉になって残ります": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every day you open the app, that sky becomes an orb"
+          }
+        }
+      }
+    },
+    "アプリを開いた日の空が玉になって残ります。\n晴れも雨も、集めると宝物になります": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every day you open the app, that sky stays as an orb.\nClear or rainy, they add up to something worth keeping"
+          }
+        }
+      }
+    },
+    "インターネットに接続されていません。通信環境をご確認ください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You're offline. Please check your connection."
+          }
+        }
+      }
+    },
+    "タップしてコレクションを見る": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to see your collection"
+          }
+        }
+      }
+    },
+    "データ提供: Open-Meteo.com / 気象庁": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data: Open-Meteo.com / Japan Meteorological Agency"
+          }
+        }
+      }
+    },
+    "バージョン": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version"
+          }
+        }
+      }
+    },
+    "プライバシーポリシー": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy Policy"
+          }
+        }
+      }
+    },
+    "マイシティ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My Cities"
+          }
+        }
+      }
+    },
+    "メートル法 (°C・m/s)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metric (°C, m/s)"
+          }
+        }
+      }
+    },
+    "モバイルデータ通信が使えない設定になっています。設定をご確認ください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cellular data is turned off for this app. Please check Settings."
+          }
+        }
+      }
+    },
+    "ヤード・ポンド法 (°F・mph)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imperial (°F, mph)"
+          }
+        }
+      }
+    },
+    "リクエストの生成に失敗しました。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't build the request."
+          }
+        }
+      }
+    },
+    "レビューを書く": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write a review"
+          }
+        }
+      }
+    },
+    "レーダーを読み込み中…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading radar…"
+          }
+        }
+      }
+    },
+    "レーダーデータを取得できませんでした": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't load the radar"
+          }
+        }
+      }
+    },
+    "ロック画面・ホーム画面用の壁紙として保存できます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save it for your Lock Screen or Home Screen"
+          }
+        }
+      }
+    },
+    "一年でいちばん、夜が長い日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The longest night of the year"
+          }
+        }
+      }
+    },
+    "一年でいちばん、昼が長い日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The longest day of the year"
+          }
+        }
+      }
+    },
+    "一年でいちばん寒さがきびしいころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The deepest cold of the year"
+          }
+        }
+      }
+    },
+    "一年でいちばん暑さがきびしいころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The fiercest heat of the year"
+          }
+        }
+      }
+    },
+    "一時停止": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        }
+      }
+    },
+    "三日月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crescent moon"
+          }
+        }
+      }
+    },
+    "上弦の月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First quarter"
+          }
+        }
+      }
+    },
+    "下弦の月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last quarter"
+          }
+        }
+      }
+    },
+    "下限": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low"
+          }
+        }
+      }
+    },
+    "不要でしょう": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You won't need one"
+          }
+        }
+      }
+    },
+    "中程度": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moderate"
+          }
+        }
+      }
+    },
+    "乾きにくいです": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slow to dry"
+          }
+        }
+      }
+    },
+    "乾燥しています": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The air is dry"
+          }
+        }
+      }
+    },
+    "予測": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forecast"
+          }
+        }
+      }
+    },
+    "今": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Now"
+          }
+        }
+      }
+    },
+    "今は晴れ、でも傘はお守りに": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear for now — take an umbrella anyway"
+          }
+        }
+      }
+    },
+    "今日の玉、しっとり濡れています": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's orb is damp to the touch"
+          }
+        }
+      }
+    },
+    "今日の玉、とびきり透明です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's orb is exceptionally clear"
+          }
+        }
+      }
+    },
+    "今日の玉、ぴりっとしています": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's orb has a spark in it"
+          }
+        }
+      }
+    },
+    "今日の玉、ぼんやり霞んでいます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's orb is softly hazy"
+          }
+        }
+      }
+    },
+    "今日の玉、少しふわふわです": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's orb is a little fluffy"
+          }
+        }
+      }
+    },
+    "今日の玉、湯気が出そう": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's orb might start steaming"
+          }
+        }
+      }
+    },
+    "今日の空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's sky"
+          }
+        }
+      }
+    },
+    "今日の空、指先まで冷たそう": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cold enough to reach your fingertips"
+          }
+        }
+      }
+    },
+    "今日の空、真っ白です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The sky is pure white today"
+          }
+        }
+      }
+    },
+    "今日の空、綿菓子みたい": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The sky looks like cotton candy"
+          }
+        }
+      }
+    },
+    "今日の空は、少し特別なかたちで残ります": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's sky takes a slightly special shape"
+          }
+        }
+      }
+    },
+    "今日の空を壁紙として保存": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save today's sky as wallpaper"
+          }
+        }
+      }
+    },
+    "今日の空を壁紙に": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's sky as wallpaper"
+          }
+        }
+      }
+    },
+    "今日の空玉ができました": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's orb is ready"
+          }
+        }
+      }
+    },
+    "今日は%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today is %@"
+          }
+        }
+      }
+    },
+    "今日はしっとりした一日です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A soft, wet sort of day"
+          }
+        }
+      }
+    },
+    "今日は星がよく見えそう": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The stars should be out tonight"
+          }
+        }
+      }
+    },
+    "今月の振り返り": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This month"
+          }
+        }
+      }
+    },
+    "今月の空玉": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orbs this month"
+          }
+        }
+      }
+    },
+    "位置情報へのアクセスが許可されていません。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Location access isn't allowed."
+          }
+        }
+      }
+    },
+    "低い": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low"
+          }
+        }
+      }
+    },
+    "低気圧・天気の崩れに注意": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low pressure, weather may turn"
+          }
+        }
+      }
+    },
+    "体感温度": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feels like"
+          }
+        }
+      }
+    },
+    "作者を応援する": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support the developer"
+          }
+        }
+      }
+    },
+    "保存しています…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving…"
+          }
+        }
+      }
+    },
+    "保存に失敗しました。もう一度お試しください": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't save. Please try again."
+          }
+        }
+      }
+    },
+    "傘が必須です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You'll want an umbrella"
+          }
+        }
+      }
+    },
+    "傘は軽めで大丈夫そう": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A small umbrella should do"
+          }
+        }
+      }
+    },
+    "傘指数": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umbrella index"
+          }
+        }
+      }
+    },
+    "入道雲の空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Towering clouds"
+          }
+        }
+      }
+    },
+    "共有": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share"
+          }
+        }
+      }
+    },
+    "再生": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play"
+          }
+        }
+      }
+    },
+    "再試行": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try again"
+          }
+        }
+      }
+    },
+    "写真に保存しました": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved to Photos"
+          }
+        }
+      }
+    },
+    "冬": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Winter"
+          }
+        }
+      }
+    },
+    "冬至": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toji (winter solstice)"
+          }
+        }
+      }
+    },
+    "凍える空をお届けします": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delivering a freezing sky"
+          }
+        }
+      }
+    },
+    "凛と冴えた空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crisp winter sky"
+          }
+        }
+      }
+    },
+    "処暑": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shosho (heat subsides)"
+          }
+        }
+      }
+    },
+    "出典: 気象庁 高解像度降水ナウキャスト": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source: Japan Meteorological Agency, High-resolution Precipitation Nowcasts"
+          }
+        }
+      }
+    },
+    "初雪の便りが届きはじめるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Word of the first snow starts to arrive"
+          }
+        }
+      }
+    },
+    "十三夜": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waxing gibbous"
+          }
+        }
+      }
+    },
+    "単位": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Units"
+          }
+        }
+      }
+    },
+    "友だちに教える": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tell a friend"
+          }
+        }
+      }
+    },
+    "同じ天気でも、昼と夜では別の玉になります": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The same weather makes a different orb by day and by night"
+          }
+        }
+      }
+    },
+    "周辺の雨雲の動きと1時間先の予測を見る": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See rain moving nearby, and the hour ahead"
+          }
+        }
+      }
+    },
+    "啓蟄": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keichitsu (insects awaken)"
+          }
+        }
+      }
+    },
+    "土の中の虫も目を覚ますころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Even the insects underground are waking"
+          }
+        }
+      }
+    },
+    "地点を選ぶ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a location"
+          }
+        }
+      }
+    },
+    "壁紙を保存": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save wallpaper"
+          }
+        }
+      }
+    },
+    "夏": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summer"
+          }
+        }
+      }
+    },
+    "夏至": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geshi (summer solstice)"
+          }
+        }
+      }
+    },
+    "夕暮れ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dusk"
+          }
+        }
+      }
+    },
+    "外干しOK": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fine to hang outside"
+          }
+        }
+      }
+    },
+    "外干しは控えて": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep it indoors today"
+          }
+        }
+      }
+    },
+    "夜": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night"
+          }
+        }
+      }
+    },
+    "夜明け前です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before dawn"
+          }
+        }
+      }
+    },
+    "夜空がひときわ澄んでいます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The night sky is unusually clear"
+          }
+        }
+      }
+    },
+    "大寒": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daikan (greater cold)"
+          }
+        }
+      }
+    },
+    "大暑": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taisho (greater heat)"
+          }
+        }
+      }
+    },
+    "大雪": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taisetsu (greater snow)"
+          }
+        }
+      }
+    },
+    "天気を取得しています…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Getting the weather…"
+          }
+        }
+      }
+    },
+    "天気データ: Open-Meteo.com\n雨雲レーダー: 出典 気象庁ホームページ（高解像度降水ナウキャスト）\nhttps://www.jma.go.jp/bosai/nowc/": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weather data: Open-Meteo.com\nRain radar: Source, Japan Meteorological Agency (High-resolution Precipitation Nowcasts)\nhttps://www.jma.go.jp/bosai/nowc/"
+          }
+        }
+      }
+    },
+    "天気データの取得に失敗しました。しばらくしてからお試しください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't load the forecast. Please try again in a moment."
+          }
+        }
+      }
+    },
+    "天気データの取得に失敗しました。通信環境をご確認ください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't load the forecast. Please check your connection."
+          }
+        }
+      }
+    },
+    "天気情報サーバーに接続できませんでした。しばらくしてからお試しください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't reach the weather server. Please try again in a moment."
+          }
+        }
+      }
+    },
+    "季節の空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seasonal sky"
+          }
+        }
+      }
+    },
+    "実況": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Observed"
+          }
+        }
+      }
+    },
+    "実際の気温とほぼ同じ体感です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feels about the same as the actual temperature"
+          }
+        }
+      }
+    },
+    "実際より寒く感じます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feels colder than it is"
+          }
+        }
+      }
+    },
+    "実際より暖かく感じます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feels warmer than it is"
+          }
+        }
+      }
+    },
+    "寒さがいよいよ本番を迎えるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The cold settles in for real"
+          }
+        }
+      }
+    },
+    "寒露": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kanro (cold dew)"
+          }
+        }
+      }
+    },
+    "寝待月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waning gibbous"
+          }
+        }
+      }
+    },
+    "小寒": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shokan (lesser cold)"
+          }
+        }
+      }
+    },
+    "小暑": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shosho (lesser heat)"
+          }
+        }
+      }
+    },
+    "小満": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shoman (lesser fullness)"
+          }
+        }
+      }
+    },
+    "小雪": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shosetsu (lesser snow)"
+          }
+        }
+      }
+    },
+    "広告も、有料機能もありません。\nもし気に入ってもらえたら、\n開発を続けるための応援をいただけると嬉しいです。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No ads, no paid features.\nIf you enjoy it, a small tip helps\nkeep the development going."
+          }
+        }
+      }
+    },
+    "強い": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High"
+          }
+        }
+      }
+    },
+    "応援": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support"
+          }
+        }
+      }
+    },
+    "応援は任意です。払わなくても、すべての機能をそのまま使えます。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supporting is optional. Everything works exactly the same either way."
+          }
+        }
+      }
+    },
+    "応援は何度でもできます。機能が増えたり、広告が消えたりすることはありません。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can tip as often as you like. Nothing unlocks, and no ads disappear — there were never any."
+          }
+        }
+      }
+    },
+    "快適な湿度です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comfortable humidity"
+          }
+        }
+      }
+    },
+    "念のため持って": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bring one just in case"
+          }
+        }
+      }
+    },
+    "情報なし": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No data"
+          }
+        }
+      }
+    },
+    "新しい種類の空玉をずかんに追加！": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A new kind of orb was added to your catalog"
+          }
+        }
+      }
+    },
+    "新月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New moon"
+          }
+        }
+      }
+    },
+    "日の入り %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunset %@"
+          }
+        }
+      }
+    },
+    "日の出 %@、日の入り %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunrise %@, sunset %@"
+          }
+        }
+      }
+    },
+    "日の出 %1$@、日の入り %2$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunrise %1$@, sunset %2$@"
+          }
+        }
+      }
+    },
+    "日の出 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunrise %@"
+          }
+        }
+      }
+    },
+    "日の出・日の入り": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunrise & sunset"
+          }
+        }
+      }
+    },
+    "日の出・日の入りの前後1時間に開くと、特別な空が残ります": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the app within an hour of sunrise or sunset for a special sky"
+          }
+        }
+      }
+    },
+    "日中です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daytime"
+          }
+        }
+      }
+    },
+    "日本": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Japan"
+          }
+        }
+      }
+    },
+    "日没しました": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After sunset"
+          }
+        }
+      }
+    },
+    "春": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spring"
+          }
+        }
+      }
+    },
+    "春分": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shunbun (spring equinox)"
+          }
+        }
+      }
+    },
+    "昼": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day"
+          }
+        }
+      }
+    },
+    "昼と夜の長さが、ちょうど同じになる日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The day when light and dark are exactly equal"
+          }
+        }
+      }
+    },
+    "昼と夜の長さが、ふたたび同じになる日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The day when light and dark are equal once more"
+          }
+        }
+      }
+    },
+    "時刻": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time"
+          }
+        }
+      }
+    },
+    "時刻の選択": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select time"
+          }
+        }
+      }
+    },
+    "時間ごとの予報": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hourly forecast"
+          }
+        }
+      }
+    },
+    "晴れ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
+          }
+        }
+      }
+    },
+    "晴れた日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear days"
+          }
+        }
+      }
+    },
+    "晴れと雲、半分こな一日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Half sun, half cloud today"
+          }
+        }
+      }
+    },
+    "晴れ時々くもり": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partly cloudy"
+          }
+        }
+      }
+    },
+    "暑さがやわらぎ、風に秋を感じるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The heat eases, and autumn arrives on the wind"
+          }
+        }
+      }
+    },
+    "最低 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L %@"
+          }
+        }
+      }
+    },
+    "最高 %@ / 最低 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %@ / L %@"
+          }
+        }
+      }
+    },
+    "最高 %1$@ / 最低 %2$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %1$@ / L %2$@"
+          }
+        }
+      }
+    },
+    "最高 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %@"
+          }
+        }
+      }
+    },
+    "有明月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waning crescent"
+          }
+        }
+      }
+    },
+    "朝7時の傘予報": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umbrella forecast at 7 AM"
+          }
+        }
+      }
+    },
+    "朝に霜が降りはじめるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frost begins to settle in the mornings"
+          }
+        }
+      }
+    },
+    "朝焼け": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dawn"
+          }
+        }
+      }
+    },
+    "本格的に雪が降り積もるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snow begins to pile up in earnest"
+          }
+        }
+      }
+    },
+    "東京": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tokyo"
+          }
+        }
+      }
+    },
+    "梅雨が明け、本格的な暑さが始まるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The rains lift, and the real heat begins"
+          }
+        }
+      }
+    },
+    "検索結果": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Results"
+          }
+        }
+      }
+    },
+    "極端に強い": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extreme"
+          }
+        }
+      }
+    },
+    "標準的な気圧です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal pressure"
+          }
+        }
+      }
+    },
+    "毎日の空が、これだけ集まりました": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is how much sky you've gathered"
+          }
+        }
+      }
+    },
+    "毎日ひとつ、空がたまる": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One sky a day, gathering up"
+          }
+        }
+      }
+    },
+    "気圧": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pressure"
+          }
+        }
+      }
+    },
+    "気温": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temperature"
+          }
+        }
+      }
+    },
+    "気温の推移": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temperature trend"
+          }
+        }
+      }
+    },
+    "洗濯指数": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laundry index"
+          }
+        }
+      }
+    },
+    "洗濯指数%lld点、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laundry score %lld, %@"
+          }
+        }
+      }
+    },
+    "洗濯指数%1$lld点、%2$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laundry score %1$lld, %2$@"
+          }
+        }
+      }
+    },
+    "清明": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seimei (clear and bright)"
+          }
+        }
+      }
+    },
+    "湿度": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humidity"
+          }
+        }
+      }
+    },
+    "満月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full moon"
+          }
+        }
+      }
+    },
+    "満月の夜です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tonight is a full moon"
+          }
+        }
+      }
+    },
+    "満月の空玉": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Full-Moon Orb"
+          }
+        }
+      }
+    },
+    "溶けそうなくらい晴れています": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunny enough to melt"
+          }
+        }
+      }
+    },
+    "澄みきった一日になりそう": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Looks like a beautifully clear day"
+          }
+        }
+      }
+    },
+    "点": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " pts"
+          }
+        }
+      }
+    },
+    "特別な玉": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Special orbs"
+          }
+        }
+      }
+    },
+    "特別な空に出会えたひと月でした": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A month with some rare skies in it"
+          }
+        }
+      }
+    },
+    "特別な空玉が生まれました": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A special orb was born"
+          }
+        }
+      }
+    },
+    "特別な空玉クリスタルが生まれました！": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A special sky crystal was born"
+          }
+        }
+      }
+    },
+    "現在地の天気を表示するために\n位置情報を使います(あとから変更できます)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We use your location to show the weather where you are\n(you can change this later)"
+          }
+        }
+      }
+    },
+    "現在地を使う": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use current location"
+          }
+        }
+      }
+    },
+    "現在地を取得できませんでした。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't find your location."
+          }
+        }
+      }
+    },
+    "白い霧に包まれています": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything is wrapped in white mist"
+          }
+        }
+      }
+    },
+    "白露": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hakuro (white dew)"
+          }
+        }
+      }
+    },
+    "秋": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autumn"
+          }
+        }
+      }
+    },
+    "秋分": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shubun (autumn equinox)"
+          }
+        }
+      }
+    },
+    "穀物を育てる雨が降るころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The rain that feeds the grain is falling"
+          }
+        }
+      }
+    },
+    "穀雨": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kokuu (grain rain)"
+          }
+        }
+      }
+    },
+    "空が少し騒がしいようです": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The sky is a little restless"
+          }
+        }
+      }
+    },
+    "空にひとつも雲がありません": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not a single cloud up there"
+          }
+        }
+      }
+    },
+    "空も草木も、すべてが清らかに明るいころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky and green alike turn clear and bright"
+          }
+        }
+      }
+    },
+    "空を集めはじめました": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You've started collecting the sky"
+          }
+        }
+      }
+    },
+    "空玉 — 空を集める天気アプリ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soradama — Collect the sky, day by day"
+          }
+        }
+      }
+    },
+    "空玉(そらだま)へようこそ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome to Soradama"
+          }
+        }
+      }
+    },
+    "空玉、あつあつです": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The orb is piping hot"
+          }
+        }
+      }
+    },
+    "空玉、キンと冷えています": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The orb is ice cold"
+          }
+        }
+      }
+    },
+    "空玉ずかん": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orb Catalog"
+          }
+        }
+      }
+    },
+    "空玉の連続記録リマインド": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Streak reminder"
+          }
+        }
+      }
+    },
+    "空玉は、ひとりで作っています": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soradama is made by one person"
+          }
+        }
+      }
+    },
+    "空玉を見る": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View collection"
+          }
+        }
+      }
+    },
+    "空玉コレクション": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky Collection"
+          }
+        }
+      }
+    },
+    "空玉コレクションを開く。連続%lld日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the sky collection. %lld-day streak"
+          }
+        }
+      }
+    },
+    "立冬": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ritto (start of winter)"
+          }
+        }
+      }
+    },
+    "立夏": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rikka (start of summer)"
+          }
+        }
+      }
+    },
+    "立春": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Risshun (start of spring)"
+          }
+        }
+      }
+    },
+    "立秋": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Risshu (start of autumn)"
+          }
+        }
+      }
+    },
+    "粉雪が舞い込んだ玉です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Powder snow drifted into the orb"
+          }
+        }
+      }
+    },
+    "缶コーヒー1本ぶんの応援": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About the price of a coffee"
+          }
+        }
+      }
+    },
+    "芒種": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boshu (grain in ear)"
+          }
+        }
+      }
+    },
+    "草に白い露が結ぶころ。空が高くなります": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "White dew gathers on the grass, and the sky lifts"
+          }
+        }
+      }
+    },
+    "草木が生い茂り、天地に満ちるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything green grows thick and fills the world"
+          }
+        }
+      }
+    },
+    "蒸し暑く感じられます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humid and muggy"
+          }
+        }
+      }
+    },
+    "表示": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Display"
+          }
+        }
+      }
+    },
+    "視界の先が優しく滲む一日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A day where the distance blurs gently"
+          }
+        }
+      }
+    },
+    "設定": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "設定アプリで写真へのアクセスを許可してください": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please allow access to Photos in Settings"
+          }
+        }
+      }
+    },
+    "足元に気をつけてお出かけを": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch your step out there"
+          }
+        }
+      }
+    },
+    "通信がタイムアウトしました。電波の良い場所でお試しください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The connection timed out. Try again where the signal is stronger."
+          }
+        }
+      }
+    },
+    "通信が途中で切れました。もう一度お試しください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The connection dropped. Please try again."
+          }
+        }
+      }
+    },
+    "通信できないため %@ 時点の情報を表示中": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offline — showing data from %@"
+          }
+        }
+      }
+    },
+    "通信できませんでした": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't connect"
+          }
+        }
+      }
+    },
+    "通知": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications"
+          }
+        }
+      }
+    },
+    "連続日数": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day streak"
+          }
+        }
+      }
+    },
+    "部屋干し推奨": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Better to dry indoors"
+          }
+        }
+      }
+    },
+    "都市を検索": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search cities"
+          }
+        }
+      }
+    },
+    "都市名で検索(例: 大阪、Paris)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search by city (e.g. Osaka, Paris)"
+          }
+        }
+      }
+    },
+    "閉じる": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "開発を続ける力になります": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keeps the development going"
+          }
+        }
+      }
+    },
+    "集めた空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skies collected"
+          }
+        }
+      }
+    },
+    "雨": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rain"
+          }
+        }
+      }
+    },
+    "雨が近づいたら通知": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notify me before rain"
+          }
+        }
+      }
+    },
+    "雨の日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rainy days"
+          }
+        }
+      }
+    },
+    "雨の気配がひそんでいます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There's rain hiding in the air"
+          }
+        }
+      }
+    },
+    "雨の記憶が多いひと月でした": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A month that remembers the rain"
+          }
+        }
+      }
+    },
+    "雨の通知は降り出しの約30分前(降水確率50%以上)、傘予報は毎朝7時、リマインドは連続3日以上の記録が途切れそうな夜8時に届きます。アプリを開いていない間もバックグラウンドで予報を取り直し、最新の内容に合わせて通知します。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rain alerts arrive about 30 minutes before it starts (at 50% chance or higher), the umbrella forecast at 7 AM, and streak reminders at 8 PM when a streak of three or more days is about to end. The forecast refreshes in the background, so alerts stay current even when the app is closed."
+          }
+        }
+      }
+    },
+    "雨水": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usui (rain water)"
+          }
+        }
+      }
+    },
+    "雨粒が玉に閉じ込められました": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raindrops got sealed inside the orb"
+          }
+        }
+      }
+    },
+    "雨雲レーダー": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rain Radar"
+          }
+        }
+      }
+    },
+    "雨雲レーダーは気象庁のデータを使っているため、\n日本とその周辺だけに対応しています": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The radar uses data from the Japan Meteorological Agency,\nso it covers Japan and nearby areas only."
+          }
+        }
+      }
+    },
+    "雨雲レーダーを開く": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open rain radar"
+          }
+        }
+      }
+    },
+    "雨音を楽しむ日にしましょう": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A good day to listen to the rain"
+          }
+        }
+      }
+    },
+    "雪": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snow"
+          }
+        }
+      }
+    },
+    "雪が雨に変わるころ。空がゆるみます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snow turns to rain, and the sky loosens its grip"
+          }
+        }
+      }
+    },
+    "雲がゆっくり流れています": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clouds are drifting by slowly"
+          }
+        }
+      }
+    },
+    "雲に包まれた玉になりました": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The orb came out wrapped in cloud"
+          }
+        }
+      }
+    },
+    "雷の音にご注意ください": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listen out for thunder"
+          }
+        }
+      }
+    },
+    "雷雨": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thunderstorm"
+          }
+        }
+      }
+    },
+    "霜降": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soko (frost falls)"
+          }
+        }
+      }
+    },
+    "霞の空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hazy sky"
+          }
+        }
+      }
+    },
+    "霧": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fog"
+          }
+        }
+      }
+    },
+    "霧雨": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drizzle"
+          }
+        }
+      }
+    },
+    "露が冷たく感じられるころ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The dew has turned cold"
+          }
+        }
+      }
+    },
+    "静かな夜の玉ができました": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A quiet night orb has formed"
+          }
+        }
+      }
+    },
+    "非常に強い": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Very high"
+          }
+        }
+      }
+    },
+    "風": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wind"
+          }
+        }
+      }
+    },
+    "高く澄んだ空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High, clear sky"
+          }
+        }
+      }
+    },
+    "高気圧・安定した天気": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High pressure, settled weather"
+          }
+        }
+      }
+    },
+    "？？？": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "???"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

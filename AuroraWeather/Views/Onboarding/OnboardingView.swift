@@ -63,7 +63,7 @@ struct OnboardingView: View {
         }
     }
 
-    private func pageView(orbKind: WeatherKind, title: String, message: String) -> some View {
+    private func pageView(orbKind: WeatherKind, title: LocalizedStringKey, message: LocalizedStringKey) -> some View {
         VStack(spacing: 22) {
             Spacer()
             OrbView(

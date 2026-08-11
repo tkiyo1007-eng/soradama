@@ -49,6 +49,46 @@ struct WeatherLogicTests {
         #expect(Self.bundle(hours: hours).maxPrecipitationProbability(withinHours: 5) == nil)
     }
 
+    // MARK: - 一言と傘指数の食い違い
+
+    /// 「☀️ 晴れ／空にひとつも雲がありません」の真下に「傘指数82% 傘が必須です」が
+    /// 並ぶ画面を実機で見つけた。どちらの数字も正しいのに、壊れて見える。
+    /// 晴れていても雨が近いときは、一言のほうを雨寄りに切り替える。
+    @Test("晴れでも数時間後に雨なら一言が雨寄りになる")
+    func voiceWarnsAboutComingRain() {
+        let now = Date()
+        var hours: [HourForecast] = []
+        for index in 0..<24 {
+            hours.append(HourForecast(
+                id: index,
+                date: now.addingTimeInterval(Double(index) * 3600),
+                temperature: 23,
+                kind: .clear,
+                isDay: true,
+                precipitationProbability: index >= 6 ? 82 : 10
+            ))
+        }
+        let sunny = Self.bundle(hours: hours)
+        let line = OrbVoice.line(for: sunny)
+        #expect(!line.contains("雲がありません"), "傘が必須なのに『雲がありません』と言っている")
+    }
+
+    /// 逆に、本当に一日晴れているときは晴れの一言のままであること。
+    @Test("雨の気配がなければ晴れの一言のまま")
+    func voiceStaysSunnyWhenDry() {
+        let now = Date()
+        var hours: [HourForecast] = []
+        for index in 0..<24 {
+            hours.append(HourForecast(
+                id: index, date: now.addingTimeInterval(Double(index) * 3600),
+                temperature: 23, kind: .clear, isDay: true,
+                precipitationProbability: 5
+            ))
+        }
+        let line = OrbVoice.line(for: Self.bundle(hours: hours))
+        #expect(!line.contains("傘"), "雨の気配がないのに傘の話をしている")
+    }
+
     // MARK: - 単位換算
 
     @Test("摂氏・華氏の換算")

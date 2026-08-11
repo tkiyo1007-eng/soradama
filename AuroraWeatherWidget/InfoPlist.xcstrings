@@ -1,0 +1,28 @@
+{
+  "sourceLanguage": "ja",
+  "strings": {
+    "AuroraWeatherWidgetExtension": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AuroraWeatherWidgetExtension"
+          }
+        }
+      },
+      "comment": "Bundle name"
+    },
+    "そらだま": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soradama"
+          }
+        }
+      },
+      "comment": "Bundle display name"
+    }
+  },
+  "version": "1.0"
+}

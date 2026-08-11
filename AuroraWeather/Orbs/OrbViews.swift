@@ -25,8 +25,9 @@ struct OrbCollectionView: View {
 
     private static let monthTitleFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ja_JP")
-        formatter.dateFormat = "yyyy年M月"
+        formatter.locale = Locale.current
+        // 書式ごとロケールに委ねる(日本語 "2026年8月" / 英語 "August 2026")
+        formatter.setLocalizedDateFormatFromTemplate("yMMMM")
         return formatter
     }()
 
@@ -127,9 +128,20 @@ struct OrbCollectionView: View {
 
     // MARK: グリッド
 
+    /// 曜日の頭文字。ハードコードしていたため英語版でも「日 月 火…」と出ていた。
+    /// カレンダーから取れば言語も、週の始まり(日曜/月曜)も端末に合う。
+    private static var weekdaySymbols: [String] {
+        var calendar = Calendar.current
+        calendar.locale = .current
+        let symbols = calendar.veryShortWeekdaySymbols
+        // firstWeekday は 1 = 日曜。地域によっては月曜始まりなので回転させる
+        let offset = calendar.firstWeekday - 1
+        return Array(symbols[offset...] + symbols[..<offset])
+    }
+
     private var weekdayHeader: some View {
         HStack {
-            ForEach(["日", "月", "火", "水", "木", "金", "土"], id: \.self) { day in
+            ForEach(Array(Self.weekdaySymbols.enumerated()), id: \.offset) { _, day in
                 Text(day)
                     .font(.caption2.weight(.medium))
                     .foregroundStyle(.white.opacity(0.5))
@@ -224,7 +236,7 @@ struct OrbCollectionView: View {
         .padding(.top, 6)
     }
 
-    private func statCard(value: String, label: String) -> some View {
+    private func statCard(value: String, label: LocalizedStringKey) -> some View {
         VStack(spacing: 2) {
             Text(value)
                 .font(.system(.title, design: .rounded).weight(.bold))
@@ -445,7 +457,7 @@ struct OrbCollectionView: View {
                     .padding(.top, 8)
                 VStack(spacing: 4) {
                     if let date = orb.date {
-                        Text(date.formatted(.dateTime.locale(Locale(identifier: "ja_JP")).year().month().day().weekday()))
+                        Text(date.formatted(.dateTime.locale(Locale.current).year().month().day().weekday()))
                             .font(.headline)
                             .foregroundStyle(.white)
                     }
@@ -551,7 +563,7 @@ struct OrbCollectionView: View {
                     Text("はじめて出会った日")
                         .font(.caption2)
                         .foregroundStyle(.white.opacity(0.55))
-                    Text(date.formatted(.dateTime.locale(Locale(identifier: "ja_JP")).year().month().day()))
+                    Text(date.formatted(.dateTime.locale(Locale.current).year().month().day()))
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.white.opacity(0.9))
                 }
@@ -585,7 +597,7 @@ struct OrbCollectionView: View {
             OrbView(orb: orb, size: 120, animated: false)
                 .padding(.top, 6)
             if let date = orb.date {
-                Text(date.formatted(.dateTime.locale(Locale(identifier: "ja_JP")).year().month().day().weekday()))
+                Text(date.formatted(.dateTime.locale(Locale.current).year().month().day().weekday()))
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.white)
             }

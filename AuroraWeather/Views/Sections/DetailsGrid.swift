@@ -96,15 +96,15 @@ struct DetailsGrid: View {
 
     private var apparentComment: String {
         let difference = weather.apparentTemperature - weather.temperature
-        if difference >= 2 { return "実際より暖かく感じます" }
-        if difference <= -2 { return "実際より寒く感じます" }
-        return "実際の気温とほぼ同じ体感です"
+        if difference >= 2 { return String(localized: "実際より暖かく感じます") }
+        if difference <= -2 { return String(localized: "実際より寒く感じます") }
+        return String(localized: "実際の気温とほぼ同じ体感です")
     }
 
     private var pressureComment: String {
-        if weather.pressure >= 1020 { return "高気圧・安定した天気" }
-        if weather.pressure <= 1005 { return "低気圧・天気の崩れに注意" }
-        return "標準的な気圧です"
+        if weather.pressure >= 1020 { return String(localized: "高気圧・安定した天気") }
+        if weather.pressure <= 1005 { return String(localized: "低気圧・天気の崩れに注意") }
+        return String(localized: "標準的な気圧です")
     }
 }
 
@@ -115,11 +115,11 @@ struct UmbrellaIndexView: View {
     let probability: Double?
 
     private var judgement: (String, Color) {
-        guard let probability else { return ("情報なし", Color.white.opacity(0.6)) }
+        guard let probability else { return (String(localized: "情報なし"), Color.white.opacity(0.6)) }
         switch probability {
-        case ..<20: return ("不要でしょう", Color(red: 0.55, green: 0.85, blue: 0.6))
-        case 20..<50: return ("念のため持って", Color(red: 1.0, green: 0.82, blue: 0.4))
-        default: return ("傘が必須です", Color(red: 0.55, green: 0.75, blue: 1.0))
+        case ..<20: return (String(localized: "不要でしょう"), Color(red: 0.55, green: 0.85, blue: 0.6))
+        case 20..<50: return (String(localized: "念のため持って"), Color(red: 1.0, green: 0.82, blue: 0.4))
+        default: return (String(localized: "傘が必須です"), Color(red: 0.55, green: 0.75, blue: 1.0))
         }
     }
 
@@ -163,11 +163,11 @@ struct LaundryIndexView: View {
 
     private var judgement: (String, Color) {
         switch score {
-        case 80...: return ("よく乾きます", Color(red: 0.55, green: 0.85, blue: 0.6))
-        case 60..<80: return ("外干しOK", Color(red: 0.75, green: 0.88, blue: 0.55))
-        case 40..<60: return ("部屋干し推奨", Color(red: 1.0, green: 0.82, blue: 0.4))
-        case 20..<40: return ("乾きにくいです", Color(red: 1.0, green: 0.62, blue: 0.35))
-        default: return ("外干しは控えて", Color(red: 0.60, green: 0.75, blue: 1.0))
+        case 80...: return (String(localized: "よく乾きます"), Color(red: 0.55, green: 0.85, blue: 0.6))
+        case 60..<80: return (String(localized: "外干しOK"), Color(red: 0.75, green: 0.88, blue: 0.55))
+        case 40..<60: return (String(localized: "部屋干し推奨"), Color(red: 1.0, green: 0.82, blue: 0.4))
+        case 20..<40: return (String(localized: "乾きにくいです"), Color(red: 1.0, green: 0.62, blue: 0.35))
+        default: return (String(localized: "外干しは控えて"), Color(red: 0.60, green: 0.75, blue: 1.0))
         }
     }
 
@@ -318,11 +318,11 @@ struct UVGaugeView: View {
 
     private var level: (String, Color) {
         switch value {
-        case ..<3:  return ("低い", Color(red: 0.45, green: 0.85, blue: 0.55))
-        case 3..<6: return ("中程度", Color(red: 1.0, green: 0.85, blue: 0.40))
-        case 6..<8: return ("強い", Color(red: 1.0, green: 0.60, blue: 0.30))
-        case 8..<11: return ("非常に強い", Color(red: 0.95, green: 0.35, blue: 0.30))
-        default:    return ("極端に強い", Color(red: 0.75, green: 0.40, blue: 0.95))
+        case ..<3:  return (String(localized: "低い"), Color(red: 0.45, green: 0.85, blue: 0.55))
+        case 3..<6: return (String(localized: "中程度"), Color(red: 1.0, green: 0.85, blue: 0.40))
+        case 6..<8: return (String(localized: "強い"), Color(red: 1.0, green: 0.60, blue: 0.30))
+        case 8..<11: return (String(localized: "非常に強い"), Color(red: 0.95, green: 0.35, blue: 0.30))
+        default:    return (String(localized: "極端に強い"), Color(red: 0.75, green: 0.40, blue: 0.95))
         }
     }
 

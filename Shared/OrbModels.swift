@@ -8,20 +8,20 @@ enum Season: String, Codable, CaseIterable {
 
     var label: String {
         switch self {
-        case .spring: return "春"
-        case .summer: return "夏"
-        case .autumn: return "秋"
-        case .winter: return "冬"
+        case .spring: return String(localized: "春")
+        case .summer: return String(localized: "夏")
+        case .autumn: return String(localized: "秋")
+        case .winter: return String(localized: "冬")
         }
     }
 
     /// その季節の空を一言で表したもの(ずかん用)
     var skyName: String {
         switch self {
-        case .spring: return "霞の空"
-        case .summer: return "入道雲の空"
-        case .autumn: return "高く澄んだ空"
-        case .winter: return "凛と冴えた空"
+        case .spring: return String(localized: "霞の空")
+        case .summer: return String(localized: "入道雲の空")
+        case .autumn: return String(localized: "高く澄んだ空")
+        case .winter: return String(localized: "凛と冴えた空")
         }
     }
 
@@ -41,10 +41,10 @@ enum TimeOfDay: String, Codable, CaseIterable {
 
     var label: String {
         switch self {
-        case .dawn:  return "朝焼け"
-        case .day:   return "昼"
-        case .dusk:  return "夕暮れ"
-        case .night: return "夜"
+        case .dawn:  return String(localized: "朝焼け")
+        case .day:   return String(localized: "昼")
+        case .dusk:  return String(localized: "夕暮れ")
+        case .night: return String(localized: "夜")
         }
     }
 
@@ -379,12 +379,12 @@ struct MonthSummary {
 
     /// その月をひとことで言い表す見出し。
     var headline: String {
-        guard orbCount > 0 else { return "空を集めはじめました" }
+        guard orbCount > 0 else { return String(localized: "空を集めはじめました") }
         let sunnyRatio = Double(sunnyDays) / Double(orbCount)
         let rainyRatio = Double(rainyDays) / Double(orbCount)
-        if sunnyRatio >= 0.6 { return "よく晴れたひと月でした" }
-        if rainyRatio >= 0.5 { return "雨の記憶が多いひと月でした" }
-        if milestoneCount > 0 { return "特別な空に出会えたひと月でした" }
-        return "いろんな空があったひと月でした"
+        if sunnyRatio >= 0.6 { return String(localized: "よく晴れたひと月でした") }
+        if rainyRatio >= 0.5 { return String(localized: "雨の記憶が多いひと月でした") }
+        if milestoneCount > 0 { return String(localized: "特別な空に出会えたひと月でした") }
+        return String(localized: "いろんな空があったひと月でした")
     }
 }

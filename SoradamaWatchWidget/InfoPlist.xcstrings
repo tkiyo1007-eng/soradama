@@ -1,0 +1,28 @@
+{
+  "sourceLanguage": "ja",
+  "strings": {
+    "そらだま": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soradama"
+          }
+        }
+      },
+      "comment": "Bundle display name"
+    },
+    "SoradamaWatchWidgetExtension": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SoradamaWatchWidgetExtension"
+          }
+        }
+      },
+      "comment": "Bundle name"
+    }
+  },
+  "version": "1.0"
+}

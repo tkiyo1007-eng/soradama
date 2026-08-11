@@ -1,0 +1,39 @@
+{
+  "sourceLanguage": "ja",
+  "strings": {
+    "そらだま": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soradama"
+          }
+        }
+      },
+      "comment": "Bundle display name"
+    },
+    "SoradamaWatch": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SoradamaWatch"
+          }
+        }
+      },
+      "comment": "Bundle name"
+    },
+    "現在地の天気を表示するために位置情報を使用します。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your location is used to show the weather where you are."
+          }
+        }
+      },
+      "comment": "Privacy - Location When In Use Usage Description"
+    }
+  },
+  "version": "1.0"
+}

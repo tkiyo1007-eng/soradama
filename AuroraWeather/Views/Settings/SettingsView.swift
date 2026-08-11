@@ -8,6 +8,7 @@ struct SettingsView: View {
     @Bindable var viewModel: WeatherViewModel
     @Environment(\.dismiss) private var dismiss
     @Environment(\.requestReview) private var requestReview
+    @State private var showTipJar = false
 
     var body: some View {
         NavigationStack {
@@ -57,13 +58,24 @@ struct SettingsView: View {
                     Button {
                         requestReview()
                     } label: {
-                        Label("空玉を応援する(レビューを書く)", systemImage: "star")
+                        Label("レビューを書く", systemImage: "star")
                     }
                     ShareLink(item: URL(string: "https://apps.apple.com/app/id6788443049")!) {
                         Label("友だちに教える", systemImage: "square.and.arrow.up")
                     }
+                    if TipJar.isEnabled {
+                        Button {
+                            showTipJar = true
+                        } label: {
+                            Label("作者を応援する", systemImage: "heart")
+                        }
+                    }
                 } header: {
                     Text("応援")
+                } footer: {
+                    if TipJar.isEnabled {
+                        Text("応援は任意です。払わなくても、すべての機能をそのまま使えます。")
+                    }
                 }
 
                 Section {
@@ -74,7 +86,7 @@ struct SettingsView: View {
                 } header: {
                     Text("このアプリについて")
                 } footer: {
-                    Text("天気データ: Open-Meteo.com / 雨雲レーダー: RainViewer.com")
+                    Text("天気データ: Open-Meteo.com\n雨雲レーダー: 出典 気象庁ホームページ（高解像度降水ナウキャスト）\nhttps://www.jma.go.jp/bosai/nowc/")
                 }
             }
             .navigationTitle("設定")
@@ -83,6 +95,9 @@ struct SettingsView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("閉じる") { dismiss() }
                 }
+            }
+            .sheet(isPresented: $showTipJar) {
+                TipJarView()
             }
         }
     }

@@ -4,7 +4,10 @@ import SwiftUI
 /// Apple 純正「天気」アプリの均一な白フチ磨りガラスとは異なり、
 /// 空色〜藍色のグラデーション縁取りと差し色のシャドウで独自のトーンを出す。
 struct GlassCard<Content: View>: View {
-    var title: String?
+    /// String ではなく LocalizedStringKey で受ける。
+    /// String だと呼び出し側のリテラルが翻訳対象として拾われず、
+    /// 英語版でもカード見出しだけ日本語のまま残ってしまう。
+    var title: LocalizedStringKey?
     var systemImage: String?
     @ViewBuilder var content: Content
 

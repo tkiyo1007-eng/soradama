@@ -11,8 +11,9 @@ struct MonthSummaryView: View {
 
     private static let monthFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ja_JP")
-        formatter.dateFormat = "yyyy年M月"
+        formatter.locale = Locale.current
+        // 書式ごとロケールに委ねる(日本語 "2026年8月" / 英語 "August 2026")
+        formatter.setLocalizedDateFormatFromTemplate("yMMMM")
         return formatter
     }()
 
@@ -104,13 +105,13 @@ struct MonthSummaryView: View {
                 if let hottest = orbs.max(by: { $0.tempMax < $1.tempMax }), let date = hottest.date {
                     highlight(
                         icon: "thermometer.sun",
-                        text: "いちばん暑かったのは \(date.formatted(.dateTime.locale(Locale(identifier: "ja_JP")).month().day()))の \(Self.degrees(hottest.tempMax))"
+                        text: String(localized: "いちばん暑かったのは \(date.formatted(.dateTime.locale(Locale.current).month().day()))の \(Self.degrees(hottest.tempMax))")
                     )
                 }
                 if let coldest = orbs.min(by: { $0.tempMin < $1.tempMin }), let date = coldest.date {
                     highlight(
                         icon: "thermometer.snowflake",
-                        text: "いちばん寒かったのは \(date.formatted(.dateTime.locale(Locale(identifier: "ja_JP")).month().day()))の \(Self.degrees(coldest.tempMin))"
+                        text: String(localized: "いちばん寒かったのは \(date.formatted(.dateTime.locale(Locale.current).month().day()))の \(Self.degrees(coldest.tempMin))")
                     )
                 }
             }
@@ -135,7 +136,7 @@ struct MonthSummaryView: View {
         )
     }
 
-    private func stat(value: String, label: String) -> some View {
+    private func stat(value: String, label: LocalizedStringKey) -> some View {
         VStack(spacing: 1) {
             Text(value)
                 .font(.system(size: 22, weight: .bold, design: .rounded))

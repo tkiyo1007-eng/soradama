@@ -9,7 +9,6 @@ struct RadarSheet: View {
     var timeZone: TimeZone = .current
     @Environment(\.dismiss) private var dismiss
 
-    @State private var host: String?
     @State private var frames: [RadarFrame] = []
     @State private var frameIndex = 0
     @State private var isPlaying = false
@@ -19,9 +18,9 @@ struct RadarSheet: View {
         frames.indices.contains(frameIndex) ? frames[frameIndex] : nil
     }
 
-    private var tileTemplate: String? {
-        guard let host, let frame = currentFrame else { return nil }
-        return RadarService.tileTemplate(host: host, frame: frame)
+    /// 気象庁ナウキャストは日本周辺しか覆っていない
+    private var isCovered: Bool {
+        RadarService.isCovered(latitude: place.latitude, longitude: place.longitude)
     }
 
     var body: some View {
@@ -30,11 +29,13 @@ struct RadarSheet: View {
                 RadarMapView(
                     latitude: place.latitude,
                     longitude: place.longitude,
-                    tileTemplate: tileTemplate
+                    frame: currentFrame
                 )
                 .ignoresSafeArea(edges: .bottom)
 
-                if loadFailed {
+                if !isCovered {
+                    outOfRangeBanner
+                } else if loadFailed {
                     failedBanner
                 } else if frames.isEmpty {
                     ProgressView("レーダーを読み込み中…")
@@ -50,6 +51,18 @@ struct RadarSheet: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("閉じる") { dismiss() }
+                }
+            }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                // 公共データ利用規約では出典の明示が求められている。
+                // ただし提供範囲外では気象庁のデータを一枚も使っていないので出さない。
+                if isCovered {
+                    Text("出典: 気象庁 高解像度降水ナウキャスト")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 4)
+                        .background(.ultraThinMaterial)
                 }
             }
         }
@@ -112,6 +125,23 @@ struct RadarSheet: View {
         .padding(.bottom, 12)
     }
 
+    private var outOfRangeBanner: some View {
+        VStack(spacing: 8) {
+            Image(systemName: "globe.asia.australia")
+                .font(.title2)
+                .foregroundStyle(.secondary)
+            Text("この地域の雨雲レーダーはありません")
+                .font(.callout.weight(.medium))
+            Text("雨雲レーダーは気象庁のデータを使っているため、\n日本とその周辺だけに対応しています")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(20)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .padding(.bottom, 40)
+    }
+
     private var failedBanner: some View {
         VStack(spacing: 10) {
             Text("レーダーデータを取得できませんでした")
@@ -128,10 +158,9 @@ struct RadarSheet: View {
     }
 
     private func load() async {
+        guard isCovered else { return }
         do {
-            let result = try await RadarService().fetchFrames()
-            host = result.host
-            frames = result.frames
+            frames = try await RadarService().fetchFrames()
             // まれに空配列が正常応答として返ることがあり、その場合スピナーが
             // 永久に消えないため失敗として扱う
             if frames.isEmpty { loadFailed = true }
@@ -145,10 +174,45 @@ struct RadarSheet: View {
 
 // MARK: - MapKit ラッパー
 
+/// 気象庁ナウキャストのタイルを供給するオーバーレイ。
+///
+/// 気象庁はズームレベル4・6・8・10 の**偶数だけ**を配信していて、
+/// 奇数を要求すると 200 が返るのに中身は完全に透明な PNG になる。
+/// 実測で確認した挙動なので、奇数を要求されたら1段下の偶数タイルへ読み替える
+/// (地図側は返ってきたタイルを引き伸ばして描いてくれる)。
+final class JMANowcastTileOverlay: MKTileOverlay {
+    private let baseTime: String
+    private let validTime: String
+
+    init(frame: RadarFrame) {
+        baseTime = frame.baseTime
+        validTime = frame.validTime
+        super.init(urlTemplate: nil)
+        tileSize = CGSize(width: 256, height: 256)
+        canReplaceMapContent = false
+        minimumZ = 4
+        maximumZ = 10
+    }
+
+    override func url(forTilePath path: MKTileOverlayPath) -> URL {
+        var z = path.z
+        var x = path.x
+        var y = path.y
+        if !z.isMultiple(of: 2) {
+            z -= 1
+            x /= 2
+            y /= 2
+        }
+        let string = "https://www.jma.go.jp/bosai/jmatile/data/nowc/"
+            + "\(baseTime)/none/\(validTime)/surf/hrpns/\(z)/\(x)/\(y).png"
+        return URL(string: string)!
+    }
+}
+
 struct RadarMapView: UIViewRepresentable {
     let latitude: Double
     let longitude: Double
-    let tileTemplate: String?
+    let frame: RadarFrame?
 
     func makeUIView(context: Context) -> MKMapView {
         let map = MKMapView()
@@ -168,28 +232,19 @@ struct RadarMapView: UIViewRepresentable {
     }
 
     func updateUIView(_ map: MKMapView, context: Context) {
-        guard context.coordinator.currentTemplate != tileTemplate else { return }
-        context.coordinator.currentTemplate = tileTemplate
+        guard context.coordinator.currentFrameID != frame?.id else { return }
+        context.coordinator.currentFrameID = frame?.id
 
         map.removeOverlays(map.overlays)
-        if let tileTemplate {
-            let overlay = MKTileOverlay(urlTemplate: tileTemplate)
-            overlay.canReplaceMapContent = false
-            overlay.tileSize = CGSize(width: 512, height: 512)
-            // RainViewer のタイル提供はズームレベル7まで(z=8以上は
-            // 「Zoom Level Not Supported」のプレースホルダー画像が返る。実測で確認済み)。
-            // maximumZ を実際の上限に合わせることで、それ以上拡大した際は
-            // z=7 のタイルを引き伸ばして描画する。
-            overlay.minimumZ = 0
-            overlay.maximumZ = 7
-            map.addOverlay(overlay, level: .aboveRoads)
+        if let frame {
+            map.addOverlay(JMANowcastTileOverlay(frame: frame), level: .aboveRoads)
         }
     }
 
     func makeCoordinator() -> Coordinator { Coordinator() }
 
     final class Coordinator: NSObject, MKMapViewDelegate {
-        var currentTemplate: String?
+        var currentFrameID: String?
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
             if let tile = overlay as? MKTileOverlay {

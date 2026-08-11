@@ -22,7 +22,9 @@ struct HourlyForecastCard: View {
                     ForEach(Array(weather.hours.enumerated()), id: \.element.id) { index, hour in
                         let isNow = index == currentHourIndex
                         VStack(spacing: 10) {
-                            Text(isNow ? "今" : hour.date.hourLabel(in: weather.timeZone))
+                            // 三項演算子の型は String に落ちるため、Text 任せでは翻訳されない。
+                            // ここだけ明示的に localized を通す。
+                            Text(isNow ? String(localized: "今") : hour.date.hourLabel(in: weather.timeZone))
                                 .font(.footnote.weight(isNow ? .bold : .medium))
                                 .foregroundStyle(.white.opacity(isNow ? 1 : 0.75))
 

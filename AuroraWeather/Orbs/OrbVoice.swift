@@ -3,9 +3,19 @@ import Foundation
 /// 「そらだまの一言」— 天気・気温・時間帯から、その日だけの短いセリフを選ぶ。
 /// アプリに小さな人格を持たせるための、かわいさ担当のロジック。
 enum OrbVoice {
+    /// このあと雨が来るとみなす降水確率のしきい値
+    private static let rainComingThreshold: Double = 60
+
     static func line(for weather: WeatherBundle) -> String {
         var pool = lines(for: weather.kind, isDay: weather.isDay)
-        if weather.temperature >= 33 {
+        // 今は降っていなくても、このあと雨が来るならそれを最優先で伝える。
+        // 「空にひとつも雲がありません」の真下に傘指数82%が並ぶと、
+        // どちらの数字も正しくてもアプリが壊れているように見えてしまう。
+        if weather.kind.isDry,
+           let probability = weather.maxPrecipitationProbability(withinHours: 12),
+           probability >= rainComingThreshold {
+            pool = rainComingLines
+        } else if weather.temperature >= 33 {
             pool = hotLines
         } else if weather.temperature <= 2 {
             pool = coldLines
@@ -32,38 +42,62 @@ enum OrbVoice {
         return pool[index]
     }
 
+    private static let rainComingLines = [
+        String(localized: "今は晴れ、でも傘はお守りに"),
+        String(localized: "このあと空が崩れそうです"),
+        String(localized: "雨の気配がひそんでいます"),
+    ]
+
     private static let hotLines = [
-        "空玉、あつあつです",
-        "今日の玉、湯気が出そう",
-        "溶けそうなくらい晴れています",
+        String(localized: "空玉、あつあつです"),
+        String(localized: "今日の玉、湯気が出そう"),
+        String(localized: "溶けそうなくらい晴れています"),
     ]
 
     private static let coldLines = [
-        "空玉、キンと冷えています",
-        "今日の空、指先まで冷たそう",
-        "凍える空をお届けします",
+        String(localized: "空玉、キンと冷えています"),
+        String(localized: "今日の空、指先まで冷たそう"),
+        String(localized: "凍える空をお届けします"),
     ]
 
     private static func lines(for kind: WeatherKind, isDay: Bool) -> [String] {
         switch kind {
         case .clear:
             return isDay
-                ? ["澄みきった一日になりそう", "今日の玉、とびきり透明です", "空にひとつも雲がありません"]
-                : ["静かな夜の玉ができました", "今日は星がよく見えそう", "夜空がひときわ澄んでいます"]
+                ? [String(localized: "澄みきった一日になりそう"),
+                   String(localized: "今日の玉、とびきり透明です"),
+                   String(localized: "空にひとつも雲がありません")]
+                : [String(localized: "静かな夜の玉ができました"),
+                   String(localized: "今日は星がよく見えそう"),
+                   String(localized: "夜空がひときわ澄んでいます")]
         case .partlyCloudy:
-            return ["雲がゆっくり流れています", "晴れと雲、半分こな一日", "今日の玉、少しふわふわです"]
+            return [String(localized: "雲がゆっくり流れています"),
+                    String(localized: "晴れと雲、半分こな一日"),
+                    String(localized: "今日の玉、少しふわふわです")]
         case .cloudy:
-            return ["やわらかい光の一日です", "今日の空、綿菓子みたい", "雲に包まれた玉になりました"]
+            return [String(localized: "やわらかい光の一日です"),
+                    String(localized: "今日の空、綿菓子みたい"),
+                    String(localized: "雲に包まれた玉になりました")]
         case .fog:
-            return ["白い霧に包まれています", "今日の玉、ぼんやり霞んでいます", "視界の先が優しく滲む一日"]
+            return [String(localized: "白い霧に包まれています"),
+                    String(localized: "今日の玉、ぼんやり霞んでいます"),
+                    String(localized: "視界の先が優しく滲む一日")]
         case .drizzle:
-            return ["こまかい雨が降っています", "今日の玉、しっとり濡れています", "傘は軽めで大丈夫そう"]
+            return [String(localized: "こまかい雨が降っています"),
+                    String(localized: "今日の玉、しっとり濡れています"),
+                    String(localized: "傘は軽めで大丈夫そう")]
         case .rain:
-            return ["雨粒が玉に閉じ込められました", "今日はしっとりした一日です", "雨音を楽しむ日にしましょう"]
+            return [String(localized: "雨粒が玉に閉じ込められました"),
+                    String(localized: "今日はしっとりした一日です"),
+                    String(localized: "雨音を楽しむ日にしましょう")]
         case .snow:
-            return ["粉雪が舞い込んだ玉です", "今日の空、真っ白です", "足元に気をつけてお出かけを"]
+            return [String(localized: "粉雪が舞い込んだ玉です"),
+                    String(localized: "今日の空、真っ白です"),
+                    String(localized: "足元に気をつけてお出かけを")]
         case .thunderstorm:
-            return ["空が少し騒がしいようです", "今日の玉、ぴりっとしています", "雷の音にご注意ください"]
+            return [String(localized: "空が少し騒がしいようです"),
+                    String(localized: "今日の玉、ぴりっとしています"),
+                    String(localized: "雷の音にご注意ください")]
         }
     }
 }

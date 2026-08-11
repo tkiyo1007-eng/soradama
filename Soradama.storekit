@@ -1,0 +1,76 @@
+{
+  "identifier" : "A1B2C3D4",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "160",
+      "familyShareable" : false,
+      "internalID" : "TIP0001",
+      "localizations" : [
+        {
+          "description" : "缶コーヒー1本ぶんの応援",
+          "displayName" : "ちいさな空玉",
+          "locale" : "ja"
+        },
+        {
+          "description" : "A small thank-you, about the price of a coffee.",
+          "displayName" : "A Small Orb",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.tkiyo1007.soradama.tip.small",
+      "referenceName" : "Tip - Small",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "480",
+      "familyShareable" : false,
+      "internalID" : "TIP0002",
+      "localizations" : [
+        {
+          "description" : "開発を続ける力になります",
+          "displayName" : "はれた日の空玉",
+          "locale" : "ja"
+        },
+        {
+          "description" : "Keeps development going.",
+          "displayName" : "A Clear-Sky Orb",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.tkiyo1007.soradama.tip.medium",
+      "referenceName" : "Tip - Medium",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "1200",
+      "familyShareable" : false,
+      "internalID" : "TIP0003",
+      "localizations" : [
+        {
+          "description" : "とても大きな支えになります",
+          "displayName" : "満月の空玉",
+          "locale" : "ja"
+        },
+        {
+          "description" : "A truly generous gesture.",
+          "displayName" : "A Full-Moon Orb",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.tkiyo1007.soradama.tip.large",
+      "referenceName" : "Tip - Large",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6788443049",
+    "_developerTeamID" : "",
+    "_lastSynchronizedDate" : 0
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

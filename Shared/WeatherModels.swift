@@ -160,7 +160,14 @@ struct SavedPlace: Codable, Identifiable, Equatable, Hashable {
     let longitude: Double
     var isCurrentLocation: Bool = false
 
-    static let fallback = SavedPlace(name: "東京", detail: "日本", latitude: 35.6895, longitude: 139.6917)
+    /// 位置情報を許可してもらえなかったときに最初に見せる地点。
+    /// 名前は表示にしか使わない(ID は座標から作る)ので、言語に合わせて訳してよい。
+    static let fallback = SavedPlace(
+        name: String(localized: "東京"),
+        detail: String(localized: "日本"),
+        latitude: 35.6895,
+        longitude: 139.6917
+    )
 }
 
 /// 表示に使う単位系。気温だけでなく風速・気圧・距離もまとめて切り替える。
@@ -171,7 +178,11 @@ enum UnitSystem: String, Codable, CaseIterable, Identifiable {
     case fahrenheit
 
     var id: String { rawValue }
-    var label: String { self == .celsius ? "メートル法 (°C・m/s)" : "ヤード・ポンド法 (°F・mph)" }
+    var label: String {
+        self == .celsius
+            ? String(localized: "メートル法 (°C・m/s)")
+            : String(localized: "ヤード・ポンド法 (°F・mph)")
+    }
     var suffix: String { self == .celsius ? "°C" : "°F" }
 
     func convert(_ celsius: Double) -> Double {

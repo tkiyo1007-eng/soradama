@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>空玉（そらだま）— その日の空が、ガラス玉になって残る天気アプリ</title>
-<meta name="description" content="アプリを開いた日の空が、その日だけの模様を持つガラス玉になって残る天気アプリ。季節と時間帯で表情が変わり、二十四節気や月の満ち欠けまで映します。iPhone・Apple Watch対応、無料。">
+<title>Soradama — The weather app that lets you keep the sky</title>
+<meta name="description" content="A weather app where each day you open it, that day's sky is sealed into a small glass orb — shaped by the weather, the season and the hour. Follows the 24 traditional Japanese seasons and the phases of the moon. iPhone and Apple Watch. Free.">
 <meta name="theme-color" content="#070915">
 <link rel="icon" href="assets/icon.png">
 
@@ -14,10 +14,10 @@
 
 <!-- OGP -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="空玉（そらだま）">
-<meta property="og:description" content="その日の空が、ガラス玉になって残る天気アプリ。">
+<meta property="og:title" content="Soradama">
+<meta property="og:description" content="A weather app that lets you keep the sky, one day at a time.">
 <meta property="og:image" content="https://tkiyo1007-eng.github.io/soradama/assets/icon.png">
-<meta property="og:url" content="https://tkiyo1007-eng.github.io/soradama/">
+<meta property="og:url" content="https://tkiyo1007-eng.github.io/soradama/en.html">
 <meta name="twitter:card" content="summary_large_image">
 
 <style>
@@ -35,12 +35,11 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
-  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN",-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
   background:#070915;
   color:var(--ink);
   line-height:1.75;
   overflow-x:hidden;
-  font-feature-settings:"palt" 1;
   letter-spacing:.01em;
 }
 
@@ -82,8 +81,9 @@ h2{font-size:clamp(1.55rem,4.4vw,2.4rem);line-height:1.35;font-weight:800;letter
   border-radius:24%;object-fit:cover;display:block;
   box-shadow:0 26px 70px rgba(58,120,220,.42), 0 4px 16px rgba(8,14,40,.5)}
 
-.title{font-size:clamp(2.9rem,11vw,4.6rem);font-weight:800;letter-spacing:.14em;line-height:1.1}
-.reading{font-size:.8rem;letter-spacing:.42em;color:var(--faint);margin-top:12px}
+/* 英語版は語長があるので字間を詰める（日本語の「空玉」2文字向けの .14em では溢れる） */
+.title{font-size:clamp(2.4rem,9vw,4.2rem);font-weight:800;letter-spacing:.01em;line-height:1.1}
+.reading{font-size:.8rem;letter-spacing:.08em;color:var(--faint);margin-top:12px}
 .catch{font-size:clamp(1.12rem,4.2vw,1.6rem);font-weight:700;margin-top:26px;line-height:1.6}
 .catch b{
   background:linear-gradient(100deg,var(--sky),#c9b6ff 55%,var(--ember));
@@ -189,7 +189,7 @@ footer a:hover{color:var(--sky);border-bottom-color:rgba(124,196,255,.5)}
 <body>
 <script>document.documentElement.classList.add('js')</script>
 
-<nav class="langswitch" aria-label="Language"><a href="index.html" aria-current="true" lang="ja">日本語</a><a href="en.html" lang="en">EN</a></nav>
+<nav class="langswitch" aria-label="Language"><a href="index.html" lang="ja">日本語</a><a href="en.html" aria-current="true" lang="en">EN</a></nav>
 <div class="sky"></div>
 <canvas class="stars" aria-hidden="true"></canvas>
 
@@ -198,16 +198,16 @@ footer a:hover{color:var(--sky);border-bottom-color:rgba(124,196,255,.5)}
   <div class="wrap">
     <div class="orb-stage">
       <div class="orb-halo"></div>
-      <img class="orb" src="assets/icon-hero.png" alt="空玉のアプリアイコン" width="512" height="512" fetchpriority="high">
+      <img class="orb" src="assets/icon-hero.png" alt="Soradama app icon" width="512" height="512" fetchpriority="high">
     </div>
-    <h1 class="title">空玉</h1>
-    <p class="reading">S O R A D A M A</p>
-    <p class="catch">その日の空が、<b>ガラス玉</b>になって残る。</p>
-    <p class="sub">毎日ひとつ。空を集める、天気アプリ。</p>
+    <h1 class="title">Soradama</h1>
+    <p class="reading">so-ra-da-ma &nbsp;·&nbsp; “sky orb” in Japanese</p>
+    <p class="catch">Keep the sky in a <b>glass orb</b>.</p>
+    <p class="sub">One a day. A weather app you can collect.</p>
     <a class="cta" href="https://apps.apple.com/app/id6788443049">
-      <span><small>App Store で</small>ダウンロード</span>
+      <span><small>Download on the</small>App Store</span>
     </a>
-    <p class="price">iPhone・Apple Watch対応／無料</p>
+    <p class="price">iPhone and Apple Watch · Free</p>
   </div>
 </header>
 
@@ -215,32 +215,32 @@ footer a:hover{color:var(--sky);border-bottom-color:rgba(124,196,255,.5)}
 <section id="features">
   <div class="wrap">
     <p class="eyebrow reveal">Features</p>
-    <h2 class="reveal">天気を調べて、終わりにしない。</h2>
-    <p class="lede reveal">アプリを開いた日の空が、その日だけの姿でカレンダーに残っていきます。</p>
+    <h2 class="reveal">Checking the weather shouldn't be the end of it.</h2>
+    <p class="lede reveal">Every day you open the app, that sky stays behind in a calendar — in a shape it will never take again.</p>
 
     <div class="features">
       <article class="card reveal">
         <div class="glyph"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M8.5 9.5a4.5 4.5 0 0 1 3-2"/></svg></div>
-        <h3>空が、玉になる</h3>
-        <p>その日の天気・気温・湿度から模様が決まり、二つとない一つの玉になります。集めた玉は月ごとのカレンダーに並び、続けるほど自分だけの一年ができあがります。</p>
+        <h3>The sky becomes an orb</h3>
+        <p>The pattern comes from that day's weather, temperature and humidity, so no two orbs are ever alike. They gather in a calendar, month by month, until a year of your own sky is sitting there.</p>
       </article>
 
       <article class="card reveal">
         <div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M5 9.5a3.5 3.5 0 1 1 7 0"/><circle cx="17" cy="7" r="2.5"/></svg></div>
-        <h3>季節と時間で表情が変わる</h3>
-        <p>春は霞をまとい、夏は入道雲が湧き、秋はうろこ雲が並び、冬は光が凛と冴える。朝焼け・夕暮れ・夜、そして夜の玉にはその日の月が浮かびます。</p>
+        <h3>It changes with the season and the hour</h3>
+        <p>Spring wears a haze, summer builds towering clouds, autumn lines up mackerel skies, winter turns the light crisp and clear. Dawn, dusk and night each look different — and a night orb holds the moon, at the phase it really was.</p>
       </article>
 
       <article class="card reveal">
         <div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/><circle cx="12" cy="12" r="3.4"/></svg></div>
-        <h3>暦の節目を、そっと知らせる</h3>
-        <p>立秋、白露、秋分——二十四節気にあたる日は、その日だけの特別な玉に。「こよみの上では、今日から秋です」と、季節の移ろいを教えてくれます。</p>
+        <h3>It marks the turns of the calendar</h3>
+        <p>Soradama follows the 24 traditional Japanese seasons. On the day autumn begins, on the day white dew gathers, the orb takes a form reserved for that day — and the app quietly tells you why.</p>
       </article>
 
       <article class="card reveal">
         <div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 1 6 6c2 .6 3 2.2 3 4a4 4 0 0 1-4 4H7a5 5 0 0 1-1-9.9A6 6 0 0 1 12 3z"/></svg></div>
-        <h3>天気アプリとしても、ちゃんと使える</h3>
-        <p>日本国内は気象庁モデルで予報。傘指数・洗濯指数は「これからの数時間」で判定し、雨雲レーダーは1時間先まで。ウィジェットとApple Watchにも対応します。</p>
+        <h3>And it works as a weather app</h3>
+        <p>Hourly and 10-day forecasts, an umbrella index and a laundry index judged on the hours ahead, widgets for the Home and Lock Screens, and an Apple Watch app. The rain radar reaches 60 minutes ahead — it uses data from the Japan Meteorological Agency, so it covers Japan and nearby areas only.</p>
       </article>
     </div>
   </div>
@@ -250,13 +250,13 @@ footer a:hover{color:var(--sky);border-bottom-color:rgba(124,196,255,.5)}
 <section id="screens">
   <div class="wrap">
     <p class="eyebrow reveal">Screens</p>
-    <h2 class="reveal">開くたび、少しうれしい画面を。</h2>
+    <h2 class="reveal">A screen worth opening.</h2>
   </div>
   <div class="wrap shots">
-    <figure class="shot reveal"><img src="assets/shot1.jpg" alt="今日の空。気温と傘指数・洗濯指数が並ぶメイン画面" loading="lazy" width="573" height="1240"><figcaption>今日の空</figcaption></figure>
-    <figure class="shot reveal"><img src="assets/shot2.jpg" alt="ひと月ぶんの空玉が並ぶコレクションのカレンダー" loading="lazy" width="573" height="1240"><figcaption>空玉コレクション</figcaption></figure>
-    <figure class="shot reveal"><img src="assets/shot3.jpg" alt="集めた空模様が並ぶ空玉ずかん" loading="lazy" width="573" height="1240"><figcaption>空玉ずかん</figcaption></figure>
-    <figure class="shot reveal"><img src="assets/shot4.jpg" alt="その月の空をまとめた振り返りカード" loading="lazy" width="573" height="1240"><figcaption>今月の振り返り</figcaption></figure>
+    <figure class="shot reveal"><img src="assets/shot1.jpg" alt="The main screen, with temperature, umbrella index and laundry index" loading="lazy" width="573" height="1240"><figcaption>Today's sky</figcaption></figure>
+    <figure class="shot reveal"><img src="assets/shot2.jpg" alt="A month of orbs laid out in the collection calendar" loading="lazy" width="573" height="1240"><figcaption>Sky Collection</figcaption></figure>
+    <figure class="shot reveal"><img src="assets/shot3.jpg" alt="The orb catalog of skies you have collected" loading="lazy" width="573" height="1240"><figcaption>Orb Catalog</figcaption></figure>
+    <figure class="shot reveal"><img src="assets/shot4.jpg" alt="A card summing up the month's skies" loading="lazy" width="573" height="1240"><figcaption>Monthly look-back</figcaption></figure>
   </div>
 </section>
 
@@ -264,14 +264,14 @@ footer a:hover{color:var(--sky);border-bottom-color:rgba(124,196,255,.5)}
 <section id="for">
   <div class="wrap">
     <p class="eyebrow reveal">For you</p>
-    <h2 class="reveal">こんな人におすすめ</h2>
+    <h2 class="reveal">You might like this if</h2>
     <div class="fits">
-      <div class="fit reveal"><span class="dot"></span><p>天気を「確認するだけ」で終わらせたくない</p></div>
-      <div class="fit reveal"><span class="dot"></span><p>季節の移ろいを感じるのが好き</p></div>
-      <div class="fit reveal"><span class="dot"></span><p>ホーム画面を自分らしく飾りたい</p></div>
-      <div class="fit reveal"><span class="dot"></span><p>毎日つづく、小さな楽しみがほしい</p></div>
-      <div class="fit reveal"><span class="dot"></span><p>傘を持つかどうかで、毎朝迷いたくない</p></div>
-      <div class="fit reveal"><span class="dot"></span><p>Apple Watch で天気をさっと見たい</p></div>
+      <div class="fit reveal"><span class="dot"></span><p>you'd rather the weather left something behind</p></div>
+      <div class="fit reveal"><span class="dot"></span><p>you like noticing the seasons turn</p></div>
+      <div class="fit reveal"><span class="dot"></span><p>you care how your Home Screen looks</p></div>
+      <div class="fit reveal"><span class="dot"></span><p>you want one small thing to keep up daily</p></div>
+      <div class="fit reveal"><span class="dot"></span><p>you're tired of guessing about the umbrella</p></div>
+      <div class="fit reveal"><span class="dot"></span><p>you check the weather from your wrist</p></div>
     </div>
   </div>
 </section>
@@ -279,13 +279,13 @@ footer a:hover{color:var(--sky);border-bottom-color:rgba(124,196,255,.5)}
 <!-- 締め ======================================================== -->
 <section class="finale">
   <div class="wrap">
-    <img class="appicon reveal" src="assets/icon.png" alt="空玉のアプリアイコン" width="88" height="88">
-    <h2 class="reveal">今日の空を、集めはじめる。</h2>
-    <p class="lede reveal" style="margin-left:auto;margin-right:auto">アプリを開いた瞬間から、今日のぶんが残ります。</p>
+    <img class="appicon reveal" src="assets/icon.png" alt="Soradama app icon" width="88" height="88">
+    <h2 class="reveal">Start collecting today's sky.</h2>
+    <p class="lede reveal" style="margin-left:auto;margin-right:auto">The moment you open it, today is already saved.</p>
     <a class="cta reveal" href="https://apps.apple.com/app/id6788443049">
-      <span><small>App Store で</small>ダウンロード</span>
+      <span><small>Download on the</small>App Store</span>
     </a>
-    <p class="price">無料／アカウント登録は不要です</p>
+    <p class="price">Free · No account needed</p>
   </div>
 </section>
 
@@ -293,13 +293,13 @@ footer a:hover{color:var(--sky);border-bottom-color:rgba(124,196,255,.5)}
 <footer>
   <div class="wrap">
     <nav class="flinks">
-      <a href="privacy.html">プライバシーポリシー</a>
-      <a href="mailto:tkiyo1007@gmail.com?subject=%E7%A9%BA%E7%8E%89%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">お問い合わせ</a>
+      <a href="privacy-en.html">Privacy Policy</a>
+      <a href="mailto:tkiyo1007@gmail.com?subject=About%20Soradama">Contact</a>
       <a href="https://apps.apple.com/app/id6788443049">App Store</a>
     </nav>
     <p class="credit">
-      空玉（そらだま）は個人開発のアプリです。<br>
-      天気データ: Open-Meteo.com ／ 雨雲レーダー: 出典 気象庁ホームページ<br>
+      Soradama is made by one independent developer.<br>
+      Weather data: Open-Meteo.com · Rain radar: Japan Meteorological Agency<br>
       © 2026 Kiyotaka Takanishi
     </p>
   </div>
