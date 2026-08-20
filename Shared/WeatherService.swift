@@ -51,12 +51,14 @@ struct WeatherService {
 
     /// 気象庁(JMA)モデルのカバー範囲(日本近域)。この範囲内では
     /// グローバルモデルより精度の高い JMA MSM/GSM を主モデルに使う。
-    private static func isJMACoverage(latitude: Double, longitude: Double) -> Bool {
+    /// 緯度だけで判定すると、同じ緯度帯の海外(アテネなど)まで拾ってしまうので
+    /// 経度も必ず見る。テストから呼べるようにしてある。
+    static func usesJMAModel(latitude: Double, longitude: Double) -> Bool {
         (20.0...47.5).contains(latitude) && (122.0...154.0).contains(longitude)
     }
 
     func fetch(latitude: Double, longitude: Double) async throws -> WeatherBundle {
-        let useJMA = Self.isJMACoverage(latitude: latitude, longitude: longitude)
+        let useJMA = Self.usesJMAModel(latitude: latitude, longitude: longitude)
 
         var components = URLComponents(string: "https://api.open-meteo.com/v1/forecast")
         var queryItems: [URLQueryItem] = [
@@ -145,7 +147,12 @@ struct WeatherService {
     }
 
     /// 主データ(JMA)の時刻グリッドに合わせて、補完データの UV・視程・降水確率を割り当てる。
-    private static func merge(primary: ForecastResponse, supplement: SupplementResponse?) -> ForecastResponse {
+    /// JMA モデルが返さない項目(降水確率・UV・視程)を、グローバルモデルの
+    /// 並行リクエストで補う。時刻の粒度が食い違うことがあるため、
+    /// 時刻をキーにして引き当てる(添字で合わせると1時間ずれる)。
+    ///
+    /// ここが壊れると傘指数と洗濯指数が丸ごと消えるので、テストから呼べるようにしてある。
+    static func merge(primary: ForecastResponse, supplement: SupplementResponse?) -> ForecastResponse {
         guard let supplement else { return primary }
 
         func aligned(_ values: [Double?]?, times: [Double], to targetTimes: [Double]) -> [Double?]? {
