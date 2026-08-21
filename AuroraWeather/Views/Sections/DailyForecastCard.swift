@@ -53,7 +53,12 @@ private struct DailyRow: View {
             Text(isToday ? String(localized: "今日") : day.date.weekdayLabel(in: timeZone))
                 .font(.callout.weight(isToday ? .bold : .medium))
                 .foregroundStyle(.white)
-                .frame(width: 44, alignment: .leading)
+                .lineLimit(1)
+                // 44pt は「今日」「月」を想定した幅で、英語の "Today" が2行に折り返した。
+                // 語長は言語によって変わるので、必要なぶんだけ広げつつ縮小も許す。
+                .minimumScaleFactor(0.8)
+                .frame(minWidth: 44, alignment: .leading)
+                .fixedSize(horizontal: true, vertical: false)
 
             VStack(spacing: 1) {
                 WeatherIconView(kind: day.kind, isDay: true)
