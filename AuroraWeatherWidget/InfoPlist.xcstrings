@@ -9,8 +9,7 @@
             "value": "AuroraWeatherWidgetExtension"
           }
         }
-      },
-      "comment": "Bundle name"
+      }
     },
     "そらだま": {
       "localizations": {
@@ -20,8 +19,7 @@
             "value": "Soradama"
           }
         }
-      },
-      "comment": "Bundle display name"
+      }
     }
   },
   "version": "1.0"

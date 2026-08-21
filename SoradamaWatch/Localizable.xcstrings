@@ -1,16 +1,6 @@
 {
   "sourceLanguage": "ja",
   "strings": {
-    "%@の特別な空玉クリスタル、%@の%@、%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Special sky crystal for %@, %@, %@, %@"
-          }
-        }
-      }
-    },
     "%1$@の特別な空玉クリスタル、%2$@の%3$@、%4$@": {
       "localizations": {
         "en": {
@@ -21,12 +11,12 @@
         }
       }
     },
-    "%@の空玉、%@の%@、%@": {
+    "%@の特別な空玉クリスタル、%@の%@、%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sky orb for %@, %@, %@, %@"
+            "value": "Special sky crystal for %@, %@, %@, %@"
           }
         }
       }
@@ -37,6 +27,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sky orb for %1$@, %2$@, %3$@, %4$@"
+          }
+        }
+      }
+    },
+    "%@の空玉、%@の%@、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky orb for %@, %@, %@, %@"
           }
         }
       }
@@ -651,22 +651,22 @@
         }
       }
     },
-    "最高 %@  最低 %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "H %@  L %@"
-          }
-        }
-      }
-    },
     "最高 %1$@  最低 %2$@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "H %1$@  L %2$@"
+          }
+        }
+      }
+    },
+    "最高 %@  最低 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %@  L %@"
           }
         }
       }

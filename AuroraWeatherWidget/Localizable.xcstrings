@@ -1,16 +1,6 @@
 {
   "sourceLanguage": "ja",
   "strings": {
-    "%@ %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ %@"
-          }
-        }
-      }
-    },
     "%1$@ %2$@": {
       "localizations": {
         "en": {
@@ -21,12 +11,12 @@
         }
       }
     },
-    "%@、%@、%@": {
+    "%@ %@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@, %@, %@"
+            "value": "%@ %@"
           }
         }
       }
@@ -41,12 +31,12 @@
         }
       }
     },
-    "%@の特別な空玉クリスタル、%@の%@、%@": {
+    "%@、%@、%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Special sky crystal for %@, %@, %@, %@"
+            "value": "%@, %@, %@"
           }
         }
       }
@@ -61,12 +51,12 @@
         }
       }
     },
-    "%@の空玉、%@の%@、%@": {
+    "%@の特別な空玉クリスタル、%@の%@、%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sky orb for %@, %@, %@, %@"
+            "value": "Special sky crystal for %@, %@, %@, %@"
           }
         }
       }
@@ -77,6 +67,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sky orb for %1$@, %2$@, %3$@, %4$@"
+          }
+        }
+      }
+    },
+    "%@の空玉、%@の%@、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky orb for %@, %@, %@, %@"
           }
         }
       }
@@ -101,22 +101,22 @@
         }
       }
     },
-    "↑%@ ↓%@ %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "↑%@ ↓%@ %@"
-          }
-        }
-      }
-    },
     "↑%1$@ ↓%2$@ %3$@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "↑%1$@ ↓%2$@ %3$@"
+          }
+        }
+      }
+    },
+    "↑%@ ↓%@ %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↑%@ ↓%@ %@"
           }
         }
       }
@@ -351,22 +351,22 @@
         }
       }
     },
-    "今日の空玉、%@、%lld日連続": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Today's orb, %@, %lld-day streak"
-          }
-        }
-      }
-    },
     "今日の空玉、%1$@、%2$lld日連続": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Today's orb, %1$@, %2$lld-day streak"
+          }
+        }
+      }
+    },
+    "今日の空玉、%@、%lld日連続": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's orb, %@, %lld-day streak"
           }
         }
       }
@@ -761,22 +761,22 @@
         }
       }
     },
-    "最高%@ 最低%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "H %@ L %@"
-          }
-        }
-      }
-    },
     "最高%1$@ 最低%2$@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "H %1$@ L %2$@"
+          }
+        }
+      }
+    },
+    "最高%@ 最低%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %@ L %@"
           }
         }
       }

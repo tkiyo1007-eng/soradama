@@ -56,11 +56,12 @@ struct HourlyForecastCard: View {
     }
 
     private func accessibilityText(index: Int, hour: HourForecast) -> String {
-        var text = index == 0 ? "現在" : hour.date.hourLabel(in: weather.timeZone)
-        text += "、\(hour.kind.label)、\(degrees(hour.temperature))"
-        if let probability = hour.precipitationProbability, probability >= 20 {
-            text += "、降水確率\(Int(probability))パーセント"
-        }
-        return text
+        // 連結で組み立てると翻訳対象として抽出されないため、補間を含むキーにまとめる
+        let timeLabel = index == 0
+            ? String(localized: "現在")
+            : hour.date.hourLabel(in: weather.timeZone)
+        let base = String(localized: "\(timeLabel)、\(hour.kind.label)、\(degrees(hour.temperature))")
+        guard let probability = hour.precipitationProbability, probability >= 20 else { return base }
+        return String(localized: "\(base)、降水確率\(Int(probability))パーセント")
     }
 }

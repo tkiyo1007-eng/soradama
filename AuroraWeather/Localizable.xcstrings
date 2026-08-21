@@ -31,16 +31,6 @@
         }
       }
     },
-    "%@、%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@"
-          }
-        }
-      }
-    },
     "%1$@、%2$@": {
       "localizations": {
         "en": {
@@ -51,12 +41,12 @@
         }
       }
     },
-    "%@、%@、現在%@、最高%@、最低%@": {
+    "%@、%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@, %@, now %@, high %@, low %@"
+            "value": "%@, %@"
           }
         }
       }
@@ -71,12 +61,12 @@
         }
       }
     },
-    "%@。%@": {
+    "%@、%@、現在%@、最高%@、最低%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@. %@"
+            "value": "%@, %@, now %@, high %@, low %@"
           }
         }
       }
@@ -91,12 +81,12 @@
         }
       }
     },
-    "%@の特別な空玉クリスタル、%@の%@、%@": {
+    "%@。%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Special sky crystal for %@, %@, %@, %@"
+            "value": "%@. %@"
           }
         }
       }
@@ -111,12 +101,12 @@
         }
       }
     },
-    "%@の空玉、%@の%@、%@": {
+    "%@の特別な空玉クリスタル、%@の%@、%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sky orb for %@, %@, %@, %@"
+            "value": "Special sky crystal for %@, %@, %@, %@"
           }
         }
       }
@@ -131,12 +121,12 @@
         }
       }
     },
-    "%@の風、秒速%lldメートル": {
+    "%@の空玉、%@の%@、%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wind from the %@ at %lld meters per second"
+            "value": "Sky orb for %@, %@, %@, %@"
           }
         }
       }
@@ -151,12 +141,12 @@
         }
       }
     },
-    "%@・%@": {
+    "%@の風、秒速%lldメートル": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ · %@"
+            "value": "Wind from the %@ at %lld meters per second"
           }
         }
       }
@@ -171,12 +161,12 @@
         }
       }
     },
-    "%@・%@  最高%@/最低%@": {
+    "%@・%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ · %@  H %@ / L %@"
+            "value": "%@ · %@"
           }
         }
       }
@@ -191,12 +181,12 @@
         }
       }
     },
-    "%lld/%lld コンプリート": {
+    "%@・%@  最高%@/最低%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld/%lld collected"
+            "value": "%@ · %@  H %@ / L %@"
           }
         }
       }
@@ -207,6 +197,76 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld/%2$lld collected"
+          }
+        }
+      }
+    },
+    "%lld/%lld コンプリート": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/%lld collected"
+          }
+        }
+      }
+    },
+    "%1$@、%2$@、%3$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@, %3$@"
+          }
+        }
+      }
+    },
+    "%@、%@、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@, %@"
+          }
+        }
+      }
+    },
+    "%1$@、%2$@、最低%3$@、最高%4$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@, low %3$@, high %4$@"
+          }
+        }
+      }
+    },
+    "%@、%@、最低%@、最高%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@, low %@, high %@"
+          }
+        }
+      }
+    },
+    "%1$@、降水確率%2$lldパーセント": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$lld percent chance of rain"
+          }
+        }
+      }
+    },
+    "%@、降水確率%lldパーセント": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %lld percent chance of rain"
           }
         }
       }
@@ -227,6 +287,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sky orb from %@"
+          }
+        }
+      }
+    },
+    "%@曜日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
           }
         }
       }
@@ -361,16 +431,6 @@
         }
       }
     },
-    "いちばん寒かったのは %@の %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The coldest day was %@, at %@"
-          }
-        }
-      }
-    },
     "いちばん寒かったのは %1$@の %2$@": {
       "localizations": {
         "en": {
@@ -381,12 +441,12 @@
         }
       }
     },
-    "いちばん暑かったのは %@の %@": {
+    "いちばん寒かったのは %@の %@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The hottest day was %@, at %@"
+            "value": "The coldest day was %@, at %@"
           }
         }
       }
@@ -397,6 +457,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The hottest day was %1$@, at %2$@"
+          }
+        }
+      }
+    },
+    "いちばん暑かったのは %@の %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The hottest day was %@, at %@"
           }
         }
       }
@@ -541,22 +611,22 @@
         }
       }
     },
-    "これから数時間の降水確率%lldパーセント、%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld percent chance of rain in the next few hours, %@"
-          }
-        }
-      }
-    },
     "これから数時間の降水確率%1$lldパーセント、%2$@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld percent chance of rain in the next few hours, %2$@"
+          }
+        }
+      }
+    },
+    "これから数時間の降水確率%lldパーセント、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld percent chance of rain in the next few hours, %@"
           }
         }
       }
@@ -1047,6 +1117,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Clear for now — take an umbrella anyway"
+          }
+        }
+      }
+    },
+    "今日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
           }
         }
       }
@@ -1941,22 +2021,22 @@
         }
       }
     },
-    "日の出 %@、日の入り %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sunrise %@, sunset %@"
-          }
-        }
-      }
-    },
     "日の出 %1$@、日の入り %2$@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Sunrise %1$@, sunset %2$@"
+          }
+        }
+      }
+    },
+    "日の出 %@、日の入り %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunrise %@, sunset %@"
           }
         }
       }
@@ -2161,22 +2241,22 @@
         }
       }
     },
-    "最高 %@ / 最低 %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "H %@ / L %@"
-          }
-        }
-      }
-    },
     "最高 %1$@ / 最低 %2$@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "H %1$@ / L %2$@"
+          }
+        }
+      }
+    },
+    "最高 %@ / 最低 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %@ / L %@"
           }
         }
       }
@@ -2351,22 +2431,22 @@
         }
       }
     },
-    "洗濯指数%lld点、%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Laundry score %lld, %@"
-          }
-        }
-      }
-    },
     "洗濯指数%1$lld点、%2$@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Laundry score %1$lld, %2$@"
+          }
+        }
+      }
+    },
+    "洗濯指数%lld点、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laundry score %lld, %@"
           }
         }
       }
@@ -2391,12 +2471,12 @@
         }
       }
     },
-    "湿度%lldパーセント": {
+    "湿度%1$lldパーセント、%2$@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Humidity %lld percent"
+            "value": "Humidity %1$lld percent, %2$@"
           }
         }
       }
@@ -2411,12 +2491,12 @@
         }
       }
     },
-    "湿度%1$lldパーセント、%2$@": {
+    "湿度%lldパーセント": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Humidity %1$lld percent, %2$@"
+            "value": "Humidity %lld percent"
           }
         }
       }
@@ -2517,6 +2597,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "A special sky crystal was born"
+          }
+        }
+      }
+    },
+    "現在": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Now"
           }
         }
       }

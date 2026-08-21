@@ -233,7 +233,9 @@ struct SunArcView: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 // 夜明け前(now < sunrise)を「日中です」と誤表示しないよう3状態で判定
-                Text(now < sunrise ? "夜明け前です" : (now > sunset ? "日没しました" : "日中です"))
+                Text(now < sunrise
+                     ? String(localized: "夜明け前です")
+                     : (now > sunset ? String(localized: "日没しました") : String(localized: "日中です")))
                     .font(.callout.weight(.semibold))
                     .foregroundStyle(.white)
                 Text("日の出 \(sunrise.timeLabel(in: timeZone))")

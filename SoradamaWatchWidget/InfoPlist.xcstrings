@@ -9,8 +9,7 @@
             "value": "Soradama"
           }
         }
-      },
-      "comment": "Bundle display name"
+      }
     },
     "SoradamaWatchWidgetExtension": {
       "localizations": {
@@ -20,8 +19,7 @@
             "value": "SoradamaWatchWidgetExtension"
           }
         }
-      },
-      "comment": "Bundle name"
+      }
     }
   },
   "version": "1.0"

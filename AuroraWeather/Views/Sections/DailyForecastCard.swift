@@ -49,7 +49,8 @@ private struct DailyRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Text(isToday ? "今日" : day.date.weekdayLabel(in: timeZone))
+            // 三項演算子は String に型推論されるので、Text 任せでは翻訳されない
+            Text(isToday ? String(localized: "今日") : day.date.weekdayLabel(in: timeZone))
                 .font(.callout.weight(isToday ? .bold : .medium))
                 .foregroundStyle(.white)
                 .frame(width: 44, alignment: .leading)
@@ -90,12 +91,13 @@ private struct DailyRow: View {
     }
 
     private var accessibilityText: String {
-        var text = isToday ? "今日" : "\(day.date.weekdayLabel(in: timeZone))曜日"
-        text += "、\(day.kind.label)、最低\(degrees(day.tempMin))、最高\(degrees(day.tempMax))"
-        if let probability = day.precipitationProbability, probability >= 20 {
-            text += "、降水確率\(Int(probability))パーセント"
-        }
-        return text
+        // 連結で組み立てると翻訳対象として抽出されないため、補間を含む1つのキーにまとめる
+        let dayLabel = isToday
+            ? String(localized: "今日")
+            : String(localized: "\(day.date.weekdayLabel(in: timeZone))曜日")
+        let base = String(localized: "\(dayLabel)、\(day.kind.label)、最低\(degrees(day.tempMin))、最高\(degrees(day.tempMax))")
+        guard let probability = day.precipitationProbability, probability >= 20 else { return base }
+        return String(localized: "\(base)、降水確率\(Int(probability))パーセント")
     }
 }
 

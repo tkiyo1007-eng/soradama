@@ -224,7 +224,9 @@ struct ContentView: View {
                         Text(toastTitle(event))
                             .font(.footnote.weight(.semibold))
                             .foregroundStyle(.white)
-                        Text(event.streak > 1 ? "\(event.streak)日連続で集めています" : "タップしてコレクションを見る")
+                        Text(event.streak > 1
+                             ? String(localized: "\(event.streak)日連続で集めています")
+                             : String(localized: "タップしてコレクションを見る"))
                             .font(.caption2)
                             .foregroundStyle(.white.opacity(0.7))
                     }

@@ -1,16 +1,6 @@
 {
   "sourceLanguage": "ja",
   "strings": {
-    "%@、%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@"
-          }
-        }
-      }
-    },
     "%1$@、%2$@": {
       "localizations": {
         "en": {
@@ -21,12 +11,12 @@
         }
       }
     },
-    "%@、%@、%@": {
+    "%@、%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@, %@, %@"
+            "value": "%@, %@"
           }
         }
       }
@@ -41,12 +31,12 @@
         }
       }
     },
-    "%@の特別な空玉クリスタル、%@の%@、%@": {
+    "%@、%@、%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Special sky crystal for %@, %@, %@, %@"
+            "value": "%@, %@, %@"
           }
         }
       }
@@ -61,12 +51,12 @@
         }
       }
     },
-    "%@の空玉、%@の%@、%@": {
+    "%@の特別な空玉クリスタル、%@の%@、%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sky orb for %@, %@, %@, %@"
+            "value": "Special sky crystal for %@, %@, %@, %@"
           }
         }
       }
@@ -77,6 +67,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sky orb for %1$@, %2$@, %3$@, %4$@"
+          }
+        }
+      }
+    },
+    "%@の空玉、%@の%@、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky orb for %@, %@, %@, %@"
           }
         }
       }
@@ -721,22 +721,22 @@
         }
       }
     },
-    "最高%@ 最低%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "H %@ L %@"
-          }
-        }
-      }
-    },
     "最高%1$@ 最低%2$@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "H %1$@ L %2$@"
+          }
+        }
+      }
+    },
+    "最高%@ 最低%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %@ L %@"
           }
         }
       }
