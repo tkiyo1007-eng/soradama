@@ -48,6 +48,19 @@ enum TimeOfDay: String, Codable, CaseIterable {
         }
     }
 
+    /// ずかんのマジックアワー枠に出す名前。
+    /// 「\(label)の空」と組み立てると、月の見出し(「2026年8月の空」)と
+    /// 同じキーを共有してしまい、英語で "The sky over Dawn" と不自然になる。
+    /// 時間帯には時間帯の言い回しが要るので、独立したキーとして持つ。
+    var skyLabel: String {
+        switch self {
+        case .dawn:  return String(localized: "朝焼けの空")
+        case .day:   return String(localized: "昼の空")
+        case .dusk:  return String(localized: "夕暮れの空")
+        case .night: return String(localized: "夜の空")
+        }
+    }
+
     /// 日の出・日の入りの前後1時間をマジックアワーとして朝焼け/夕暮れに割り当てる
     /// (空の背景グラデーションと同じ考え方)
     static func at(_ date: Date, sunrise: Date?, sunset: Date?, isDay: Bool) -> TimeOfDay {
@@ -72,7 +85,9 @@ struct SkyVariant: Hashable, Identifiable {
         .flatMap { time in WeatherKind.allCases.map { SkyVariant(kind: $0, timeOfDay: time) } }
 
     var label: String {
-        timeOfDay == .day ? kind.label : "夜の\(kind.label)"
+        // 連結すると翻訳対象にならず「夜のPartly cloudy」と混ざる。
+        // 補間を含む1つのキーにして、英語では "Partly cloudy at night" と訳す。
+        timeOfDay == .day ? kind.label : String(localized: "夜の\(kind.label)")
     }
 }
 

@@ -401,12 +401,42 @@
         }
       }
     },
+    "夕暮れの空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dusk sky"
+          }
+        }
+      }
+    },
     "夜": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Night"
+          }
+        }
+      }
+    },
+    "夜の%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ at night"
+          }
+        }
+      }
+    },
+    "夜の空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night sky"
           }
         }
       }
@@ -611,6 +641,16 @@
         }
       }
     },
+    "昼の空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daytime sky"
+          }
+        }
+      }
+    },
     "晴れ": {
       "localizations": {
         "en": {
@@ -697,6 +737,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dawn"
+          }
+        }
+      }
+    },
+    "朝焼けの空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dawn sky"
           }
         }
       }

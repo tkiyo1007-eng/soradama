@@ -51,6 +51,46 @@
         }
       }
     },
+    "%1$@、%2$@、%3$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@, %3$@"
+          }
+        }
+      }
+    },
+    "%@、%@、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@, %@"
+          }
+        }
+      }
+    },
+    "%1$@、%2$@、最低%3$@、最高%4$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@, low %3$@, high %4$@"
+          }
+        }
+      }
+    },
+    "%@、%@、最低%@、最高%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@, low %@, high %@"
+          }
+        }
+      }
+    },
     "%1$@、%2$@、現在%3$@、最高%4$@、最低%5$@": {
       "localizations": {
         "en": {
@@ -67,6 +107,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@, %@, now %@, high %@, low %@"
+          }
+        }
+      }
+    },
+    "%1$@、降水確率%2$lldパーセント": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$lld percent chance of rain"
+          }
+        }
+      }
+    },
+    "%@、降水確率%lldパーセント": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %lld percent chance of rain"
           }
         }
       }
@@ -207,66 +267,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld/%lld collected"
-          }
-        }
-      }
-    },
-    "%1$@、%2$@、%3$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@, %2$@, %3$@"
-          }
-        }
-      }
-    },
-    "%@、%@、%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@, %@"
-          }
-        }
-      }
-    },
-    "%1$@、%2$@、最低%3$@、最高%4$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@, %2$@, low %3$@, high %4$@"
-          }
-        }
-      }
-    },
-    "%@、%@、最低%@、最高%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@, low %@, high %@"
-          }
-        }
-      }
-    },
-    "%1$@、降水確率%2$lldパーセント": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@, %2$lld percent chance of rain"
-          }
-        }
-      }
-    },
-    "%@、降水確率%lldパーセント": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %lld percent chance of rain"
           }
         }
       }
@@ -1661,6 +1661,16 @@
         }
       }
     },
+    "夕暮れの空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dusk sky"
+          }
+        }
+      }
+    },
     "外干しOK": {
       "localizations": {
         "en": {
@@ -1687,6 +1697,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Night"
+          }
+        }
+      }
+    },
+    "夜の%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ at night"
+          }
+        }
+      }
+    },
+    "夜の空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night sky"
           }
         }
       }
@@ -2151,6 +2181,16 @@
         }
       }
     },
+    "昼の空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daytime sky"
+          }
+        }
+      }
+    },
     "時刻": {
       "localizations": {
         "en": {
@@ -2307,6 +2347,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dawn"
+          }
+        }
+      }
+    },
+    "朝焼けの空": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dawn sky"
           }
         }
       }

@@ -307,8 +307,12 @@ struct OrbCollectionView: View {
                             Text(has ? variant.label : "？？？")
                                 .font(.caption2)
                                 .foregroundStyle(.white.opacity(has ? 0.7 : 0.35))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.8)
+                                // 日本語の「夜のくもり」は1行で収まるが、英語の
+                                // "Thunderstorm at night" は省略されてしまう。
+                                // 2行まで許し、縮小率も広げて語尾が切れないようにする。
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.7)
+                                .multilineTextAlignment(.center)
                         }
                     }
                     .buttonStyle(.plain)
@@ -367,7 +371,7 @@ struct OrbCollectionView: View {
                                 .strokeBorder(Color.white.opacity(0.18), style: StrokeStyle(lineWidth: 1, dash: [2, 2]))
                                 .frame(width: 26, height: 26)
                         }
-                        Text(has ? String(localized: "\(time.label)の空") : String(localized: "？？？"))
+                        Text(has ? time.skyLabel : String(localized: "？？？"))
                             .font(.caption2)
                             .foregroundStyle(.white.opacity(has ? 0.7 : 0.3))
                     }
