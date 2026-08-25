@@ -84,7 +84,7 @@ struct RadarSheet: View {
                 HStack(spacing: 8) {
                     Text(frame.date.timeLabel(in: timeZone))
                         .font(.headline.monospacedDigit())
-                    Text(frame.isForecast ? "予測" : "実況")
+                    Text(frame.isForecast ? String(localized: "予測") : String(localized: "実況"))
                         .font(.caption.weight(.bold))
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
@@ -104,7 +104,9 @@ struct RadarSheet: View {
                         .frame(width: 40, height: 40)
                         .background(.thinMaterial, in: Circle())
                 }
-                .accessibilityLabel(isPlaying ? "一時停止" : "再生")
+                .accessibilityLabel(Text(isPlaying
+                    ? String(localized: "一時停止")
+                    : String(localized: "再生")))
 
                 if frames.count > 1 {
                     Slider(

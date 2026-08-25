@@ -75,6 +75,13 @@ struct TodayOrbWidget: Widget {
 struct TodayOrbWidgetView: View {
     let entry: TodayOrbEntry
 
+    private var accessibilityText: String {
+        guard let orb = entry.orb else {
+            return String(localized: "今日の空玉はまだありません。アプリを開くと記録されます")
+        }
+        return String(localized: "今日の空玉、\(orb.kind.label)、\(entry.streak)日連続")
+    }
+
     var body: some View {
         VStack(spacing: 6) {
             if let orb = entry.orb {
@@ -113,9 +120,6 @@ struct TodayOrbWidgetView: View {
         }
         .widgetURL(URL(string: "soradama://collection"))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(
-            entry.orb.map { "今日の空玉、\($0.kind.label)、\(entry.streak)日連続" }
-                ?? "今日の空玉はまだありません。アプリを開くと記録されます"
-        )
+        .accessibilityLabel(Text(accessibilityText))
     }
 }

@@ -264,10 +264,18 @@ struct WindCompassView: View {
     let speed: Double     // m/s(表示時に units で変換する)
     var units: UnitSystem = .celsius
 
-    /// 16方位の日本語名(VoiceOver 用)
+    /// 表示と VoiceOver の両方で使う、ローカライズ済みの16方位名。
     static func directionName(_ degrees: Double) -> String {
-        let names = ["北", "北北東", "北東", "東北東", "東", "東南東", "南東", "南南東",
-                     "南", "南南西", "南西", "西南西", "西", "西北西", "北西", "北北西"]
+        let names = [
+            String(localized: "北"), String(localized: "北北東"),
+            String(localized: "北東"), String(localized: "東北東"),
+            String(localized: "東"), String(localized: "東南東"),
+            String(localized: "南東"), String(localized: "南南東"),
+            String(localized: "南"), String(localized: "南南西"),
+            String(localized: "南西"), String(localized: "西南西"),
+            String(localized: "西"), String(localized: "西北西"),
+            String(localized: "北西"), String(localized: "北北西"),
+        ]
         // 負値・NaN でも配列外アクセスしないよう 0..<360 に正規化してから方位に変換
         guard degrees.isFinite else { return names[0] }
         let normalized = (degrees.truncatingRemainder(dividingBy: 360) + 360)
@@ -293,6 +301,8 @@ struct WindCompassView: View {
                 Text(Self.directionName(direction))
                     .font(.callout.weight(.semibold))
                     .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                 HStack(spacing: 3) {
                     Text(String(format: "%.0f", units.windSpeed(speed)))
                         .font(.system(.title2, design: .rounded).weight(.semibold))
@@ -371,7 +381,10 @@ struct HumidityView: View {
 
     private var visibilityLabel: String? {
         guard let visibility else { return nil }
-        return String(format: "視程 %.1f%@", units.distance(visibility), units.distanceUnit)
+        let distance = units.distance(visibility).formatted(
+            .number.precision(.fractionLength(1))
+        )
+        return String(localized: "視程 \(distance)\(units.distanceUnit)")
     }
 
     var body: some View {
@@ -399,7 +412,11 @@ struct HumidityView: View {
             }
             .frame(height: 10)
 
-            Text(value >= 75 ? "蒸し暑く感じられます" : value <= 35 ? "乾燥しています" : "快適な湿度です")
+            Text(value >= 75
+                ? String(localized: "蒸し暑く感じられます")
+                : value <= 35
+                    ? String(localized: "乾燥しています")
+                    : String(localized: "快適な湿度です"))
                 .font(.footnote)
                 .foregroundStyle(.white.opacity(0.7))
             if let visibilityLabel {

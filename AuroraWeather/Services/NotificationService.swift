@@ -35,9 +35,11 @@ struct NotificationService {
 
         let content = UNMutableNotificationContent()
         let isSnow = rainHour.kind == .snow
-        let label = isSnow ? "雪" : "雨"
-        content.title = isSnow ? "☃️ まもなく雪の予報" : "☔️ まもなく雨の予報"
-        content.body = "\(placeName)では\(rainHour.date.hourLabel(in: weather.timeZone))ごろから\(label)の見込みです(降水確率\(Int(rainHour.precipitationProbability ?? 0))%)。"
+        let label = isSnow ? String(localized: "雪") : String(localized: "雨")
+        content.title = isSnow
+            ? String(localized: "☃️ まもなく雪の予報")
+            : String(localized: "☔️ まもなく雨の予報")
+        content.body = String(localized: "\(placeName)では\(rainHour.date.hourLabel(in: weather.timeZone))ごろから\(label)の見込みです(降水確率\(Int(rainHour.precipitationProbability ?? 0))%)。")
         content.sound = .default
 
         let trigger = UNTimeIntervalNotificationTrigger(
@@ -79,14 +81,14 @@ struct NotificationService {
         let content = UNMutableNotificationContent()
         switch probability {
         case 50...:
-            content.title = "☔️ 今日は傘の出番です"
-            content.body = "\(placeName)の日中の降水確率は最大\(Int(probability))%。傘を持ってお出かけください。"
+            content.title = String(localized: "☔️ 今日は傘の出番です")
+            content.body = String(localized: "\(placeName)の日中の降水確率は最大\(Int(probability))%。傘を持ってお出かけください。")
         case 30..<50:
-            content.title = "🌂 折りたたみ傘があると安心"
-            content.body = "\(placeName)の日中の降水確率は最大\(Int(probability))%です。"
+            content.title = String(localized: "🌂 折りたたみ傘があると安心")
+            content.body = String(localized: "\(placeName)の日中の降水確率は最大\(Int(probability))%です。")
         default:
-            content.title = "☀️ 今日は傘なしで大丈夫そう"
-            content.body = "\(placeName)の日中の降水確率は最大\(Int(probability))%。よい一日を！"
+            content.title = String(localized: "☀️ 今日は傘なしで大丈夫そう")
+            content.body = String(localized: "\(placeName)の日中の降水確率は最大\(Int(probability))%。よい一日を！")
         }
         content.sound = .default
 
@@ -116,8 +118,8 @@ struct NotificationService {
               let fireDate = calendar.date(bySettingHour: 20, minute: 0, second: 0, of: tomorrow) else { return }
 
         let content = UNMutableNotificationContent()
-        content.title = "🔮 連続\(streak)日の記録が今日で途切れそうです"
-        content.body = "アプリを開くと今日の空玉を受け取れます。"
+        content.title = String(localized: "🔮 連続\(streak)日の記録が今日で途切れそうです")
+        content.body = String(localized: "アプリを開くと今日の空玉を受け取れます。")
         content.sound = .default
 
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)

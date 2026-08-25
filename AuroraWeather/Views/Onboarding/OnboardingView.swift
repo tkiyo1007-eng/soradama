@@ -50,7 +50,7 @@ struct OnboardingView: View {
                         onFinish()
                     }
                 } label: {
-                    Text(page < 2 ? "つぎへ" : "はじめる")
+                    Text(page < 2 ? String(localized: "つぎへ") : String(localized: "はじめる"))
                         .font(.headline)
                         .foregroundStyle(Color(red: 0.10, green: 0.12, blue: 0.28))
                         .frame(maxWidth: .infinity)

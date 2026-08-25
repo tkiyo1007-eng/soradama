@@ -65,9 +65,9 @@ struct OrbView: View {
                 regularOrb
             }
         }
-        .accessibilityLabel(orb.isMilestone
-            ? "\(orb.dateKey)の特別な空玉クリスタル、\(orb.season.label)の\(orb.timeOfDay.label)、\(orb.kind.label)"
-            : "\(orb.dateKey)の空玉、\(orb.season.label)の\(orb.timeOfDay.label)、\(orb.kind.label)")
+        .accessibilityLabel(Text(orb.isMilestone
+            ? String(localized: "\(orb.dateKey)の特別な空玉クリスタル、\(orb.season.label)の\(orb.timeOfDay.label)、\(orb.kind.label)")
+            : String(localized: "\(orb.dateKey)の空玉、\(orb.season.label)の\(orb.timeOfDay.label)、\(orb.kind.label)")))
     }
 
     private var regularOrb: some View {

@@ -150,10 +150,12 @@ final class WeatherViewModel {
 
     private func resolveCurrentLocation() async -> SavedPlace? {
         guard let location = try? await locationService.currentLocation() else { return nil }
-        var name = "現在地"
+        var name = String(localized: "現在地")
         var detail = ""
         if let placemark = try? await CLGeocoderBox.reverseGeocode(location) {
-            name = placemark.locality ?? placemark.administrativeArea ?? "現在地"
+            name = placemark.locality
+                ?? placemark.administrativeArea
+                ?? String(localized: "現在地")
             detail = placemark.country ?? ""
         }
         return SavedPlace(

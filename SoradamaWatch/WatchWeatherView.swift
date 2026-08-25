@@ -67,7 +67,7 @@ struct WatchWeatherView: View {
                 VStack(spacing: 10) {
                     Image(systemName: "wifi.exclamationmark")
                         .font(.title2)
-                    Text(model.errorMessage ?? "取得に失敗しました")
+                    Text(model.errorMessage ?? String(localized: "取得に失敗しました"))
                         .font(.footnote)
                         .multilineTextAlignment(.center)
                     Button("再試行") {

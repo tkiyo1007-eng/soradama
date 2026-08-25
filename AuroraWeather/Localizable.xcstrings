@@ -151,6 +151,86 @@
         }
       }
     },
+    "%1$@では%2$@ごろから%3$@の見込みです(降水確率%4$lld%%)。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@: Around %2$@, expect %3$@ (%4$lld%% chance of precipitation)."
+          }
+        }
+      }
+    },
+    "%@では%@ごろから%@の見込みです(降水確率%lld%%)。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: Around %@, expect %@ (%lld%% chance of precipitation)."
+          }
+        }
+      }
+    },
+    "%1$@の日中の降水確率は最大%2$lld%%。よい一日を！": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %1$@, daytime precipitation may reach %2$lld%%. Have a lovely day!"
+          }
+        }
+      }
+    },
+    "%@の日中の降水確率は最大%lld%%。よい一日を！": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %@, daytime precipitation may reach %lld%%. Have a lovely day!"
+          }
+        }
+      }
+    },
+    "%1$@の日中の降水確率は最大%2$lld%%。傘を持ってお出かけください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %1$@, daytime precipitation may reach %2$lld%%. Take an umbrella with you."
+          }
+        }
+      }
+    },
+    "%@の日中の降水確率は最大%lld%%。傘を持ってお出かけください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %@, daytime precipitation may reach %lld%%. Take an umbrella with you."
+          }
+        }
+      }
+    },
+    "%1$@の日中の降水確率は最大%2$lld%%です。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %1$@, daytime precipitation may reach %2$lld%%."
+          }
+        }
+      }
+    },
+    "%@の日中の降水確率は最大%lld%%です。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %@, daytime precipitation may reach %lld%%."
+          }
+        }
+      }
+    },
     "%1$@の特別な空玉クリスタル、%2$@の%3$@、%4$@": {
       "localizations": {
         "en": {
@@ -387,6 +467,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "|"
+          }
+        }
+      }
+    },
+    "☀️ 今日は傘なしで大丈夫そう": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "☀️ You probably won't need an umbrella today"
+          }
+        }
+      }
+    },
+    "☃️ まもなく雪の予報": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "☃️ Snow expected soon"
+          }
+        }
+      }
+    },
+    "☔️ まもなく雨の予報": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "☔️ Rain expected soon"
+          }
+        }
+      }
+    },
+    "☔️ 今日は傘の出番です": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "☔️ You'll need an umbrella today"
           }
         }
       }
@@ -817,6 +937,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Every day you open the app, that sky stays as an orb.\nClear or rainy, they add up to something worth keeping"
+          }
+        }
+      }
+    },
+    "アプリを開くと今日の空玉を受け取れます。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the app to collect today's sky orb."
           }
         }
       }
@@ -1541,12 +1671,112 @@
         }
       }
     },
+    "北": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "North"
+          }
+        }
+      }
+    },
+    "北北東": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "North-northeast"
+          }
+        }
+      }
+    },
+    "北北西": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "North-northwest"
+          }
+        }
+      }
+    },
+    "北東": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Northeast"
+          }
+        }
+      }
+    },
+    "北西": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Northwest"
+          }
+        }
+      }
+    },
     "十三夜": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Waxing gibbous"
+          }
+        }
+      }
+    },
+    "南": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "South"
+          }
+        }
+      }
+    },
+    "南南東": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "South-southeast"
+          }
+        }
+      }
+    },
+    "南南西": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "South-southwest"
+          }
+        }
+      }
+    },
+    "南東": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Southeast"
+          }
+        }
+      }
+    },
+    "南西": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Southwest"
           }
         }
       }
@@ -2371,12 +2601,42 @@
         }
       }
     },
+    "東": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "East"
+          }
+        }
+      }
+    },
     "東京": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Tokyo"
+          }
+        }
+      }
+    },
+    "東北東": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "East-northeast"
+          }
+        }
+      }
+    },
+    "東南東": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "East-southeast"
           }
         }
       }
@@ -2657,6 +2917,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Now"
+          }
+        }
+      }
+    },
+    "現在地": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current Location"
           }
         }
       }
@@ -3001,12 +3271,62 @@
         }
       }
     },
+    "西": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "West"
+          }
+        }
+      }
+    },
+    "西北西": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "West-northwest"
+          }
+        }
+      }
+    },
+    "西南西": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "West-southwest"
+          }
+        }
+      }
+    },
     "視界の先が優しく滲む一日": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "A day where the distance blurs gently"
+          }
+        }
+      }
+    },
+    "視程 %1$@%2$@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visibility %1$@ %2$@"
+          }
+        }
+      }
+    },
+    "視程 %@%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visibility %@ %@"
           }
         }
       }
@@ -3447,6 +3767,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "???"
+          }
+        }
+      }
+    },
+    "🌂 折りたたみ傘があると安心": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌂 A compact umbrella may help"
+          }
+        }
+      }
+    },
+    "🔮 連続%lld日の記録が今日で途切れそうです": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🔮 Your %lld-day streak may end today"
           }
         }
       }

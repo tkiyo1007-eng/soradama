@@ -8,7 +8,11 @@ struct WeatherEntry: TimelineEntry {
     let placeName: String
     let weather: WeatherBundle?
 
-    static let placeholder = WeatherEntry(date: .now, placeName: "東京", weather: nil)
+    static let placeholder = WeatherEntry(
+        date: .now,
+        placeName: String(localized: "東京"),
+        weather: nil
+    )
 }
 
 struct WeatherTimelineProvider: TimelineProvider {
@@ -67,6 +71,17 @@ struct AuroraWeatherWidgetView: View {
     private var kind: WeatherKind { entry.weather?.kind ?? .partlyCloudy }
     private var isDay: Bool { entry.weather?.isDay ?? true }
 
+    private var weatherStatusText: String {
+        entry.weather == nil ? String(localized: "取得できません") : kind.label
+    }
+
+    private var accessibilityText: String {
+        guard let weather = entry.weather else {
+            return String(localized: "\(entry.placeName)、天気を取得できません")
+        }
+        return String(localized: "\(entry.placeName)、\(weather.kind.label)、\(degrees(weather.temperature))")
+    }
+
     private var isAccessory: Bool {
         switch family {
         case .accessoryCircular, .accessoryRectangular, .accessoryInline:
@@ -97,11 +112,7 @@ struct AuroraWeatherWidgetView: View {
                 }
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(
-                entry.weather == nil
-                    ? "\(entry.placeName)、天気を取得できません"
-                    : "\(entry.placeName)、\(kind.label)、\(degrees(entry.weather?.temperature))"
-            )
+            .accessibilityLabel(Text(accessibilityText))
     }
 
     @ViewBuilder
@@ -189,7 +200,7 @@ struct AuroraWeatherWidgetView: View {
                 WeatherIconView(kind: kind, isDay: isDay)
                     .frame(width: 22, height: 22)
             }
-            Text(entry.weather == nil ? "取得できません" : kind.label)
+            Text(weatherStatusText)
                 .font(.caption.weight(.medium))
                 .lineLimit(1)
             if let weather = entry.weather {
@@ -214,7 +225,7 @@ struct AuroraWeatherWidgetView: View {
                     WeatherIconView(kind: kind, isDay: isDay)
                         .frame(width: 22, height: 22)
                 }
-                Text(entry.weather == nil ? "取得できません" : kind.label)
+                Text(weatherStatusText)
                     .font(.caption.weight(.medium))
                     .lineLimit(1)
             }

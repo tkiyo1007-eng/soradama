@@ -8,7 +8,11 @@ struct WatchWeatherEntry: TimelineEntry {
     let placeName: String
     let weather: WeatherBundle?
 
-    static let placeholder = WatchWeatherEntry(date: .now, placeName: "東京", weather: nil)
+    static let placeholder = WatchWeatherEntry(
+        date: .now,
+        placeName: String(localized: "東京"),
+        weather: nil
+    )
 }
 
 struct WatchWeatherProvider: TimelineProvider {
@@ -44,6 +48,20 @@ private func degrees(_ celsius: Double?) -> String {
     return "\(Int(SharedStore.units().convert(celsius).rounded()))°"
 }
 
+private func circularAccessibilityText(_ entry: WatchWeatherEntry) -> String {
+    guard let weather = entry.weather else {
+        return String(localized: "天気を取得できません")
+    }
+    return String(localized: "\(weather.kind.label)、\(degrees(weather.temperature))")
+}
+
+private func rectangularAccessibilityText(_ entry: WatchWeatherEntry) -> String {
+    guard let weather = entry.weather else {
+        return String(localized: "\(entry.placeName)、天気を取得できません")
+    }
+    return String(localized: "\(entry.placeName)、\(weather.kind.label)、\(degrees(weather.temperature))")
+}
+
 // MARK: - 円形(文字盤の丸い枠)
 
 struct SoradamaCircularComplication: Widget {
@@ -70,7 +88,7 @@ struct SoradamaCircularComplication: Widget {
             }
             .containerBackground(.clear, for: .widget)
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(entry.weather.map { "\($0.kind.label)、\(degrees($0.temperature))" } ?? "天気を取得できません")
+            .accessibilityLabel(Text(circularAccessibilityText(entry)))
         }
         .configurationDisplayName("天気")
         .description("現在の天気と気温を表示します。")
@@ -111,7 +129,7 @@ struct SoradamaRectangularComplication: Widget {
             .frame(maxWidth: .infinity, alignment: .leading)
             .containerBackground(.clear, for: .widget)
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(entry.weather.map { "\(entry.placeName)、\($0.kind.label)、\(degrees($0.temperature))" } ?? "\(entry.placeName)、天気を取得できません")
+            .accessibilityLabel(Text(rectangularAccessibilityText(entry)))
         }
         .configurationDisplayName("天気(詳細)")
         .description("地点名・気温・最高最低を表示します。")
@@ -135,7 +153,7 @@ struct SoradamaInlineComplication: Widget {
     }
 
     private func inlineText(_ entry: WatchWeatherEntry) -> String {
-        guard let weather = entry.weather else { return "そらだま --°" }
+        guard let weather = entry.weather else { return String(localized: "そらだま --°") }
         return "\(degrees(weather.temperature)) \(weather.kind.label)"
     }
 }

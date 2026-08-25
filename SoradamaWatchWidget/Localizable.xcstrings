@@ -151,6 +151,16 @@
         }
       }
     },
+    "そらだま --°": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soradama --°"
+          }
+        }
+      }
+    },
     "そろそろ梅雨の入り口です": {
       "localizations": {
         "en": {
