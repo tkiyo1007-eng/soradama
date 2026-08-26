@@ -9,7 +9,7 @@
 Apple Lookup APIおよび日本・米国のApp Storeで一般公開を確認。Apple ID `6788443049`
 
 - 提出コミット: `8dfc2c3` / Submission ID: `d731174a-4bf4-4ffc-a706-e95febf80a81`
-- ローカルannotated tag `v1.7.1` は `8dfc2c3` に作成済み。originへのpushは外部送信の実行前確認待ち
+- annotated tag `v1.7.1` は `8dfc2c3` に作成し、ユーザー確認後にoriginへpush済み
 - 旧Submission `8c389e36-4bc0-414a-bce3-e061f30e776d` はスクリーンショット更新のため取り下げ済み
 - 日本語・英語ともスクリーンショット5枚、プレビュー0本。順序は Today → Collection → Month → Catalog → Radar
 - 1.7.1後の改善は `codex/post-1.7.1-improvements`、version/buildは1.7.2 (30)。実機QA完了前にアーカイブ/アップロードしない
