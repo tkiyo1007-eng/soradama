@@ -1,5 +1,23 @@
 import SwiftUI
 
+/// 端末の週の開始曜日に合わせて、月表示用の日付と先頭の空欄を組み立てる。
+enum OrbCalendarLayout {
+    static func monthDays(for displayedMonth: Date, calendar: Calendar) -> [Date?] {
+        guard let interval = calendar.dateInterval(of: .month, for: displayedMonth),
+              let dayCount = calendar.range(of: .day, in: .month, for: displayedMonth)?.count else {
+            return []
+        }
+
+        let weekdayOfFirstDay = calendar.component(.weekday, from: interval.start)
+        let leadingEmptyDays = (weekdayOfFirstDay - calendar.firstWeekday + 7) % 7
+        var days: [Date?] = Array(repeating: nil, count: leadingEmptyDays)
+        for offset in 0..<dayCount {
+            days.append(calendar.date(byAdding: .day, value: offset, to: interval.start))
+        }
+        return days
+    }
+}
+
 // MARK: - 空玉コレクション画面
 
 struct OrbCollectionView: View {
@@ -152,14 +170,7 @@ struct OrbCollectionView: View {
 
     /// 表示月の日付一覧(週頭合わせの nil パディング付き)
     private var monthDays: [Date?] {
-        guard let interval = calendar.dateInterval(of: .month, for: displayedMonth),
-              let dayCount = calendar.range(of: .day, in: .month, for: displayedMonth)?.count else { return [] }
-        let firstWeekday = calendar.component(.weekday, from: interval.start) // 1 = 日曜
-        var days: [Date?] = Array(repeating: nil, count: firstWeekday - 1)
-        for offset in 0..<dayCount {
-            days.append(calendar.date(byAdding: .day, value: offset, to: interval.start))
-        }
-        return days
+        OrbCalendarLayout.monthDays(for: displayedMonth, calendar: calendar)
     }
 
     private var orbGrid: some View {

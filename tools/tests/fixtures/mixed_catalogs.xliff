@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="App/InfoPlist.xcstrings" source-language="ja" target-language="en" datatype="plaintext">
+    <body>
+      <trans-unit id="InternalName" xml:space="preserve">
+        <source>InternalName</source>
+        <target state="translated">InternalName</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="CFBundleDisplayName" xml:space="preserve">
+        <source>そらだま</source>
+        <note>Bundle display name</note>
+      </trans-unit>
+      <trans-unit id="CFBundleName" xml:space="preserve">
+        <source>InternalName</source>
+        <note>Bundle name</note>
+      </trans-unit>
+      <trans-unit id="NSLocationWhenInUseUsageDescription" xml:space="preserve">
+        <source>現在地の天気を表示するために位置情報を使用します。</source>
+        <note>Privacy - Location When In Use Usage Description</note>
+      </trans-unit>
+      <trans-unit id="そらだま" xml:space="preserve">
+        <source>そらだま</source>
+        <target state="translated">Soradama</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="現在地の天気を表示するために位置情報を使用します。" xml:space="preserve">
+        <source>現在地の天気を表示するために位置情報を使用します。</source>
+        <target state="translated">Old location text</target>
+        <note/>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="App/Localizable.xcstrings" source-language="ja" target-language="en" datatype="plaintext">
+    <body>
+      <trans-unit id="an-unrelated-id" xml:space="preserve">
+        <source>こんにちは</source>
+        <note>New note must not replace the existing comment</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

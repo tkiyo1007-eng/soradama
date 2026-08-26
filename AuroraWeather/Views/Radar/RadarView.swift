@@ -18,6 +18,12 @@ struct RadarSheet: View {
         frames.indices.contains(frameIndex) ? frames[frameIndex] : nil
     }
 
+    static func accessibilityValue(for frame: RadarFrame?, timeZone: TimeZone) -> String {
+        guard let frame else { return "" }
+        let frameKind = frame.isForecast ? String(localized: "予測") : String(localized: "実況")
+        return "\(frame.date.timeLabel(in: timeZone))、\(frameKind)"
+    }
+
     /// 気象庁ナウキャストは日本周辺しか覆っていない
     private var isCovered: Bool {
         RadarService.isCovered(latitude: place.latitude, longitude: place.longitude)
@@ -101,7 +107,7 @@ struct RadarSheet: View {
                 } label: {
                     Image(systemName: isPlaying ? "pause.fill" : "play.fill")
                         .font(.title3)
-                        .frame(width: 40, height: 40)
+                        .frame(width: 44, height: 44)
                         .background(.thinMaterial, in: Circle())
                 }
                 .accessibilityLabel(Text(isPlaying
@@ -118,6 +124,7 @@ struct RadarSheet: View {
                         step: 1
                     )
                     .accessibilityLabel("時刻の選択")
+                    .accessibilityValue(Text(Self.accessibilityValue(for: currentFrame, timeZone: timeZone)))
                 }
             }
         }

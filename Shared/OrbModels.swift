@@ -109,6 +109,53 @@ struct DailyOrb: Codable, Identifiable, Equatable {
     /// 玉が記録された時間帯。1.4.0 で追加したため、それ以前のデータは「昼」として扱う。
     var timeOfDay: TimeOfDay = .day
 
+    enum CodingKeys: String, CodingKey {
+        case dateKey
+        case kind
+        case tempMax
+        case tempMin
+        case humidity
+        case precipProbability
+        case placeName
+        case isMilestone
+        case timeOfDay
+    }
+
+    init(
+        dateKey: String,
+        kind: WeatherKind,
+        tempMax: Double,
+        tempMin: Double,
+        humidity: Double,
+        precipProbability: Double?,
+        placeName: String,
+        isMilestone: Bool = false,
+        timeOfDay: TimeOfDay = .day
+    ) {
+        self.dateKey = dateKey
+        self.kind = kind
+        self.tempMax = tempMax
+        self.tempMin = tempMin
+        self.humidity = humidity
+        self.precipProbability = precipProbability
+        self.placeName = placeName
+        self.isMilestone = isMilestone
+        self.timeOfDay = timeOfDay
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        dateKey = try container.decode(String.self, forKey: .dateKey)
+        kind = try container.decode(WeatherKind.self, forKey: .kind)
+        tempMax = try container.decode(Double.self, forKey: .tempMax)
+        tempMin = try container.decode(Double.self, forKey: .tempMin)
+        humidity = try container.decode(Double.self, forKey: .humidity)
+        precipProbability = try container.decodeIfPresent(Double.self, forKey: .precipProbability)
+        placeName = try container.decode(String.self, forKey: .placeName)
+        isMilestone = try container.decodeIfPresent(Bool.self, forKey: .isMilestone) ?? false
+        timeOfDay = try container.decodeIfPresent(TimeOfDay.self, forKey: .timeOfDay) ?? .day
+    }
+
     var id: String { dateKey }
 
     var date: Date? { Self.keyFormatter.date(from: dateKey) }

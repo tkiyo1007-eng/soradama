@@ -1,0 +1,62 @@
+{
+  "sourceLanguage": "ja",
+  "strings": {
+    "InternalName": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "InternalName"
+          }
+        }
+      }
+    },
+    "そらだま": {
+      "comment": "既存コメントを保持",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Old name"
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Orbe"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "現在地の天気を表示するために位置情報を使用します。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Old location text"
+          }
+        }
+      }
+    },
+    "obsolete": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove me"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0",
+  "fixtureMetadata": {
+    "owner": "tests"
+  }
+}

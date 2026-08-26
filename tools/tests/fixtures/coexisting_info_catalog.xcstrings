@@ -1,0 +1,54 @@
+{
+  "sourceLanguage": "ja",
+  "strings": {
+    "CFBundleDisplayName": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soradama",
+            "reviewer": "canonical"
+          }
+        }
+      }
+    },
+    "そらだま": {
+      "comment": "legacy comment",
+      "legacyMetadata": {
+        "owner": "legacy"
+      },
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soradama"
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Orbe"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "obsolete": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep me"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

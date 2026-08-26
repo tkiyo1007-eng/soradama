@@ -2,6 +2,14 @@ import Foundation
 import BackgroundTasks
 import WidgetKit
 
+/// バックグラウンド処理の実行結果とキャンセル状態から、iOS へ返す完了結果を決める。
+/// `BGTask` に依存しない純粋な判定にして、期限切れと通常完了の競合をテスト可能にする。
+enum BackgroundRefreshCompletion {
+    static func success(refreshSucceeded: Bool, isCancelled: Bool) -> Bool {
+        refreshSucceeded && !isCancelled
+    }
+}
+
 /// バックグラウンドで天気を取り直し、通知の予約を入れ替える仕組み。
 ///
 /// 以前は「アプリを開いたときにだけ通知を予約する」実装だったため、
@@ -31,27 +39,41 @@ enum BackgroundRefresh {
         schedule()
 
         let work = Task {
-            await refreshAndReschedule()
-            task.setTaskCompleted(success: true)
+            let refreshSucceeded = await performRefreshAndReschedule()
+            let success = BackgroundRefreshCompletion.success(
+                refreshSucceeded: refreshSucceeded,
+                isCancelled: Task.isCancelled
+            )
+            task.setTaskCompleted(success: success)
         }
         task.expirationHandler = {
             work.cancel()
-            task.setTaskCompleted(success: false)
         }
     }
 
     /// 現在地(= ウィジェットと共有している地点)の天気を取り直して通知を組み直す。
     static func refreshAndReschedule() async {
+        _ = await performRefreshAndReschedule()
+    }
+
+    /// `handle` が iOS へ実処理の成否を返せるよう、更新結果を Bool で返す本体。
+    private static func performRefreshAndReschedule() async -> Bool {
         let defaults = UserDefaults.standard
         let rainEnabled = defaults.bool(forKey: "aurora.rainAlerts")
         let morningEnabled = defaults.bool(forKey: "aurora.morningAlerts")
-        guard rainEnabled || morningEnabled else { return }
+        guard rainEnabled || morningEnabled else { return true }
 
         let place = SharedStore.lastPlace()
-        guard let bundle = try? await WeatherService().fetch(
-            latitude: place.latitude,
-            longitude: place.longitude
-        ) else { return }
+        let bundle: WeatherBundle
+        do {
+            bundle = try await WeatherService().fetch(
+                latitude: place.latitude,
+                longitude: place.longitude
+            )
+        } catch {
+            return false
+        }
+        guard !Task.isCancelled else { return false }
 
         let notifications = NotificationService()
         if rainEnabled {
@@ -62,5 +84,6 @@ enum BackgroundRefresh {
         }
         // 取れたてのデータでウィジェットも更新しておく
         WidgetCenter.shared.reloadAllTimelines()
+        return true
     }
 }

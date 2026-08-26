@@ -178,6 +178,56 @@ struct WeatherLogicTests {
 /// 空玉まわり。日付キーとシードは「同じ日は必ず同じ見た目」を支えている。
 struct OrbLogicTests {
 
+    @Test("旧版の空玉JSONは追加フィールドが無くても読める")
+    func legacyDailyOrbJSONUsesDefaults() throws {
+        let json = """
+        {
+          "2026-07-20": {
+            "dateKey": "2026-07-20",
+            "kind": "clear",
+            "tempMax": 31.5,
+            "tempMin": 24.0,
+            "humidity": 68.0,
+            "precipProbability": 10.0,
+            "placeName": "東京"
+          }
+        }
+        """
+
+        let decoded = try JSONDecoder().decode(
+            [String: DailyOrb].self,
+            from: Data(json.utf8)
+        )
+        let orb = try #require(decoded["2026-07-20"])
+
+        #expect(orb.isMilestone == false)
+        #expect(orb.timeOfDay == .day)
+        #expect(orb.kind == .clear)
+        #expect(orb.placeName == "東京")
+    }
+
+    @Test("現行の空玉は追加フィールドを往復して保持する")
+    func currentDailyOrbRoundTripPreservesFields() throws {
+        let original = DailyOrb(
+            dateKey: "2026-08-26",
+            kind: .thunderstorm,
+            tempMax: 29.0,
+            tempMin: 22.0,
+            humidity: 81.0,
+            precipProbability: 75.0,
+            placeName: "大阪",
+            isMilestone: true,
+            timeOfDay: .night
+        )
+
+        let data = try JSONEncoder().encode(original)
+        let decoded = try JSONDecoder().decode(DailyOrb.self, from: data)
+
+        #expect(decoded == original)
+        #expect(decoded.isMilestone)
+        #expect(decoded.timeOfDay == .night)
+    }
+
     /// `String.hashValue` はプロセスごとに変わるため、再起動で模様が変わってしまった。
     @Test("シードは同じ文字列なら常に同じ値になる")
     func stableSeedIsDeterministic() {

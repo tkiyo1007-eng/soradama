@@ -78,6 +78,7 @@ struct OnboardingView: View {
                 ),
                 size: 150
             )
+            .accessibilityHidden(true)
             Text(title)
                 .font(.title2.weight(.bold))
                 .foregroundStyle(.white)

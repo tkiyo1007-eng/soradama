@@ -1,0 +1,58 @@
+{
+  "sourceLanguage": "ja",
+  "strings": {
+    "こんにちは": {
+      "comment": "既存の通常カタログコメント",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Old hello",
+            "reviewer": "keep"
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Bonjour"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "obsolete": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove me"
+          }
+        }
+      }
+    },
+    "manual-only": {
+      "comment": "XLIFFに無いentryも保持",
+      "localizations": {
+        "de": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Nur manuell"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

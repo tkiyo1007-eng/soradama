@@ -1,19 +1,33 @@
 {
   "sourceLanguage": "ja",
   "strings": {
-    "そらだま": {
+    "CFBundleDisplayName": {
+      "comment": "Bundle display name",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Soradama"
           }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "そらだま"
+          }
         }
       }
     },
-    "SoradamaWatch": {
+    "CFBundleName": {
+      "comment": "Bundle name",
       "localizations": {
         "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SoradamaWatch"
+          }
+        },
+        "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "SoradamaWatch"
@@ -21,12 +35,19 @@
         }
       }
     },
-    "現在地の天気を表示するために位置情報を使用します。": {
+    "NSLocationWhenInUseUsageDescription": {
+      "comment": "Privacy - Location When In Use Usage Description",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Your location is used to show the weather where you are."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "現在地の天気を表示するために位置情報を使用します。"
           }
         }
       }

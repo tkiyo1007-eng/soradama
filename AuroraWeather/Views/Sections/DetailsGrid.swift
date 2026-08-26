@@ -284,6 +284,12 @@ struct WindCompassView: View {
         return names[index]
     }
 
+    /// 画面と同じ単位系で読み上げる。単位記号は VoiceOver が言語に応じて読み上げる。
+    static func accessibilityText(direction: Double, speed: Double, units: UnitSystem) -> String {
+        let displayedSpeed = Int(units.windSpeed(speed).rounded())
+        return "\(String(localized: "風"))、\(directionName(direction))、\(displayedSpeed) \(units.windSpeedUnit)"
+    }
+
     var body: some View {
         HStack(spacing: 16) {
             ZStack {
@@ -316,7 +322,7 @@ struct WindCompassView: View {
         }
         .frame(minHeight: cardMinHeight, alignment: .leading)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(Self.directionName(direction))の風、秒速\(Int(speed.rounded()))メートル")
+        .accessibilityLabel(Self.accessibilityText(direction: direction, speed: speed, units: units))
     }
 }
 

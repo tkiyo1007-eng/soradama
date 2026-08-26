@@ -4,4 +4,21 @@ xcuserdata/
 DerivedData/
 build/
 *.moved-aside
+*.xcarchive
+*.xcresult
+*.ipa
+*.mobileprovision
+*.p8
+*.p12
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Python tooling
+__pycache__/
+*.py[cod]
+
+# macOS
 .DS_Store
