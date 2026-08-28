@@ -12,5 +12,18 @@
 	<array>
 		<string>com.tkiyo1007.soradama.refresh</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>com.tkiyo1007.soradama</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>soradama</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

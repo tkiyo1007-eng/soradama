@@ -2,15 +2,21 @@ import SwiftUI
 import StoreKit
 
 struct ContentView: View {
+    private enum ActiveSheet: Hashable, Identifiable {
+        case search
+        case collection
+        case settings
+        case wallpaper
+
+        var id: Self { self }
+    }
+
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.requestReview) private var requestReview
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
     @State private var viewModel = WeatherViewModel()
-    @State private var showSearch = false
-    @State private var showOrbCollection = false
-    @State private var showWallpaper = false
-    @State private var showSettings = false
+    @State private var activeSheet: ActiveSheet?
     @State private var orbBounce = false
     /// 今日の空玉が記録された瞬間のお祝いトースト(通常の日)
     @State private var orbToast: OrbRecordResult?
@@ -50,7 +56,7 @@ struct ContentView: View {
             if let celebration, let orb = OrbStore.shared.orb(for: Date()) {
                 OrbCelebrationView(orb: orb, event: celebration) {
                     withAnimation(.easeOut(duration: 0.35)) { self.celebration = nil }
-                    showOrbCollection = true
+                    activeSheet = .collection
                 }
                 .transition(.opacity)
                 .zIndex(20)
@@ -66,28 +72,29 @@ struct ContentView: View {
                 .zIndex(10)
             }
         }
-        .sheet(isPresented: $showSearch) {
-            CitySearchView(viewModel: viewModel)
-                .presentationDetents([.large])
-        }
-        .sheet(isPresented: $showOrbCollection, onDismiss: requestReviewAfterCollectionIfNeeded) {
-            OrbCollectionView()
-                .onAppear {
-                    orbCollectionOpenedAt = Date()
-                    reviewPromptToken = nil
+        .sheet(item: $activeSheet, onDismiss: requestReviewAfterCollectionIfNeeded) { sheet in
+            switch sheet {
+            case .search:
+                CitySearchView(viewModel: viewModel)
+                    .presentationDetents([.large])
+            case .collection:
+                OrbCollectionView()
+                    .onAppear {
+                        orbCollectionOpenedAt = Date()
+                        reviewPromptToken = nil
+                    }
+            case .settings:
+                SettingsView(viewModel: viewModel)
+            case .wallpaper:
+                if let bundle = viewModel.currentBundle,
+                   let place = viewModel.pages.first(where: { $0.id == viewModel.selectionID }) {
+                    WallpaperExportView(
+                        placeName: place.name,
+                        weather: bundle,
+                        degrees: viewModel.degrees,
+                        orb: OrbStore.shared.orb(for: Date())
+                    )
                 }
-        }
-        .sheet(isPresented: $showSettings) {
-            SettingsView(viewModel: viewModel)
-        }
-        .sheet(isPresented: $showWallpaper) {
-            if let bundle = viewModel.currentBundle, let place = viewModel.pages.first(where: { $0.id == viewModel.selectionID }) {
-                WallpaperExportView(
-                    placeName: place.name,
-                    weather: bundle,
-                    degrees: viewModel.degrees,
-                    orb: OrbStore.shared.orb(for: Date())
-                )
             }
         }
         .task {
@@ -106,7 +113,7 @@ struct ContentView: View {
             // 前面復帰のたびに再取得を試みる(30分以内ならensureLoadedが弾く)
             if phase == .active {
                 // バックグラウンド滞在時間は「コレクションを見た時間」に含めない。
-                if showOrbCollection {
+                if activeSheet == .collection {
                     orbCollectionOpenedAt = Date()
                 }
                 Task { await viewModel.ensureLoaded(viewModel.selectionID) }
@@ -118,8 +125,8 @@ struct ContentView: View {
         }
         .onOpenURL { url in
             // 「今日の空玉」ウィジェットのタップでコレクションを直接開く
-            if url.scheme == "soradama", url.host == "collection" {
-                showOrbCollection = true
+            if SoradamaURL.opensCollection(url) {
+                activeSheet = .collection
             }
         }
         .onChange(of: viewModel.lastOrbEvent) { _, event in
@@ -146,10 +153,13 @@ struct ContentView: View {
     /// 起動直後には出さず、利用者がコレクションを自分で開いて見終えた後だけ依頼する。
     /// バックグラウンド中や別シートへ移った場合は、その日の依頼を静かに見送る。
     private func requestReviewAfterCollectionIfNeeded() {
+        // 共通sheetのonDismissから呼ばれるため、検索・設定・壁紙を閉じただけなら
+        // 評価候補を消費せず、その後にコレクションを見る機会を残す。
+        guard let openedAt = orbCollectionOpenedAt else { return }
+        orbCollectionOpenedAt = nil
         guard let event = pendingReviewEvent else { return }
         pendingReviewEvent = nil
-        let viewedLongEnough = orbCollectionOpenedAt.map { Date().timeIntervalSince($0) >= 3 } ?? false
-        orbCollectionOpenedAt = nil
+        let viewedLongEnough = Date().timeIntervalSince(openedAt) >= 3
         guard viewedLongEnough else { return }
 
         let token = UUID()
@@ -160,9 +170,7 @@ struct ContentView: View {
             guard reviewPromptToken == token,
                   scenePhase == .active,
                   hasSeenOnboarding,
-                  !showSearch,
-                  !showWallpaper,
-                  !showSettings,
+                  activeSheet == nil,
                   celebration == nil,
                   reviewPromptPolicy.reserveIfEligible(for: event) else {
                 return
@@ -178,7 +186,7 @@ struct ContentView: View {
                 Button {
                     Haptics.selection()
                     guard !reduceMotion else {
-                        showOrbCollection = true
+                        activeSheet = .collection
                         return
                     }
                     withAnimation(.interpolatingSpring(stiffness: 320, damping: 8)) {
@@ -186,7 +194,7 @@ struct ContentView: View {
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
                         withAnimation(.easeOut(duration: 0.2)) { orbBounce = false }
-                        showOrbCollection = true
+                        activeSheet = .collection
                     }
                 } label: {
                     MiniOrbIcon()
@@ -217,7 +225,7 @@ struct ContentView: View {
                 if viewModel.currentBundle != nil {
                     Button {
                         Haptics.selection()
-                        showWallpaper = true
+                        activeSheet = .wallpaper
                     } label: {
                         Image(systemName: "square.and.arrow.down")
                             .font(.title3)
@@ -230,7 +238,7 @@ struct ContentView: View {
 
                 Button {
                     Haptics.selection()
-                    showSearch = true
+                    activeSheet = .search
                 } label: {
                     Image(systemName: "magnifyingglass")
                         .font(.title3)
@@ -242,7 +250,7 @@ struct ContentView: View {
 
                 Button {
                     Haptics.selection()
-                    showSettings = true
+                    activeSheet = .settings
                 } label: {
                     Image(systemName: "gearshape")
                         .font(.title3)
@@ -264,7 +272,7 @@ struct ContentView: View {
             Spacer()
             Button {
                 orbToast = nil
-                showOrbCollection = true
+                activeSheet = .collection
             } label: {
                 HStack(spacing: 10) {
                     if let orb = OrbStore.shared.orb(for: Date()) {

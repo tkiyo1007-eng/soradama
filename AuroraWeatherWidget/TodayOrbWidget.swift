@@ -118,7 +118,7 @@ struct TodayOrbWidgetView: View {
                 endPoint: .bottom
             )
         }
-        .widgetURL(URL(string: "soradama://collection"))
+        .widgetURL(SoradamaURL.collection)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(accessibilityText))
     }

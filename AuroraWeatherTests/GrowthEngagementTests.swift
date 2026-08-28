@@ -94,6 +94,20 @@ struct GrowthEngagementTests {
         #expect(SoradamaShareContent.messageWithStoreLink.contains(AppStoreLinks.app.absoluteString))
     }
 
+    @Test("今日の空玉Widget用URLスキームがアプリに登録されている")
+    func widgetDeepLinkSchemeIsRegistered() {
+        let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [[String: Any]]
+        let schemes = urlTypes?.flatMap { urlType in
+            urlType["CFBundleURLSchemes"] as? [String] ?? []
+        } ?? []
+
+        #expect(schemes.contains(SoradamaURL.scheme))
+        #expect(SoradamaURL.opensCollection(SoradamaURL.collection))
+        #expect(!SoradamaURL.opensCollection(URL(string: "soradama://settings")!))
+        #expect(!SoradamaURL.opensCollection(URL(string: "soradama://collection/history")!))
+        #expect(!SoradamaURL.opensCollection(URL(string: "soradama://collection?source=external")!))
+    }
+
     private static func event(
         streak: Int,
         isFirstToday: Bool = true,
