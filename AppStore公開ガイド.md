@@ -12,7 +12,7 @@ Apple Lookup APIおよび日本・米国のApp Storeで一般公開を確認。A
 - annotated tag `v1.7.1` は `8dfc2c3` に作成し、ユーザー確認後にoriginへpush済み
 - 旧Submission `8c389e36-4bc0-414a-bce3-e061f30e776d` はスクリーンショット更新のため取り下げ済み
 - 日本語・英語ともスクリーンショット5枚、プレビュー0本。順序は Today → Collection → Month → Catalog → Radar
-- 1.7.1後の改善は `codex/post-1.7.1-improvements`、version/buildは1.7.2 (30)。実機QA完了前にアーカイブ/アップロードしない
+- 1.7.1後の品質改善は `codex/post-1.7.1-improvements`、成長施策の統合先はローカルの `codex/growth-improvements`。version/buildは1.7.2 (30)。実機QA完了前にアーカイブ/アップロードしない
 - アーカイブ/アップロードは認証済みCLIまたはXcode Organizerを使い、処理後にASC上のversion/buildを再確認する
 
 ### リリース履歴と、そこで直した不具合
@@ -66,6 +66,16 @@ Apple Lookup APIおよび日本・米国のApp Storeで一般公開を確認。A
 
 このブランチは **1.7.1には含まれない**。現在は1.7.2 (30)を割り当て済み。
 自動検証とSimulator事前QAに加え、実機で日本語/英語・圏外・VoiceOver・Widget/Watchを確認してからアーカイブする。
+
+`codex/growth-improvements` は上記品質改善ブランチを基に、レビュー依頼と共有導線の改善
+（`522b55a`）およびWidget deep link修正（`9880fcf`）を重ねたローカル統合ブランチ。
+`9880fcf` では `soradama://collection` のInfo.plist登録、Widget/本体のURL共通定義、
+複数sheetの排他化を行った。2026年8月29日時点でiOS 60テスト定義・動的74件、
+Python 10/10、Release analyze、物理iPhone向け4ターゲット署名ビルドに成功している。
+
+物理iPhoneでは日本語メイン/コレクション、プロセス単体の英語メイン、Widget deep linkを確認済み。
+VoiceOver、ホーム画面へ実際に追加したWidget、Watch/コンプリケーション、圏外、共有先別確認、
+3日継続後の評価依頼は未完了。`codex/growth-improvements` は未pushで、App Store Connectも未変更。
 
 ### 公式サイト
 
