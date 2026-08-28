@@ -104,6 +104,19 @@ struct LocalizationTests {
         }
     }
 
+    @Test("成長改善の共有文に英訳がある")
+    func growthShareStringsAreTranslated() throws {
+        let keys = [
+            "空を集める天気アプリ「空玉」",
+            "毎日の空を、小さなガラス玉に残せる天気アプリです。",
+            "今月の空を共有",
+        ]
+        for key in keys {
+            let value = try #require(english(key), "「\(key)」の英訳が無い")
+            #expect(value != key, "「\(key)」が英語版でも日本語のまま")
+        }
+    }
+
     /// 時刻表示は書式ごと切り替わる必要がある。
     /// "H時" のような日本語専用の書式を直に指定していると、英語圏で "15時" と出てしまう。
     @Test("時刻の書式がロケールに追従する")

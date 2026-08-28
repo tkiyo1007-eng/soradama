@@ -50,11 +50,14 @@ struct MonthSummaryView: View {
                     if let shareImage {
                         ShareLink(
                             item: shareImage,
+                            subject: Text(SoradamaShareContent.subject),
+                            message: Text(SoradamaShareContent.messageWithStoreLink),
                             preview: SharePreview(String(localized: "\(Self.monthFormatter.string(from: summary.month))の空"), image: shareImage)
                         ) {
                             Image(systemName: "square.and.arrow.up")
                                 .foregroundStyle(.white)
                         }
+                        .accessibilityLabel("今月の空を共有")
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {

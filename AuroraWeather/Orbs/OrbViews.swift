@@ -402,11 +402,14 @@ struct OrbCollectionView: View {
         if let image = monthShareImage {
             ShareLink(
                 item: image,
+                subject: Text(SoradamaShareContent.subject),
+                message: Text(SoradamaShareContent.messageWithStoreLink),
                 preview: SharePreview("空玉コレクション", image: image)
             ) {
                 Image(systemName: "square.and.arrow.up")
                     .foregroundStyle(.white)
             }
+            .accessibilityLabel("今月の空を共有")
         } else {
             // 画像生成が終わるまでの一瞬だけプレースホルダ
             Image(systemName: "square.and.arrow.up")
@@ -519,6 +522,8 @@ struct OrbCollectionView: View {
                     if let image = orbShareImage {
                         ShareLink(
                             item: image,
+                            subject: Text(SoradamaShareContent.subject),
+                            message: Text(SoradamaShareContent.messageWithStoreLink),
                             preview: SharePreview("\(orb.dateKey)の空玉", image: image)
                         ) {
                             Label("共有", systemImage: "square.and.arrow.up")

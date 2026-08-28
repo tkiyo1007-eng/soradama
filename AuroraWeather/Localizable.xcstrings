@@ -1441,6 +1441,16 @@
         }
       }
     },
+    "今月の空を共有": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share this month's sky"
+          }
+        }
+      }
+    },
     "今月の空玉": {
       "localizations": {
         "en": {
@@ -2691,6 +2701,16 @@
         }
       }
     },
+    "毎日の空を、小さなガラス玉に残せる天気アプリです。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soradama turns each day's sky into a little glass orb you can keep."
+          }
+        }
+      }
+    },
     "毎日ひとつ、空がたまる": {
       "localizations": {
         "en": {
@@ -3057,6 +3077,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "You've started collecting the sky"
+          }
+        }
+      }
+    },
+    "空を集める天気アプリ「空玉」": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soradama — Collect the sky, day by day"
           }
         }
       }

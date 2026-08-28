@@ -1,8 +1,10 @@
 import SwiftUI
+import StoreKit
 
 struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.requestReview) private var requestReview
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
     @State private var viewModel = WeatherViewModel()
     @State private var showSearch = false
@@ -14,6 +16,12 @@ struct ContentView: View {
     @State private var orbToast: OrbRecordResult?
     /// 節気・満月・連続記録の節目だけに出す、画面いっぱいのお祝い
     @State private var celebration: OrbRecordResult?
+    /// 通常の空玉を見終えたあとにだけ評価依頼を検討するため、その日の成功イベントを保持する。
+    @State private var pendingReviewEvent: OrbRecordResult?
+    @State private var orbCollectionOpenedAt: Date?
+    /// シートを閉じてから依頼するまでの待機を識別し、途中のバックグラウンド移行で無効化する。
+    @State private var reviewPromptToken: UUID?
+    private let reviewPromptPolicy = ReviewPromptPolicy()
 
     var body: some View {
         ZStack {
@@ -62,8 +70,12 @@ struct ContentView: View {
             CitySearchView(viewModel: viewModel)
                 .presentationDetents([.large])
         }
-        .sheet(isPresented: $showOrbCollection) {
+        .sheet(isPresented: $showOrbCollection, onDismiss: requestReviewAfterCollectionIfNeeded) {
             OrbCollectionView()
+                .onAppear {
+                    orbCollectionOpenedAt = Date()
+                    reviewPromptToken = nil
+                }
         }
         .sheet(isPresented: $showSettings) {
             SettingsView(viewModel: viewModel)
@@ -93,7 +105,15 @@ struct ContentView: View {
             // 一晩置いて開き直したときなどに古い予報が残らないよう、
             // 前面復帰のたびに再取得を試みる(30分以内ならensureLoadedが弾く)
             if phase == .active {
+                // バックグラウンド滞在時間は「コレクションを見た時間」に含めない。
+                if showOrbCollection {
+                    orbCollectionOpenedAt = Date()
+                }
                 Task { await viewModel.ensureLoaded(viewModel.selectionID) }
+            } else {
+                pendingReviewEvent = nil
+                orbCollectionOpenedAt = nil
+                reviewPromptToken = nil
             }
         }
         .onOpenURL { url in
@@ -112,6 +132,7 @@ struct ContentView: View {
                 withAnimation(.easeIn(duration: 0.3)) { celebration = event }
             } else {
                 withAnimation(.spring(duration: 0.5)) { orbToast = event }
+                pendingReviewEvent = event
                 Task {
                     try? await Task.sleep(for: .seconds(4))
                     withAnimation(.easeOut(duration: 0.4)) {
@@ -119,6 +140,35 @@ struct ContentView: View {
                     }
                 }
             }
+        }
+    }
+
+    /// 起動直後には出さず、利用者がコレクションを自分で開いて見終えた後だけ依頼する。
+    /// バックグラウンド中や別シートへ移った場合は、その日の依頼を静かに見送る。
+    private func requestReviewAfterCollectionIfNeeded() {
+        guard let event = pendingReviewEvent else { return }
+        pendingReviewEvent = nil
+        let viewedLongEnough = orbCollectionOpenedAt.map { Date().timeIntervalSince($0) >= 3 } ?? false
+        orbCollectionOpenedAt = nil
+        guard viewedLongEnough else { return }
+
+        let token = UUID()
+        reviewPromptToken = token
+        Task { @MainActor in
+            // シートを閉じた直後の操作を遮らないよう、メイン画面へ戻ってから少し待つ。
+            try? await Task.sleep(for: .seconds(2))
+            guard reviewPromptToken == token,
+                  scenePhase == .active,
+                  hasSeenOnboarding,
+                  !showSearch,
+                  !showWallpaper,
+                  !showSettings,
+                  celebration == nil,
+                  reviewPromptPolicy.reserveIfEligible(for: event) else {
+                return
+            }
+            reviewPromptToken = nil
+            requestReview()
         }
     }
 

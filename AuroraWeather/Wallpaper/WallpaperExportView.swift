@@ -60,14 +60,7 @@ struct WallpaperExportView: View {
                         }
                         .disabled(saveState == .saving)
 
-                        ShareLink(item: shareImage, preview: SharePreview("今日の空", image: shareImage)) {
-                            Label("共有", systemImage: "square.and.arrow.up")
-                                .font(.callout.weight(.semibold))
-                                .foregroundStyle(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 13)
-                                .background(Color.white.opacity(0.16), in: Capsule())
-                        }
+                        shareButton
                     }
                     .padding(.horizontal, 32)
                     .padding(.bottom, 12)
@@ -136,11 +129,34 @@ struct WallpaperExportView: View {
         return renderer.uiImage
     }
 
-    private var shareImage: Image {
+    @ViewBuilder
+    private var shareButton: some View {
         if let exportImage {
-            return Image(uiImage: exportImage)
+            let image = Image(uiImage: exportImage)
+            ShareLink(
+                item: image,
+                subject: Text(SoradamaShareContent.subject),
+                message: Text(SoradamaShareContent.messageWithStoreLink),
+                preview: SharePreview("今日の空", image: image)
+            ) {
+                shareButtonLabel
+            }
+        } else {
+            // 高解像度画像ができる前にSF Symbolのプレースホルダを共有しない。
+            Button(action: {}) {
+                shareButtonLabel
+            }
+            .disabled(true)
         }
-        return Image(systemName: "photo")
+    }
+
+    private var shareButtonLabel: some View {
+        Label("共有", systemImage: "square.and.arrow.up")
+            .font(.callout.weight(.semibold))
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 13)
+            .background(Color.white.opacity(0.16), in: Capsule())
     }
 
     private func save() {

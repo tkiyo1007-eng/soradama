@@ -1,5 +1,4 @@
 import SwiftUI
-import StoreKit
 
 /// アプリの設定画面。
 /// 以前は雨の通知トグルが都市検索シートの中に埋もれていて見つけにくく、
@@ -7,7 +6,6 @@ import StoreKit
 struct SettingsView: View {
     @Bindable var viewModel: WeatherViewModel
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.requestReview) private var requestReview
     @State private var showTipJar = false
 
     var body: some View {
@@ -55,12 +53,14 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    Button {
-                        requestReview()
-                    } label: {
+                    Link(destination: AppStoreLinks.writeReview) {
                         Label("レビューを書く", systemImage: "star")
                     }
-                    ShareLink(item: URL(string: "https://apps.apple.com/app/id6788443049")!) {
+                    ShareLink(
+                        item: AppStoreLinks.app,
+                        subject: Text(SoradamaShareContent.subject),
+                        message: Text(SoradamaShareContent.message)
+                    ) {
                         Label("友だちに教える", systemImage: "square.and.arrow.up")
                     }
                     if TipJar.isEnabled {
