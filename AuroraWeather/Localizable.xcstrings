@@ -21,282 +21,62 @@
         }
       }
     },
+    "？？？": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "???"
+          }
+        }
+      }
+    },
+    "「%@」": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@”"
+          }
+        }
+      }
+    },
+    "「%@」は見つかりませんでした。表記を変えるか、通信状態をご確認ください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No results for “%@”. Try a different spelling, or check your connection."
+          }
+        }
+      }
+    },
+    "「空玉」を検索し、「今日の空玉」を追加します": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search for “Soradama,” then add “Today’s Orb”"
+          }
+        }
+      }
+    },
+    "「編集」または「＋」から「ウィジェットを追加」を選びます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose “Add Widget” from “Edit” or the + button"
+          }
+        }
+      }
+    },
     "%": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%"
-          }
-        }
-      }
-    },
-    "%1$@、%2$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@, %2$@"
-          }
-        }
-      }
-    },
-    "%@、%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@"
-          }
-        }
-      }
-    },
-    "%1$@、%2$@、%3$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@, %2$@, %3$@"
-          }
-        }
-      }
-    },
-    "%@、%@、%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@, %@"
-          }
-        }
-      }
-    },
-    "%1$@、%2$@、最低%3$@、最高%4$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@, %2$@, low %3$@, high %4$@"
-          }
-        }
-      }
-    },
-    "%@、%@、最低%@、最高%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@, low %@, high %@"
-          }
-        }
-      }
-    },
-    "%1$@、%2$@、現在%3$@、最高%4$@、最低%5$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@, %2$@, now %3$@, high %4$@, low %5$@"
-          }
-        }
-      }
-    },
-    "%@、%@、現在%@、最高%@、最低%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %@, now %@, high %@, low %@"
-          }
-        }
-      }
-    },
-    "%1$@、降水確率%2$lldパーセント": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@, %2$lld percent chance of rain"
-          }
-        }
-      }
-    },
-    "%@、降水確率%lldパーセント": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@, %lld percent chance of rain"
-          }
-        }
-      }
-    },
-    "%1$@。%2$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@. %2$@"
-          }
-        }
-      }
-    },
-    "%@。%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@. %@"
-          }
-        }
-      }
-    },
-    "%1$@では%2$@ごろから%3$@の見込みです(降水確率%4$lld%%)。": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@: Around %2$@, expect %3$@ (%4$lld%% chance of precipitation)."
-          }
-        }
-      }
-    },
-    "%@では%@ごろから%@の見込みです(降水確率%lld%%)。": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@: Around %@, expect %@ (%lld%% chance of precipitation)."
-          }
-        }
-      }
-    },
-    "%1$@の日中の降水確率は最大%2$lld%%。よい一日を！": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In %1$@, daytime precipitation may reach %2$lld%%. Have a lovely day!"
-          }
-        }
-      }
-    },
-    "%@の日中の降水確率は最大%lld%%。よい一日を！": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In %@, daytime precipitation may reach %lld%%. Have a lovely day!"
-          }
-        }
-      }
-    },
-    "%1$@の日中の降水確率は最大%2$lld%%。傘を持ってお出かけください。": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In %1$@, daytime precipitation may reach %2$lld%%. Take an umbrella with you."
-          }
-        }
-      }
-    },
-    "%@の日中の降水確率は最大%lld%%。傘を持ってお出かけください。": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In %@, daytime precipitation may reach %lld%%. Take an umbrella with you."
-          }
-        }
-      }
-    },
-    "%1$@の日中の降水確率は最大%2$lld%%です。": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In %1$@, daytime precipitation may reach %2$lld%%."
-          }
-        }
-      }
-    },
-    "%@の日中の降水確率は最大%lld%%です。": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In %@, daytime precipitation may reach %lld%%."
-          }
-        }
-      }
-    },
-    "%1$@の特別な空玉クリスタル、%2$@の%3$@、%4$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Special sky crystal for %1$@, %2$@, %3$@, %4$@"
-          }
-        }
-      }
-    },
-    "%@の特別な空玉クリスタル、%@の%@、%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Special sky crystal for %@, %@, %@, %@"
-          }
-        }
-      }
-    },
-    "%1$@の空玉、%2$@の%3$@、%4$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sky orb for %1$@, %2$@, %3$@, %4$@"
-          }
-        }
-      }
-    },
-    "%@の空玉、%@の%@、%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sky orb for %@, %@, %@, %@"
-          }
-        }
-      }
-    },
-    "%1$@の風、秒速%2$lldメートル": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wind from the %1$@ at %2$lld meters per second"
-          }
-        }
-      }
-    },
-    "%@の風、秒速%lldメートル": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wind from the %@ at %lld meters per second"
-          }
-        }
-      }
-    },
-    "%1$@・%2$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$@"
           }
         }
       }
@@ -311,16 +91,6 @@
         }
       }
     },
-    "%1$@・%2$@  最高%3$@/最低%4$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ · %2$@  H %3$@ / L %4$@"
-          }
-        }
-      }
-    },
     "%@・%@  最高%@/最低%@": {
       "localizations": {
         "en": {
@@ -331,22 +101,112 @@
         }
       }
     },
-    "%1$lld/%2$lld コンプリート": {
+    "%@、%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$lld/%2$lld collected"
+            "value": "%@, %@"
           }
         }
       }
     },
-    "%lld/%lld コンプリート": {
+    "%@、%@、%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld/%lld collected"
+            "value": "%@, %@, %@"
+          }
+        }
+      }
+    },
+    "%@、%@、最低%@、最高%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@, low %@, high %@"
+          }
+        }
+      }
+    },
+    "%@、%@、現在%@、最高%@、最低%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@, now %@, high %@, low %@"
+          }
+        }
+      }
+    },
+    "%@、降水確率%lldパーセント": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %lld percent chance of rain"
+          }
+        }
+      }
+    },
+    "%@。%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@. %@"
+          }
+        }
+      }
+    },
+    "%@では%@ごろから%@の見込みです(降水確率%lld%%)。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: Around %@, expect %@ (%lld%% chance of precipitation)."
+          }
+        }
+      }
+    },
+    "%@の日中の降水確率は最大%lld%%。よい一日を！": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %@, daytime precipitation may reach %lld%%. Have a lovely day!"
+          }
+        }
+      }
+    },
+    "%@の日中の降水確率は最大%lld%%。傘を持ってお出かけください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %@, daytime precipitation may reach %lld%%. Take an umbrella with you."
+          }
+        }
+      }
+    },
+    "%@の日中の降水確率は最大%lld%%です。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %@, daytime precipitation may reach %lld%%."
+          }
+        }
+      }
+    },
+    "%@の特別な空玉クリスタル、%@の%@、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Special sky crystal for %@, %@, %@, %@"
           }
         }
       }
@@ -371,6 +231,37 @@
         }
       }
     },
+    "%@の空玉、%@の%@、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky orb for %@, %@, %@, %@"
+          }
+        }
+      }
+    },
+    "%@の空玉を共有": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share the sky orb from %@"
+          }
+        }
+      }
+    },
+    "%@の風、秒速%lldメートル": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wind from the %@ at %lld meters per second"
+          }
+        }
+      }
+    },
     "%@曜日": {
       "localizations": {
         "en": {
@@ -381,12 +272,198 @@
         }
       }
     },
+    "%1$@・%2$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "%1$@・%2$@  最高%3$@/最低%4$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · %2$@  H %3$@ / L %4$@"
+          }
+        }
+      }
+    },
+    "%1$@、%2$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@"
+          }
+        }
+      }
+    },
+    "%1$@、%2$@、%3$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@, %3$@"
+          }
+        }
+      }
+    },
+    "%1$@、%2$@、最低%3$@、最高%4$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@, low %3$@, high %4$@"
+          }
+        }
+      }
+    },
+    "%1$@、%2$@、現在%3$@、最高%4$@、最低%5$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@, now %3$@, high %4$@, low %5$@"
+          }
+        }
+      }
+    },
+    "%1$@、降水確率%2$lldパーセント": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$lld percent chance of rain"
+          }
+        }
+      }
+    },
+    "%1$@。%2$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@. %2$@"
+          }
+        }
+      }
+    },
+    "%1$@では%2$@ごろから%3$@の見込みです(降水確率%4$lld%%)。": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@: Around %2$@, expect %3$@ (%4$lld%% chance of precipitation)."
+          }
+        }
+      }
+    },
+    "%1$@の日中の降水確率は最大%2$lld%%。よい一日を！": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %1$@, daytime precipitation may reach %2$lld%%. Have a lovely day!"
+          }
+        }
+      }
+    },
+    "%1$@の日中の降水確率は最大%2$lld%%。傘を持ってお出かけください。": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %1$@, daytime precipitation may reach %2$lld%%. Take an umbrella with you."
+          }
+        }
+      }
+    },
+    "%1$@の日中の降水確率は最大%2$lld%%です。": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %1$@, daytime precipitation may reach %2$lld%%."
+          }
+        }
+      }
+    },
+    "%1$@の特別な空玉クリスタル、%2$@の%3$@、%4$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Special sky crystal for %1$@, %2$@, %3$@, %4$@"
+          }
+        }
+      }
+    },
+    "%1$@の空玉、%2$@の%3$@、%4$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky orb for %1$@, %2$@, %3$@, %4$@"
+          }
+        }
+      }
+    },
+    "%1$@の風、秒速%2$lldメートル": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wind from the %1$@ at %2$lld meters per second"
+          }
+        }
+      }
+    },
+    "%1$lld/%2$lld コンプリート": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld/%2$lld collected"
+          }
+        }
+      }
+    },
     "%lld": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld"
+          }
+        }
+      }
+    },
+    "%lld/%lld コンプリート": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/%lld collected"
           }
         }
       }
@@ -427,36 +504,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "You're on a %lld-day streak"
-          }
-        }
-      }
-    },
-    "10日間予報": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "10-day forecast"
-          }
-        }
-      }
-    },
-    "UV指数": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "UV Index"
-          }
-        }
-      }
-    },
-    "apps.apple.com/app/id6788443049": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "apps.apple.com/app/id6788443049"
           }
         }
       }
@@ -511,22 +558,52 @@
         }
       }
     },
-    "「%@」": {
+    "🌂 折りたたみ傘があると安心": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "“%@”"
+            "value": "🌂 A compact umbrella may help"
           }
         }
       }
     },
-    "「%@」は見つかりませんでした。表記を変えるか、通信状態をご確認ください。": {
+    "🔮 連続%lld日の記録が今日で途切れそうです": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No results for “%@”. Try a different spelling, or check your connection."
+            "value": "🔮 Your %lld-day streak may end today"
+          }
+        }
+      }
+    },
+    "10日間予報": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10-day forecast"
+          }
+        }
+      }
+    },
+    "apps.apple.com/app/id6788443049": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "apps.apple.com/app/id6788443049"
+          }
+        }
+      }
+    },
+    "UV指数": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "UV Index"
           }
         }
       }
@@ -541,22 +618,52 @@
         }
       }
     },
+    "アプリを開いた日の空が、玉になって残ります": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every day you open the app, that sky becomes an orb"
+          }
+        }
+      }
+    },
+    "アプリを開いた日の空が玉になって残ります。\n晴れも雨も、集めると宝物になります": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every day you open the app, that sky stays as an orb.\nClear or rainy, they add up to something worth keeping"
+          }
+        }
+      }
+    },
+    "アプリを開かないときも、今日の空玉と連続日数をひと目で見られます。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See today's orb and your streak at a glance, even without opening the app."
+          }
+        }
+      }
+    },
+    "アプリを開くと今日の空玉を受け取れます。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the app to collect today's sky orb."
+          }
+        }
+      }
+    },
     "ありがとうございます。\nこの空は、あなたのおかげで続きます。": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Thank you.\nThis sky keeps going because of you."
-          }
-        }
-      }
-    },
-    "いちばん寒かったのは %1$@の %2$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The coldest day was %1$@, at %2$@"
           }
         }
       }
@@ -571,12 +678,13 @@
         }
       }
     },
-    "いちばん暑かったのは %1$@の %2$@": {
+    "いちばん寒かったのは %1$@の %2$@": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The hottest day was %1$@, at %2$@"
+            "value": "The coldest day was %1$@, at %2$@"
           }
         }
       }
@@ -587,6 +695,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "The hottest day was %@, at %@"
+          }
+        }
+      }
+    },
+    "いちばん暑かったのは %1$@の %2$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The hottest day was %1$@, at %2$@"
           }
         }
       }
@@ -617,6 +736,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "A month of many different skies"
+          }
+        }
+      }
+    },
+    "インターネットに接続されていません。通信環境をご確認ください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You're offline. Please check your connection."
+          }
+        }
+      }
+    },
+    "ウィジェット": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget"
+          }
+        }
+      }
+    },
+    "ウィジェットの案内を閉じる": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dismiss the widget tip"
+          }
+        }
+      }
+    },
+    "ウィジェットを追加": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a widget"
           }
         }
       }
@@ -732,6 +891,7 @@
       }
     },
     "これから数時間の降水確率%1$lldパーセント、%2$@": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -801,6 +961,16 @@
         }
       }
     },
+    "タップしてコレクションを見る": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to see your collection"
+          }
+        }
+      }
+    },
     "ちいさな空玉": {
       "localizations": {
         "en": {
@@ -821,12 +991,32 @@
         }
       }
     },
+    "データ提供: Open-Meteo.com / 気象庁": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data: Open-Meteo.com / Japan Meteorological Agency"
+          }
+        }
+      }
+    },
     "とても大きな支えになります": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "A truly generous gesture"
+          }
+        }
+      }
+    },
+    "バージョン": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version"
           }
         }
       }
@@ -861,6 +1051,46 @@
         }
       }
     },
+    "プライバシーポリシー": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy Policy"
+          }
+        }
+      }
+    },
+    "ホーム画面に空玉を飾る": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep an orb on your Home Screen"
+          }
+        }
+      }
+    },
+    "ホーム画面の何もない場所を長押しします": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch and hold an empty area on the Home Screen"
+          }
+        }
+      }
+    },
+    "マイシティ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My Cities"
+          }
+        }
+      }
+    },
     "また来てくださって、ありがとうございます。\n空玉はこれからも増えていきます。": {
       "localizations": {
         "en": {
@@ -881,12 +1111,42 @@
         }
       }
     },
+    "メートル法 (°C・m/s)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metric (°C, m/s)"
+          }
+        }
+      }
+    },
     "もう一度読み込む": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Reload"
+          }
+        }
+      }
+    },
+    "モバイルデータ通信が使えない設定になっています。設定をご確認ください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cellular data is turned off for this app. Please check Settings."
+          }
+        }
+      }
+    },
+    "ヤード・ポンド法 (°F・mph)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imperial (°F, mph)"
           }
         }
       }
@@ -921,126 +1181,6 @@
         }
       }
     },
-    "アプリを開いた日の空が、玉になって残ります": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Every day you open the app, that sky becomes an orb"
-          }
-        }
-      }
-    },
-    "アプリを開いた日の空が玉になって残ります。\n晴れも雨も、集めると宝物になります": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Every day you open the app, that sky stays as an orb.\nClear or rainy, they add up to something worth keeping"
-          }
-        }
-      }
-    },
-    "アプリを開くと今日の空玉を受け取れます。": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Open the app to collect today's sky orb."
-          }
-        }
-      }
-    },
-    "インターネットに接続されていません。通信環境をご確認ください。": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You're offline. Please check your connection."
-          }
-        }
-      }
-    },
-    "タップしてコレクションを見る": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tap to see your collection"
-          }
-        }
-      }
-    },
-    "データ提供: Open-Meteo.com / 気象庁": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Data: Open-Meteo.com / Japan Meteorological Agency"
-          }
-        }
-      }
-    },
-    "バージョン": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Version"
-          }
-        }
-      }
-    },
-    "プライバシーポリシー": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Privacy Policy"
-          }
-        }
-      }
-    },
-    "マイシティ": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "My Cities"
-          }
-        }
-      }
-    },
-    "メートル法 (°C・m/s)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Metric (°C, m/s)"
-          }
-        }
-      }
-    },
-    "モバイルデータ通信が使えない設定になっています。設定をご確認ください。": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cellular data is turned off for this app. Please check Settings."
-          }
-        }
-      }
-    },
-    "ヤード・ポンド法 (°F・mph)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Imperial (°F, mph)"
-          }
-        }
-      }
-    },
     "リクエストの生成に失敗しました。": {
       "localizations": {
         "en": {
@@ -1051,12 +1191,12 @@
         }
       }
     },
-    "レビューを書く": {
+    "レーダーデータを取得できませんでした": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Write a review"
+            "value": "Couldn't load the radar"
           }
         }
       }
@@ -1071,12 +1211,12 @@
         }
       }
     },
-    "レーダーデータを取得できませんでした": {
+    "レビューを書く": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Couldn't load the radar"
+            "value": "Write a review"
           }
         }
       }
@@ -1391,12 +1531,32 @@
         }
       }
     },
+    "今日の空玉": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's orb"
+          }
+        }
+      }
+    },
     "今日の空玉ができました": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Today's orb is ready"
+          }
+        }
+      }
+    },
+    "今日の空玉と連続日数を、ホーム画面でいつでも見られます。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See today's orb and your streak anytime on your Home Screen."
           }
         }
       }
@@ -1597,6 +1757,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Try again"
+          }
+        }
+      }
+    },
+    "最低 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L %@"
+          }
+        }
+      }
+    },
+    "最初の空を集めました": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You've collected your first sky"
+          }
+        }
+      }
+    },
+    "最高 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %@"
+          }
+        }
+      }
+    },
+    "最高 %@ / 最低 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %@ / L %@"
+          }
+        }
+      }
+    },
+    "最高 %1$@ / 最低 %2$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %1$@ / L %2$@"
           }
         }
       }
@@ -2011,16 +2222,6 @@
         }
       }
     },
-    "天気を取得しています…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Getting the weather…"
-          }
-        }
-      }
-    },
     "天気データ: Open-Meteo.com\n雨雲レーダー: 出典 気象庁ホームページ（高解像度降水ナウキャスト）\nhttps://www.jma.go.jp/bosai/nowc/": {
       "localizations": {
         "en": {
@@ -2047,6 +2248,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn't load the forecast. Please check your connection."
+          }
+        }
+      }
+    },
+    "天気を取得しています…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Getting the weather…"
           }
         }
       }
@@ -2291,12 +2502,12 @@
         }
       }
     },
-    "日の出 %1$@、日の入り %2$@": {
+    "日の出 %@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sunrise %1$@, sunset %2$@"
+            "value": "Sunrise %@"
           }
         }
       }
@@ -2311,12 +2522,13 @@
         }
       }
     },
-    "日の出 %@": {
+    "日の出 %1$@、日の入り %2$@": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sunrise %@"
+            "value": "Sunrise %1$@, sunset %2$@"
           }
         }
       }
@@ -2507,46 +2719,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "The heat eases, and autumn arrives on the wind"
-          }
-        }
-      }
-    },
-    "最低 %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L %@"
-          }
-        }
-      }
-    },
-    "最高 %1$@ / 最低 %2$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "H %1$@ / L %2$@"
-          }
-        }
-      }
-    },
-    "最高 %@ / 最低 %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "H %@ / L %@"
-          }
-        }
-      }
-    },
-    "最高 %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "H %@"
           }
         }
       }
@@ -2762,6 +2934,7 @@
       }
     },
     "洗濯指数%1$lld点、%2$@": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -2802,21 +2975,12 @@
       }
     },
     "湿度%1$lldパーセント、%2$@": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Humidity %1$lld percent, %2$@"
-          }
-        }
-      }
-    },
-    "湿度%lldパーセント、%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Humidity %lld percent, %@"
           }
         }
       }
@@ -2827,6 +2991,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Humidity %lld percent"
+          }
+        }
+      }
+    },
+    "湿度%lldパーセント、%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humidity %lld percent, %@"
           }
         }
       }
@@ -2887,6 +3061,16 @@
           "stringUnit": {
             "state": "translated",
             "value": " pts"
+          }
+        }
+      }
+    },
+    "蒸し暑く感じられます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humid and muggy"
           }
         }
       }
@@ -3001,6 +3185,37 @@
         }
       }
     },
+    "視界の先が優しく滲む一日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A day where the distance blurs gently"
+          }
+        }
+      }
+    },
+    "視程 %@%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visibility %@ %@"
+          }
+        }
+      }
+    },
+    "視程 %1$@%2$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visibility %1$@ %2$@"
+          }
+        }
+      }
+    },
     "秋": {
       "localizations": {
         "en": {
@@ -3101,16 +3316,6 @@
         }
       }
     },
-    "空玉(そらだま)へようこそ": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Welcome to Soradama"
-          }
-        }
-      }
-    },
     "空玉、あつあつです": {
       "localizations": {
         "en": {
@@ -3127,6 +3332,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "The orb is ice cold"
+          }
+        }
+      }
+    },
+    "空玉(そらだま)へようこそ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome to Soradama"
+          }
+        }
+      }
+    },
+    "空玉コレクション": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky Collection"
+          }
+        }
+      }
+    },
+    "空玉コレクションを開きます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens your sky collection"
+          }
+        }
+      }
+    },
+    "空玉コレクションを開く。連続%lld日": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the sky collection. %lld-day streak"
           }
         }
       }
@@ -3167,26 +3412,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "View collection"
-          }
-        }
-      }
-    },
-    "空玉コレクション": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sky Collection"
-          }
-        }
-      }
-    },
-    "空玉コレクションを開く。連続%lld日": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Open the sky collection. %lld-day streak"
           }
         }
       }
@@ -3281,16 +3506,6 @@
         }
       }
     },
-    "蒸し暑く感じられます": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Humid and muggy"
-          }
-        }
-      }
-    },
     "表示": {
       "localizations": {
         "en": {
@@ -3331,36 +3546,6 @@
         }
       }
     },
-    "視界の先が優しく滲む一日": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A day where the distance blurs gently"
-          }
-        }
-      }
-    },
-    "視程 %1$@%2$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Visibility %1$@ %2$@"
-          }
-        }
-      }
-    },
-    "視程 %@%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Visibility %@ %@"
-          }
-        }
-      }
-    },
     "設定": {
       "localizations": {
         "en": {
@@ -3387,6 +3572,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Watch your step out there"
+          }
+        }
+      }
+    },
+    "追加後にウィジェットをタップすると、空玉コレクションが開きます。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After adding it, tap the widget to open your sky collection."
+          }
+        }
+      }
+    },
+    "追加方法を見る": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See how to add it"
           }
         }
       }
@@ -3787,36 +3992,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "High pressure, settled weather"
-          }
-        }
-      }
-    },
-    "？？？": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "???"
-          }
-        }
-      }
-    },
-    "🌂 折りたたみ傘があると安心": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "🌂 A compact umbrella may help"
-          }
-        }
-      }
-    },
-    "🔮 連続%lld日の記録が今日で途切れそうです": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "🔮 Your %lld-day streak may end today"
           }
         }
       }

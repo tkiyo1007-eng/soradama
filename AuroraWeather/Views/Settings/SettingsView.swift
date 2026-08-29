@@ -28,6 +28,18 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    NavigationLink {
+                        WidgetGuideView()
+                    } label: {
+                        Label("ホーム画面に空玉を飾る", systemImage: "rectangle.stack.badge.plus")
+                    }
+                } header: {
+                    Text("ウィジェット")
+                } footer: {
+                    Text("今日の空玉と連続日数を、ホーム画面でいつでも見られます。")
+                }
+
+                Section {
                     Toggle(isOn: Binding(
                         get: { viewModel.rainAlertsEnabled },
                         set: { newValue in Task { await viewModel.setRainAlerts(newValue) } }

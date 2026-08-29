@@ -1,4 +1,38 @@
 import SwiftUI
+import WidgetKit
+
+/// 「今日の空玉」Widget の案内を、必要な利用者に一度だけ出すための判定。
+/// WidgetKit の取得に失敗した場合は、設置済みの利用者へ誤って案内しないよう表示を見送る。
+enum TodayOrbWidgetDiscovery {
+    static let widgetKind = "TodayOrbWidget"
+    static let dismissedKey = "soradama.todayOrbWidgetGuide.dismissed"
+
+    static func shouldShow(
+        hasOrb: Bool,
+        installationState: Bool?,
+        isDismissed: Bool
+    ) -> Bool {
+        hasOrb && installationState == false && !isDismissed
+    }
+
+    /// WidgetKitへの確認が重なったとき、最後に始めた確認結果だけを画面へ反映する。
+    static func isCurrent(resultGeneration: Int, currentGeneration: Int) -> Bool {
+        resultGeneration == currentGeneration
+    }
+
+    static func installationState() async -> Bool? {
+        await withCheckedContinuation { continuation in
+            WidgetCenter.shared.getCurrentConfigurations { result in
+                switch result {
+                case .success(let widgets):
+                    continuation.resume(returning: widgets.contains { $0.kind == widgetKind })
+                case .failure:
+                    continuation.resume(returning: nil)
+                }
+            }
+        }
+    }
+}
 
 /// 端末の週の開始曜日に合わせて、月表示用の日付と先頭の空欄を組み立てる。
 enum OrbCalendarLayout {
@@ -22,6 +56,8 @@ enum OrbCalendarLayout {
 
 struct OrbCollectionView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
+    @AppStorage(TodayOrbWidgetDiscovery.dismissedKey) private var isWidgetGuideDismissed = false
     @State private var displayedMonth = Date()
     @State private var selectedOrb: DailyOrb?
     /// ImageRenderer は重いので、body評価のたびに実行せず月が変わったときだけ作り直す
@@ -32,6 +68,10 @@ struct OrbCollectionView: View {
     @State private var selectedVariant: SkyVariant?
     /// 月の振り返りカードを開いているか
     @State private var showMonthSummary = false
+    /// 「今日の空玉」Widget の設置状態。nil は確認前または確認失敗。
+    @State private var todayOrbWidgetInstalled: Bool?
+    @State private var widgetInstallationCheckGeneration = 0
+    @State private var showWidgetGuide = false
 
     private let store = OrbStore.shared
 
@@ -65,6 +105,13 @@ struct OrbCollectionView: View {
                         weekdayHeader
                         orbGrid
                         statsRow
+                        if TodayOrbWidgetDiscovery.shouldShow(
+                            hasOrb: !store.orbs.isEmpty,
+                            installationState: todayOrbWidgetInstalled,
+                            isDismissed: isWidgetGuideDismissed
+                        ) {
+                            widgetDiscoveryCard
+                        }
                         Text("アプリを開いた日の空が、玉になって残ります")
                             .font(.caption)
                             .foregroundStyle(.white.opacity(0.55))
@@ -100,6 +147,100 @@ struct OrbCollectionView: View {
                 }
             }
         }
+        .sheet(isPresented: $showWidgetGuide) {
+            NavigationStack {
+                WidgetGuideView(showsCloseButton: true)
+            }
+        }
+        .task {
+            await refreshWidgetInstallationState()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            guard phase == .active, !isWidgetGuideDismissed else { return }
+            Task { await refreshWidgetInstallationState() }
+        }
+    }
+
+    // MARK: Widget 案内
+
+    private var widgetDiscoveryCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: "rectangle.stack.badge.plus")
+                    .font(.title2)
+                    .foregroundStyle(Color(red: 0.70, green: 0.84, blue: 1.0))
+                    .accessibilityHidden(true)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("ホーム画面に空玉を飾る")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.white)
+                    Text("アプリを開かないときも、今日の空玉と連続日数をひと目で見られます。")
+                        .font(.caption)
+                        .foregroundStyle(.white.opacity(0.68))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Spacer(minLength: 0)
+
+                Button {
+                    consumeWidgetDiscoveryCard()
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(.white.opacity(0.75))
+                        .frame(width: 44, height: 44)
+                        .background(Color.white.opacity(0.10), in: Circle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("ウィジェットの案内を閉じる")
+            }
+
+            Button {
+                consumeWidgetDiscoveryCard()
+                showWidgetGuide = true
+            } label: {
+                Label("追加方法を見る", systemImage: "chevron.right")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .background(Color.white.opacity(0.12), in: Capsule())
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(14)
+        .background(
+            LinearGradient(
+                colors: [Color.white.opacity(0.13), Color(red: 0.43, green: 0.55, blue: 0.90).opacity(0.16)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ),
+            in: RoundedRectangle(cornerRadius: 18, style: .continuous)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .strokeBorder(Color.white.opacity(0.16), lineWidth: 0.8)
+        }
+        .transition(.opacity.combined(with: .move(edge: .top)))
+    }
+
+    private func consumeWidgetDiscoveryCard() {
+        Haptics.selection()
+        withAnimation(.easeOut(duration: 0.2)) {
+            isWidgetGuideDismissed = true
+        }
+    }
+
+    @MainActor
+    private func refreshWidgetInstallationState() async {
+        widgetInstallationCheckGeneration &+= 1
+        let generation = widgetInstallationCheckGeneration
+        let state = await TodayOrbWidgetDiscovery.installationState()
+        guard TodayOrbWidgetDiscovery.isCurrent(
+            resultGeneration: generation,
+            currentGeneration: widgetInstallationCheckGeneration
+        ) else { return }
+        todayOrbWidgetInstalled = state
     }
 
     // MARK: 月ナビゲーション
@@ -112,7 +253,7 @@ struct OrbCollectionView: View {
                 Image(systemName: "chevron.left")
                     .font(.body.weight(.semibold))
                     .foregroundStyle(.white.opacity(0.85))
-                    .frame(width: 36, height: 36)
+                    .frame(width: 44, height: 44)
                     .background(Color.white.opacity(0.10), in: Circle())
             }
             Spacer()
@@ -126,7 +267,7 @@ struct OrbCollectionView: View {
                 Image(systemName: "chevron.right")
                     .font(.body.weight(.semibold))
                     .foregroundStyle(canGoForward ? .white.opacity(0.85) : .white.opacity(0.25))
-                    .frame(width: 36, height: 36)
+                    .frame(width: 44, height: 44)
                     .background(Color.white.opacity(0.10), in: Circle())
             }
             .disabled(!canGoForward)
@@ -166,6 +307,9 @@ struct OrbCollectionView: View {
                     .frame(maxWidth: .infinity)
             }
         }
+        // 7列の密集表示はAXサイズの文字を物理的に収められない。
+        // 日付の完全な情報は各玉のVoiceOverラベルに残し、視覚上の重なりだけを防ぐ。
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
 
     /// 表示月の日付一覧(週頭合わせの nil パディング付き)
@@ -183,6 +327,7 @@ struct OrbCollectionView: View {
                 }
             }
         }
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
 
     @ViewBuilder
@@ -414,6 +559,7 @@ struct OrbCollectionView: View {
             // 画像生成が終わるまでの一瞬だけプレースホルダ
             Image(systemName: "square.and.arrow.up")
                 .foregroundStyle(.white.opacity(0.4))
+                .accessibilityHidden(true)
                 .task(id: DailyOrb.key(for: displayedMonth)) { renderMonthShareImage() }
         }
     }
@@ -533,6 +679,7 @@ struct OrbCollectionView: View {
                                 .padding(.vertical, 9)
                                 .background(Color.white.opacity(0.15), in: Capsule())
                         }
+                        .accessibilityLabel(Self.singleOrbShareAccessibilityLabel(for: orb))
                     }
                     Button("閉じる") { selectedOrb = nil }
                         .font(.callout.weight(.semibold))
@@ -645,6 +792,120 @@ struct OrbCollectionView: View {
                 endPoint: .bottom
             )
         )
+    }
+
+    static func singleOrbShareAccessibilityLabel(
+        for orb: DailyOrb,
+        locale: Locale = .current
+    ) -> String {
+        let date = orb.date?.formatted(
+            .dateTime.locale(locale).year().month().day()
+        ) ?? orb.dateKey
+        return String(localized: "\(date)の空玉を共有")
+    }
+}
+
+/// iOS 17 ではアプリから直接 Widget を追加できないため、OS標準の安全な手順を案内する。
+/// コレクションからは一度限りのカードで、設定からはいつでも開ける。
+struct WidgetGuideView: View {
+    @Environment(\.dismiss) private var dismiss
+    @ScaledMetric(relativeTo: .caption) private var stepBadgeSize: CGFloat = 28
+
+    let showsCloseButton: Bool
+
+    init(showsCloseButton: Bool = false) {
+        self.showsCloseButton = showsCloseButton
+    }
+
+    private let previewOrb = DailyOrb(
+        dateKey: "widget-guide",
+        kind: .partlyCloudy,
+        tempMax: 24,
+        tempMin: 16,
+        humidity: 55,
+        precipProbability: nil,
+        placeName: ""
+    )
+
+    private var steps: [LocalizedStringKey] {
+        [
+            "ホーム画面の何もない場所を長押しします",
+            "「編集」または「＋」から「ウィジェットを追加」を選びます",
+            "「空玉」を検索し、「今日の空玉」を追加します",
+        ]
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 24) {
+                widgetPreview
+
+                Text("アプリを開かないときも、今日の空玉と連続日数をひと目で見られます。")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 10)
+
+                VStack(spacing: 14) {
+                    ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
+                        HStack(alignment: .top, spacing: 12) {
+                            Text(verbatim: "\(index + 1)")
+                                .font(.caption.weight(.bold))
+                                .foregroundStyle(.white)
+                                .frame(width: stepBadgeSize, height: stepBadgeSize)
+                                .background(
+                                    Color(red: 0.16, green: 0.30, blue: 0.58),
+                                    in: Circle()
+                                )
+                            Text(step)
+                                .font(.body)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.top, 3)
+                        }
+                        .accessibilityElement(children: .combine)
+                    }
+                }
+
+                Label(
+                    "追加後にウィジェットをタップすると、空玉コレクションが開きます。",
+                    systemImage: "hand.tap"
+                )
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(14)
+                .background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: 14))
+            }
+            .padding(20)
+        }
+        .navigationTitle("ウィジェットを追加")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if showsCloseButton {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("閉じる") { dismiss() }
+                }
+            }
+        }
+    }
+
+    private var widgetPreview: some View {
+        VStack(spacing: 7) {
+            OrbView(orb: previewOrb, size: 76, animated: false)
+            Text("今日の空玉")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.white)
+        }
+        .frame(width: 150, height: 150)
+        .background(
+            LinearGradient(
+                colors: [Color(red: 0.07, green: 0.09, blue: 0.22), Color(red: 0.16, green: 0.15, blue: 0.36)],
+                startPoint: .top,
+                endPoint: .bottom
+            ),
+            in: RoundedRectangle(cornerRadius: 30, style: .continuous)
+        )
+        .accessibilityHidden(true)
     }
 }
 

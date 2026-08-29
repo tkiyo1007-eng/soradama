@@ -1,16 +1,6 @@
 {
   "sourceLanguage": "ja",
   "strings": {
-    "%1$@の特別な空玉クリスタル、%2$@の%3$@、%4$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Special sky crystal for %1$@, %2$@, %3$@, %4$@"
-          }
-        }
-      }
-    },
     "%@の特別な空玉クリスタル、%@の%@、%@": {
       "localizations": {
         "en": {
@@ -21,22 +11,34 @@
         }
       }
     },
-    "%1$@の空玉、%2$@の%3$@、%4$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sky orb for %1$@, %2$@, %3$@, %4$@"
-          }
-        }
-      }
-    },
     "%@の空玉、%@の%@、%@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Sky orb for %@, %@, %@, %@"
+          }
+        }
+      }
+    },
+    "%1$@の特別な空玉クリスタル、%2$@の%3$@、%4$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Special sky crystal for %1$@, %2$@, %3$@, %4$@"
+          }
+        }
+      }
+    },
+    "%1$@の空玉、%2$@の%3$@、%4$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky orb for %1$@, %2$@, %3$@, %4$@"
           }
         }
       }
@@ -57,6 +59,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "A month of many different skies"
+          }
+        }
+      }
+    },
+    "インターネットに接続されていません。通信環境をご確認ください。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You're offline. Please check your connection."
           }
         }
       }
@@ -121,26 +133,6 @@
         }
       }
     },
-    "よく晴れたひと月でした": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A month of clear skies"
-          }
-        }
-      }
-    },
-    "インターネットに接続されていません。通信環境をご確認ください。": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You're offline. Please check your connection."
-          }
-        }
-      }
-    },
     "メートル法 (°C・m/s)": {
       "localizations": {
         "en": {
@@ -167,6 +159,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Imperial (°F, mph)"
+          }
+        }
+      }
+    },
+    "よく晴れたひと月でした": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A month of clear skies"
           }
         }
       }
@@ -277,6 +279,27 @@
           "stringUnit": {
             "state": "translated",
             "value": "Try again"
+          }
+        }
+      }
+    },
+    "最高 %@  最低 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %@  L %@"
+          }
+        }
+      }
+    },
+    "最高 %1$@  最低 %2$@": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H %1$@  L %2$@"
           }
         }
       }
@@ -697,26 +720,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Refresh"
-          }
-        }
-      }
-    },
-    "最高 %1$@  最低 %2$@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "H %1$@  L %2$@"
-          }
-        }
-      }
-    },
-    "最高 %@  最低 %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "H %@  L %@"
           }
         }
       }

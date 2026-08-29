@@ -23,6 +23,19 @@ enum SoradamaShareContent {
     }
 }
 
+/// 「今日の空玉」は現在地（先頭ページ）の天気からだけ作られる。
+/// 保存した別都市のページにも同じ玉を表示すると、その都市の記録だと誤解されるため、
+/// カードを出せる条件を画面から切り離して固定する。
+enum TodayOrbCardPolicy {
+    static func shouldShow(
+        pageID: String,
+        primaryPageID: String?,
+        hasTodayOrb: Bool
+    ) -> Bool {
+        hasTodayOrb && pageID == primaryPageID
+    }
+}
+
 /// 評価依頼は、使い始めではなく「空を集める習慣」ができた成功直後だけ候補にする。
 /// StoreKit側の表示回数制限に加え、アプリ側でも同一バージョン1回・120日間隔に抑える。
 struct ReviewPromptPolicy {

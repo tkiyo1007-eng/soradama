@@ -40,7 +40,10 @@ struct ContentView: View {
 
             TabView(selection: Bindable(viewModel).selectionID) {
                 ForEach(viewModel.pages) { place in
-                    WeatherPageView(place: place, viewModel: viewModel)
+                    WeatherPageView(place: place, viewModel: viewModel) {
+                        Haptics.selection()
+                        activeSheet = .collection
+                    }
                         .tag(place.id)
                 }
             }
@@ -198,7 +201,7 @@ struct ContentView: View {
                     }
                 } label: {
                     MiniOrbIcon()
-                        .frame(width: 40, height: 40)
+                        .frame(width: 44, height: 44)
                         .background(.ultraThinMaterial, in: Circle())
                         .scaleEffect(orbBounce ? 1.35 : 1.0)
                         .overlay(alignment: .topTrailing) {
@@ -230,7 +233,7 @@ struct ContentView: View {
                         Image(systemName: "square.and.arrow.down")
                             .font(.title3)
                             .foregroundStyle(.white)
-                            .frame(width: 40, height: 40)
+                            .frame(width: 44, height: 44)
                             .background(.ultraThinMaterial, in: Circle())
                     }
                     .accessibilityLabel("今日の空を壁紙として保存")
@@ -243,7 +246,7 @@ struct ContentView: View {
                     Image(systemName: "magnifyingglass")
                         .font(.title3)
                         .foregroundStyle(.white)
-                        .frame(width: 40, height: 40)
+                        .frame(width: 44, height: 44)
                         .background(.ultraThinMaterial, in: Circle())
                 }
                 .accessibilityLabel("都市を検索")
@@ -255,11 +258,14 @@ struct ContentView: View {
                     Image(systemName: "gearshape")
                         .font(.title3)
                         .foregroundStyle(.white)
-                        .frame(width: 40, height: 40)
+                        .frame(width: 44, height: 44)
                         .background(.ultraThinMaterial, in: Circle())
                 }
                 .accessibilityLabel("設定")
             }
+            // 固定横並びの操作群だけはAX最大サイズで記号が重ならないよう上限を持たせる。
+            // 各ボタンのVoiceOverラベルと44ptのタップ領域はそのまま維持する。
+            .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
             .padding(.horizontal, 16)
             Spacer()
         }

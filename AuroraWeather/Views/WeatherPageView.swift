@@ -4,9 +4,12 @@ import SwiftUI
 struct WeatherPageView: View {
     let place: SavedPlace
     let viewModel: WeatherViewModel
+    let onOpenCollection: () -> Void
 
     @State private var scrollOffset: CGFloat = 0
     @State private var showRadar = false
+    /// 最初の1回は説明を厚くし、価値が伝わった後は天気情報を押し下げない高さにする。
+    @AppStorage("soradama.todayOrbCard.hasOpened") private var hasOpenedTodayOrbCard = false
     /// カード類を下から順番に登場させる演出用のフラグ
     @State private var cardsAppeared = false
 
@@ -14,6 +17,16 @@ struct WeatherPageView: View {
 
     private var collapseProgress: Double {
         (Double(-scrollOffset) / 140).clamped(to: 0...1)
+    }
+
+    init(
+        place: SavedPlace,
+        viewModel: WeatherViewModel,
+        onOpenCollection: @escaping () -> Void = {}
+    ) {
+        self.place = place
+        self.viewModel = viewModel
+        self.onOpenCollection = onOpenCollection
     }
 
     var body: some View {
@@ -59,26 +72,43 @@ struct WeatherPageView: View {
                 }
 
                 Group {
-                    HourlyForecastCard(weather: weather, degrees: viewModel.degrees)
+                    if let orb = OrbStore.shared.orb(for: Date()),
+                       TodayOrbCardPolicy.shouldShow(
+                           pageID: place.id,
+                           primaryPageID: viewModel.pages.first?.id,
+                           hasTodayOrb: true
+                       ) {
+                        TodayOrbCard(
+                            orb: orb,
+                            streak: OrbStore.shared.streak,
+                            isExpanded: !hasOpenedTodayOrbCard
+                        ) {
+                            hasOpenedTodayOrbCard = true
+                            onOpenCollection()
+                        }
                         .revealed(cardsAppeared, order: 0, reduceMotion: reduceMotion)
+                    }
 
-                    DetailsGrid(weather: weather, degrees: viewModel.degrees, units: viewModel.units)
+                    HourlyForecastCard(weather: weather, degrees: viewModel.degrees)
                         .revealed(cardsAppeared, order: 1, reduceMotion: reduceMotion)
 
-                    RadarCardButton { showRadar = true }
+                    DetailsGrid(weather: weather, degrees: viewModel.degrees, units: viewModel.units)
                         .revealed(cardsAppeared, order: 2, reduceMotion: reduceMotion)
 
-                    TemperatureChartCard(weather: weather, units: viewModel.units)
+                    RadarCardButton { showRadar = true }
                         .revealed(cardsAppeared, order: 3, reduceMotion: reduceMotion)
-                    DailyForecastCard(weather: weather, degrees: viewModel.degrees)
+
+                    TemperatureChartCard(weather: weather, units: viewModel.units)
                         .revealed(cardsAppeared, order: 4, reduceMotion: reduceMotion)
+                    DailyForecastCard(weather: weather, degrees: viewModel.degrees)
+                        .revealed(cardsAppeared, order: 5, reduceMotion: reduceMotion)
 
                     Text("データ提供: Open-Meteo.com / 気象庁")
                         .font(.caption2)
                         .foregroundStyle(.white.opacity(0.45))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
-                        .revealed(cardsAppeared, order: 5, reduceMotion: reduceMotion)
+                        .revealed(cardsAppeared, order: 6, reduceMotion: reduceMotion)
                 }
                 .padding(.horizontal, 16)
             }
@@ -103,6 +133,91 @@ struct WeatherPageView: View {
                 }
             }
         }
+    }
+}
+
+// MARK: - 今日の空玉
+
+/// 天気の確認画面にも「空を集める」という空玉ならではの価値を残すカード。
+/// 初回だけ少し詳しく伝え、開いた後はコンパクトにして予報の閲覧を妨げない。
+struct TodayOrbCard: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    let orb: DailyOrb
+    let streak: Int
+    let isExpanded: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(
+                alignment: dynamicTypeSize.isAccessibilitySize ? .top : .center,
+                spacing: 14
+            ) {
+                OrbView(
+                    orb: orb,
+                    size: dynamicTypeSize.isAccessibilitySize ? 50 : (isExpanded ? 68 : 50)
+                )
+                    .accessibilityHidden(true)
+
+                VStack(alignment: .leading, spacing: isExpanded ? 5 : 3) {
+                    Text("今日の空玉")
+                        .font(isExpanded ? .headline : .subheadline.weight(.semibold))
+                        .foregroundStyle(.white)
+
+                    HStack(spacing: 5) {
+                        Text(orb.kind.label)
+                        Text(verbatim: "·")
+                            .accessibilityHidden(true)
+                        Text(orb.timeOfDay.skyLabel)
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.white.opacity(0.72))
+
+                    Text(streak > 1
+                         ? String(localized: "\(streak)日連続で集めています")
+                         : String(localized: "最初の空を集めました"))
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(Color(red: 0.72, green: 0.86, blue: 1.0))
+
+                    if isExpanded {
+                        Label("タップしてコレクションを見る", systemImage: "sparkles.rectangle.stack")
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(.white.opacity(0.82))
+                            .padding(.top, 2)
+                    }
+                }
+
+                Spacer(minLength: 6)
+
+                if !dynamicTypeSize.isAccessibilitySize {
+                    Image(systemName: "chevron.right")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.white.opacity(0.55))
+                        .accessibilityHidden(true)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(isExpanded ? 16 : 13)
+            .background(
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.18, green: 0.20, blue: 0.42).opacity(0.92),
+                        Color(red: 0.12, green: 0.16, blue: 0.34).opacity(0.92),
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                in: RoundedRectangle(cornerRadius: 20, style: .continuous)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .strokeBorder(Color.white.opacity(0.15), lineWidth: 0.8)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityHint("空玉コレクションを開きます")
     }
 }
 

@@ -108,6 +108,30 @@ struct GrowthEngagementTests {
         #expect(!SoradamaURL.opensCollection(URL(string: "soradama://collection?source=external")!))
     }
 
+    @Test("今日の空玉カードは記録元の先頭ページだけに出す")
+    func todayOrbCardOnlyAppearsOnPrimaryPage() {
+        #expect(TodayOrbCardPolicy.shouldShow(
+            pageID: "current",
+            primaryPageID: "current",
+            hasTodayOrb: true
+        ))
+        #expect(!TodayOrbCardPolicy.shouldShow(
+            pageID: "saved-city",
+            primaryPageID: "current",
+            hasTodayOrb: true
+        ))
+        #expect(!TodayOrbCardPolicy.shouldShow(
+            pageID: "current",
+            primaryPageID: "current",
+            hasTodayOrb: false
+        ))
+        #expect(!TodayOrbCardPolicy.shouldShow(
+            pageID: "current",
+            primaryPageID: nil,
+            hasTodayOrb: true
+        ))
+    }
+
     private static func event(
         streak: Int,
         isFirstToday: Bool = true,

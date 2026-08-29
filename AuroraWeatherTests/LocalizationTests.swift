@@ -117,6 +117,38 @@ struct LocalizationTests {
         }
     }
 
+    @Test("今日の空玉カードの文言に英訳がある")
+    func todayOrbCardStringsAreTranslated() throws {
+        let keys = [
+            "今日の空玉",
+            "最初の空を集めました",
+            "タップしてコレクションを見る",
+            "空玉コレクションを開きます",
+        ]
+        for key in keys {
+            let value = try #require(english(key), "「\(key)」の英訳が無い")
+            #expect(value != key, "「\(key)」が英語版でも日本語のまま")
+        }
+    }
+
+    @Test("ウィジェット案内の文言に英訳がある")
+    func widgetGuideStringsAreTranslated() throws {
+        let keys = [
+            "ホーム画面に空玉を飾る",
+            "アプリを開かないときも、今日の空玉と連続日数をひと目で見られます。",
+            "ウィジェットの案内を閉じる",
+            "追加方法を見る",
+            "ホーム画面の何もない場所を長押しします",
+            "「編集」または「＋」から「ウィジェットを追加」を選びます",
+            "「空玉」を検索し、「今日の空玉」を追加します",
+            "追加後にウィジェットをタップすると、空玉コレクションが開きます。",
+        ]
+        for key in keys {
+            let value = try #require(english(key), "「\(key)」の英訳が無い")
+            #expect(value != key, "「\(key)」が英語版でも日本語のまま")
+        }
+    }
+
     /// 時刻表示は書式ごと切り替わる必要がある。
     /// "H時" のような日本語専用の書式を直に指定していると、英語圏で "15時" と出てしまう。
     @Test("時刻の書式がロケールに追従する")
