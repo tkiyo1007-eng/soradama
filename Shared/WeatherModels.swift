@@ -134,17 +134,38 @@ struct WeatherBundle: Codable {
     let hours: [HourForecast]
     let days: [DayForecast]
 
-    var todayMax: Double { days.first?.tempMax ?? temperature }
+    /// キャッシュが日をまたいでも「昨日」を今日として扱わない。
+    func dayForecast(for date: Date = .now) -> DayForecast? {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        return days.first { calendar.isDate($0.date, inSameDayAs: date) }
+    }
+
+    /// 現在時刻から表示可能な時間別予報。時刻境界のずれを30分だけ許容する。
+    func upcomingHours(from date: Date = .now) -> [HourForecast] {
+        let cutoff = date.addingTimeInterval(-30 * 60)
+        return hours.filter { $0.date >= cutoff }
+    }
+
+    /// 現地タイムゾーンの今日以降だけを返し、日跨ぎキャッシュの昨日を除く。
+    func upcomingDays(from date: Date = .now) -> [DayForecast] {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        let startOfToday = calendar.startOfDay(for: date)
+        return days.filter { $0.date >= startOfToday }
+    }
+
+    var todayMax: Double { dayForecast()?.tempMax ?? temperature }
 
 
     /// 直近 N 時間以内の最大降水確率。傘指数・洗濯指数のように「今から数時間」を
     /// 判断材料にしたい場面で使う。`days.first` の「今日1日の最大値」だと、
     /// 深夜の雨予報のせいで日中ずっと高い数値のままになるなど実感とズレるため。
     func maxPrecipitationProbability(withinHours limit: Int) -> Double? {
-        let relevant = hours.prefix(limit).compactMap(\.precipitationProbability)
+        let relevant = upcomingHours().prefix(limit).compactMap(\.precipitationProbability)
         return relevant.max()
     }
-    var todayMin: Double { days.first?.tempMin ?? temperature }
+    var todayMin: Double { dayForecast()?.tempMin ?? temperature }
 }
 
 // MARK: - 保存地点・設定
@@ -184,6 +205,16 @@ enum UnitSystem: String, Codable, CaseIterable, Identifiable {
             : String(localized: "ヤード・ポンド法 (°F・mph)")
     }
     var suffix: String { self == .celsius ? "°C" : "°F" }
+
+    /// 初回だけ端末地域に合う単位を選ぶ。英国は気温に摂氏を使うため
+    /// `.uk` をメートル法側にし、明示的に米国式の地域だけ華氏にする。
+    static func defaultSystem(for measurementSystem: Locale.MeasurementSystem) -> UnitSystem {
+        measurementSystem == .us ? .fahrenheit : .celsius
+    }
+
+    static var localeDefault: UnitSystem {
+        defaultSystem(for: Locale.current.measurementSystem)
+    }
 
     func convert(_ celsius: Double) -> Double {
         self == .celsius ? celsius : celsius * 9 / 5 + 32

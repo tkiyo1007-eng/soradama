@@ -8,7 +8,7 @@ import Foundation
 actor WeatherCache {
     private let fileURL: URL
     /// これより古いキャッシュは表示に使えないので捨てる
-    private static let maxAge: TimeInterval = 3 * 24 * 3600
+    private static let maxAge: TimeInterval = WeatherSnapshotCache.maximumAge
 
     init() {
         let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
@@ -29,13 +29,21 @@ actor WeatherCache {
         }
         // 古すぎるものは読み込み時点で捨てる
         let cutoff = Date().addingTimeInterval(-Self.maxAge)
-        return decoded.filter { $0.value.fetchedAt > cutoff }
+        // 現在地は ID が固定のため、座標を持たない旧形式のディスクキャッシュは
+        // 旅行後の別都市と照合できない。座標検証できる共有キャッシュへ一本化する。
+        return decoded.filter {
+            $0.key != "current-location" && $0.value.fetchedAt > cutoff
+        }
     }
 
     /// `keeping` に含まれる地点だけを、期限内のものに絞って保存する。
     func save(_ bundles: [String: WeatherBundle], keeping ids: Set<String>) {
         let cutoff = Date().addingTimeInterval(-Self.maxAge)
-        let trimmed = bundles.filter { ids.contains($0.key) && $0.value.fetchedAt > cutoff }
+        let trimmed = bundles.filter {
+            $0.key != "current-location"
+                && ids.contains($0.key)
+                && $0.value.fetchedAt > cutoff
+        }
         guard let data = try? JSONEncoder().encode(trimmed) else { return }
         try? data.write(to: fileURL, options: .atomic)
     }

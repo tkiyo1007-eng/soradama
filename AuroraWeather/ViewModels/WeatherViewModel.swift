@@ -23,6 +23,11 @@ final class WeatherViewModel {
     private(set) var streakRemindersEnabled: Bool
     /// 今日の空玉がはじめて記録された瞬間のイベント(お祝いトースト用)
     private(set) var lastOrbEvent: OrbRecordResult?
+    /// ホーム地点が現在地か、利用者が明示的に選んだ都市か。
+    /// `nil` はこの設定がまだ無かった旧バージョンからの移行状態。
+    private(set) var primaryLocationMode: PrimaryLocationMode?
+    /// オンボーディングや地点選択シートに表示する、直近の測位エラー。
+    private(set) var locationSelectionError: String?
 
     private var primaryPlace: SavedPlace
     private let weatherService = WeatherService()
@@ -36,7 +41,9 @@ final class WeatherViewModel {
     private static let streakRemindersKey = "aurora.streakReminders"
 
     init() {
-        primaryPlace = SharedStore.lastPlace()
+        let locationPreference = SharedStore.primaryLocationPreference()
+        primaryPlace = locationPreference?.place ?? SharedStore.lastPlace()
+        primaryLocationMode = locationPreference?.mode
         rainAlertsEnabled = UserDefaults.standard.bool(forKey: Self.rainAlertsKey)
         morningAlertsEnabled = UserDefaults.standard.bool(forKey: Self.morningAlertsKey)
         streakRemindersEnabled = UserDefaults.standard.bool(forKey: Self.streakRemindersKey)
@@ -65,11 +72,14 @@ final class WeatherViewModel {
     // MARK: - 読み込み
 
     func loadInitial() async {
-        // 現在地の解決を試み、拒否/失敗時は前回の地点(既定: 東京)を使う
-        if let located = await resolveCurrentLocation() {
-            primaryPlace = located
-            rebuildPages()
-            selectionID = located.id
+        let preference = primaryLocationMode.map {
+            PrimaryLocationPreference(mode: $0, place: primaryPlace)
+        }
+        // 明示的に都市をホームへ選んだ場合は、以後の起動で測位結果に上書きしない。
+        // 設定が無い旧版利用者だけは互換性のため従来どおり現在地を一度試す。
+        if SharedStore.shouldResolveCurrentLocation(for: preference),
+           let located = try? await resolveCurrentLocation() {
+            setPrimaryPlace(located, mode: .currentLocation)
         }
         await ensureLoaded(selectionID, force: true)
 
@@ -102,7 +112,16 @@ final class WeatherViewModel {
             let snapshot = bundles
             Task.detached { await self.cache.save(snapshot, keeping: keep) }
             if id == primaryPlace.id {
-                SharedStore.saveLastPlace(place)
+                // Widget/Watch が次の通信失敗時にも同じホーム地点を表示できるよう、
+                // 本体で取得できた時点で共有スナップショットも更新する。
+                WeatherSnapshotCache.save(bundle, for: place)
+                if let primaryLocationMode {
+                    SharedStore.savePrimaryLocation(place, mode: primaryLocationMode)
+                } else {
+                    // 設定キーを持たない旧版利用者の互換経路。
+                    SharedStore.saveLastPlace(place)
+                }
+                PhoneWatchSyncService.shared.sync(place: place, units: units)
                 WidgetCenter.shared.reloadAllTimelines()
                 if rainAlertsEnabled {
                     notifications.scheduleRainAlert(for: bundle, placeName: place.name)
@@ -110,9 +129,13 @@ final class WeatherViewModel {
                 if morningAlertsEnabled {
                     notifications.scheduleMorningUmbrella(for: bundle, placeName: place.name)
                 }
-                // 今日の空玉を記録(現在地の空だけがコレクションになる)。
+                // 今日の空玉を記録(利用者が選んだホーム地点だけがコレクションになる)。
                 // 今日はじめての記録ならお祝いトーストを出し、ウィジェットにも反映する
-                let result = OrbStore.shared.recordToday(from: bundle, placeName: place.name)
+                let result = OrbStore.shared.recordToday(
+                    from: bundle,
+                    placeName: place.name,
+                    latitude: place.latitude
+                )
                 if result.isFirstToday {
                     lastOrbEvent = result
                 }
@@ -121,11 +144,23 @@ final class WeatherViewModel {
                 }
             }
         } catch {
+            // 現在条件として古すぎる値は残さない。ホーム地点なら座標照合済みの
+            // 共有キャッシュを使い、旅行後に以前の街の天気を出さない。
+            if let existing = bundles[id],
+               Date().timeIntervalSince(existing.fetchedAt) > WeatherSnapshotCache.maximumAge {
+                bundles[id] = nil
+            }
+            if bundles[id] == nil,
+               id == primaryPlace.id,
+               let cached = WeatherSnapshotCache.loadSnapshot(for: place) {
+                bundles[id] = cached.weather
+            }
             errors[id] = error.soradamaMessage
         }
     }
 
-    /// 検索結果から地点を選択(未保存ならマイシティへ追加してからページ移動)
+    /// 検索結果から地点を選択(未保存ならマイシティへ追加してからページ移動)。
+    /// 通常の都市閲覧ではホーム地点を変えず、通知・Widget・空玉への意図しない影響を防ぐ。
     func selectSearched(_ place: SavedPlace) async {
         if place.id != primaryPlace.id, !savedPlaces.contains(where: { $0.id == place.id }) {
             savedPlaces.append(place)
@@ -137,19 +172,38 @@ final class WeatherViewModel {
         await ensureLoaded(place.id)
     }
 
-    func useCurrentLocation() async {
-        guard let located = await resolveCurrentLocation() else {
-            errors[selectionID] = errors[selectionID] ?? LocationError.denied.localizedDescription
-            return
+    /// オンボーディングで選んだ都市をホーム地点として保存する。
+    /// 空玉・通知・Widget はすべてこの地点を使う。
+    func selectPrimaryCity(_ place: SavedPlace) async {
+        if !savedPlaces.contains(where: { $0.id == place.id }) {
+            savedPlaces.append(place)
+            persistPlaces()
         }
-        primaryPlace = located
-        rebuildPages()
-        selectionID = located.id
-        await ensureLoaded(located.id, force: true)
+        setPrimaryPlace(place, mode: .selectedCity)
+        locationSelectionError = nil
+        Haptics.selection()
+        // 地点の確定と永続化は通信を待たずに完了させる。
+        // 圏外でもオンボーディングを抜けられ、天気はメイン画面で再試行できる。
+        Task { await self.ensureLoaded(place.id) }
     }
 
-    private func resolveCurrentLocation() async -> SavedPlace? {
-        guard let location = try? await locationService.currentLocation() else { return nil }
+    /// 現在地をホームへ戻す。成功したときだけ選択モードも更新する。
+    @discardableResult
+    func useCurrentLocation() async -> Bool {
+        do {
+            let located = try await resolveCurrentLocation()
+            setPrimaryPlace(located, mode: .currentLocation)
+            locationSelectionError = nil
+            Task { await self.ensureLoaded(located.id, force: true) }
+            return true
+        } catch {
+            locationSelectionError = error.soradamaMessage
+            return false
+        }
+    }
+
+    private func resolveCurrentLocation() async throws -> SavedPlace {
+        let location = try await locationService.currentLocation()
         var name = String(localized: "現在地")
         var detail = ""
         if let placemark = try? await CLGeocoderBox.reverseGeocode(location) {
@@ -165,6 +219,26 @@ final class WeatherViewModel {
             longitude: location.coordinate.longitude,
             isCurrentLocation: true
         )
+    }
+
+    /// ホーム地点・選択モード・Widget互換用地点を、読み込みより先に確定する。
+    /// 通信に失敗しても次回起動で利用者の選択が失われない。
+    private func setPrimaryPlace(_ place: SavedPlace, mode: PrimaryLocationMode) {
+        if primaryPlace.isCurrentLocation,
+           place.isCurrentLocation,
+           !WeatherSnapshotCache.locationsAreNearby(primaryPlace, place) {
+            // 現在地の ID は固定なので、遠くへ移動したときは同じ辞書キーに残る
+            // 以前の街の天気を先に破棄する。
+            bundles[place.id] = nil
+            errors[place.id] = nil
+        }
+        primaryPlace = place
+        primaryLocationMode = mode
+        SharedStore.savePrimaryLocation(place, mode: mode)
+        PhoneWatchSyncService.shared.sync(place: place, units: units)
+        rebuildPages()
+        selectionID = place.id
+        WidgetCenter.shared.reloadAllTimelines()
     }
 
     // MARK: - 保存地点
@@ -254,6 +328,7 @@ final class WeatherViewModel {
         guard newUnits != units else { return }
         units = newUnits
         SharedStore.saveUnits(newUnits)
+        PhoneWatchSyncService.shared.sync(place: primaryPlace, units: newUnits)
         WidgetCenter.shared.reloadAllTimelines()
         Haptics.selection()
     }

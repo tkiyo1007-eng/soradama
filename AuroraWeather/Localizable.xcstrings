@@ -262,6 +262,16 @@
         }
       }
     },
+    "%@を自分の空にすると、空玉・通知・ウィジェット・Apple Watchもこの都市に変わります。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set %@ as My Sky, and your orbs, notifications, widgets, and Apple Watch will use this city."
+          }
+        }
+      }
+    },
     "%@曜日": {
       "localizations": {
         "en": {
@@ -437,6 +447,17 @@
         }
       }
     },
+    "%1$@を自分の空にすると、空玉・通知・ウィジェット・Apple Watchもこの都市に変わります。": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set %1$@ as My Sky, and your orbs, notifications, widgets, and Apple Watch will use this city."
+          }
+        }
+      }
+    },
     "%1$lld/%2$lld コンプリート": {
       "extractionState": "stale",
       "localizations": {
@@ -594,6 +615,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "apps.apple.com/app/id6788443049"
+          }
+        }
+      }
+    },
+    "OK": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
           }
         }
       }
@@ -780,6 +811,16 @@
         }
       }
     },
+    "キャンセル": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
     "くもり": {
       "localizations": {
         "en": {
@@ -810,6 +851,16 @@
         }
       }
     },
+    "このバージョンでは読み込めないバックアップです。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This version can't read that backup."
+          }
+        }
+      }
+    },
     "この地域の雨雲レーダーはありません": {
       "localizations": {
         "en": {
@@ -836,6 +887,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Share this image to show someone a whole month of sky"
+          }
+        }
+      }
+    },
+    "この都市の天気を見る": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View this city's weather"
+          }
+        }
+      }
+    },
+    "この都市をどう使いますか？": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How would you like to use this city?"
           }
         }
       }
@@ -907,6 +978,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld percent chance of rain in the next few hours, %@"
+          }
+        }
+      }
+    },
+    "コレクション": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collection"
           }
         }
       }
@@ -991,6 +1072,16 @@
         }
       }
     },
+    "データ提供: Open-Meteo.com": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data: Open-Meteo.com"
+          }
+        }
+      }
+    },
     "データ提供: Open-Meteo.com / 気象庁": {
       "localizations": {
         "en": {
@@ -1032,11 +1123,92 @@
       }
     },
     "はじめる": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Get started"
+          }
+        }
+      }
+    },
+    "バックアップから復元": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore from Backup"
+          }
+        }
+      }
+    },
+    "バックアップのファイルサイズが大きすぎます。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The backup file is too large."
+          }
+        }
+      }
+    },
+    "バックアップの内容が正しくありません。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The backup contents are invalid."
+          }
+        }
+      }
+    },
+    "バックアップを作成できませんでした。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't create the backup."
+          }
+        }
+      }
+    },
+    "バックアップを保存できませんでした。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't save the restored backup."
+          }
+        }
+      }
+    },
+    "バックアップを復元しますか？": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore this backup?"
+          }
+        }
+      }
+    },
+    "バックアップを書き出せませんでした。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't export the backup."
+          }
+        }
+      }
+    },
+    "バックアップを読み込めませんでした。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't read the backup."
           }
         }
       }
@@ -1617,6 +1789,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Orbs this month"
+          }
+        }
+      }
+    },
+    "位置情報は現在地の天気を取得するためにだけ使います": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your location is used only to get weather for where you are"
           }
         }
       }
@@ -2412,6 +2594,26 @@
         }
       }
     },
+    "復元する変更はありませんでした。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There were no changes to restore."
+          }
+        }
+      }
+    },
+    "復元内容をもう一度確認してください": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Review the restore again"
+          }
+        }
+      }
+    },
     "応援": {
       "localizations": {
         "en": {
@@ -3136,6 +3338,7 @@
       }
     },
     "現在地の天気を表示するために\n位置情報を使います(あとから変更できます)": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -3151,6 +3354,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Use current location"
+          }
+        }
+      }
+    },
+    "現在地を使うか、都市を選んで\nあなたの空を決められます(あとから変更できます)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use your current location or choose a city\nto set your sky (you can change this later)"
+          }
+        }
+      }
+    },
+    "現在地を取得しています…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Getting your location…"
           }
         }
       }
@@ -3386,6 +3609,16 @@
         }
       }
     },
+    "空玉のバックアップを書き出しました。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your orb backup was exported."
+          }
+        }
+      }
+    },
     "空玉の連続記録リマインド": {
       "localizations": {
         "en": {
@@ -3402,6 +3635,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "Soradama is made by one person"
+          }
+        }
+      }
+    },
+    "空玉バックアップ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orb Backup"
+          }
+        }
+      }
+    },
+    "空玉をバックアップ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back Up Orbs"
+          }
+        }
+      }
+    },
+    "空玉を復元しました（追加: %1$lld個、更新: %2$lld個）。": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restored your orbs (added: %1$lld, updated: %2$lld)."
+          }
+        }
+      }
+    },
+    "空玉を復元しました（追加: %lld個、更新: %lld個）。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restored your orbs (added: %lld, updated: %lld)."
           }
         }
       }
@@ -3472,6 +3746,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "About the price of a coffee"
+          }
+        }
+      }
+    },
+    "自分の空に設定": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set as My Sky"
           }
         }
       }
@@ -3576,6 +3860,37 @@
         }
       }
     },
+    "追加 %1$lld個、更新 %2$lld個。今ある別の日の空玉は削除されません。": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld added, %2$lld updated. Orbs from other days will not be deleted."
+          }
+        }
+      }
+    },
+    "追加 %lld個、更新 %lld個。今ある別の日の空玉は削除されません。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld added, %lld updated. Orbs from other days will not be deleted."
+          }
+        }
+      }
+    },
+    "追加・更新して復元": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore and Apply Changes"
+          }
+        }
+      }
+    },
     "追加後にウィジェットをタップすると、空玉コレクションが開きます。": {
       "localizations": {
         "en": {
@@ -3676,6 +3991,16 @@
         }
       }
     },
+    "都市を選ぶ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a city"
+          }
+        }
+      }
+    },
     "都市名で検索(例: 大阪、Paris)": {
       "localizations": {
         "en": {
@@ -3712,6 +4037,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skies collected"
+          }
+        }
+      }
+    },
+    "集めた空玉をJSONファイルに保存できます。復元では、今ある空玉を消さずにバックアップを追加・更新します。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save your collected orbs as a JSON file. Restoring adds or updates the backup without deleting the orbs already here."
           }
         }
       }

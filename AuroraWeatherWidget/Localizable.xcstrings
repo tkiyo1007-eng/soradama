@@ -407,6 +407,26 @@
         }
       }
     },
+    "保存済み": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved"
+          }
+        }
+      }
+    },
+    "保存済みの天気": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved weather"
+          }
+        }
+      }
+    },
     "入道雲の空": {
       "localizations": {
         "en": {

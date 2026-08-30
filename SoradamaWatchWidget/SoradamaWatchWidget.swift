@@ -7,11 +7,15 @@ struct WatchWeatherEntry: TimelineEntry {
     let date: Date
     let placeName: String
     let weather: WeatherBundle?
+    let cachedAt: Date?
+
+    var isCached: Bool { cachedAt != nil }
 
     static let placeholder = WatchWeatherEntry(
         date: .now,
         placeName: String(localized: "東京"),
-        weather: nil
+        weather: nil,
+        cachedAt: nil
     )
 }
 
@@ -36,8 +40,22 @@ struct WatchWeatherProvider: TimelineProvider {
 
     private func makeEntry() async -> WatchWeatherEntry {
         let place = SharedStore.lastPlace()
-        let weather = try? await service.fetch(latitude: place.latitude, longitude: place.longitude)
-        return WatchWeatherEntry(date: Date(), placeName: place.name, weather: weather)
+        do {
+            let weather = try await service.fetch(
+                latitude: place.latitude,
+                longitude: place.longitude
+            )
+            WeatherSnapshotCache.save(weather, for: place)
+            return WatchWeatherEntry(date: Date(), placeName: place.name, weather: weather, cachedAt: nil)
+        } catch {
+            let cached = WeatherSnapshotCache.loadSnapshot(for: place)
+            return WatchWeatherEntry(
+                date: Date(),
+                placeName: place.name,
+                weather: cached?.weather,
+                cachedAt: cached?.savedAt
+            )
+        }
     }
 }
 
@@ -52,14 +70,29 @@ private func circularAccessibilityText(_ entry: WatchWeatherEntry) -> String {
     guard let weather = entry.weather else {
         return String(localized: "天気を取得できません")
     }
-    return String(localized: "\(weather.kind.label)、\(degrees(weather.temperature))")
+    let currentConditions = String(localized: "\(weather.kind.label)、\(degrees(weather.temperature))")
+    guard entry.isCached else { return currentConditions }
+    return currentConditions + " · " + cachedStatusText(entry)
 }
 
 private func rectangularAccessibilityText(_ entry: WatchWeatherEntry) -> String {
     guard let weather = entry.weather else {
         return String(localized: "\(entry.placeName)、天気を取得できません")
     }
-    return String(localized: "\(entry.placeName)、\(weather.kind.label)、\(degrees(weather.temperature))")
+    let currentConditions = String(
+        localized: "\(entry.placeName)、\(weather.kind.label)、\(degrees(weather.temperature))"
+    )
+    guard entry.isCached else { return currentConditions }
+    return currentConditions + " · " + cachedStatusText(entry)
+}
+
+private func cachedStatusText(_ entry: WatchWeatherEntry) -> String {
+    guard let cachedAt = entry.cachedAt else { return "" }
+    let formatter = RelativeDateTimeFormatter()
+    formatter.unitsStyle = .full
+    return String(localized: "保存済みの天気")
+        + " · "
+        + formatter.localizedString(for: cachedAt, relativeTo: entry.date)
 }
 
 // MARK: - 円形(文字盤の丸い枠)
@@ -112,6 +145,11 @@ struct SoradamaRectangularComplication: Widget {
                     Text(entry.placeName)
                         .font(.caption2)
                         .lineLimit(1)
+                    if entry.isCached {
+                        Image(systemName: "clock.arrow.circlepath")
+                            .font(.caption2)
+                            .accessibilityHidden(true)
+                    }
                 }
                 Text(degrees(entry.weather?.temperature))
                     .font(.system(size: 22, weight: .semibold, design: .rounded))
@@ -154,7 +192,8 @@ struct SoradamaInlineComplication: Widget {
 
     private func inlineText(_ entry: WatchWeatherEntry) -> String {
         guard let weather = entry.weather else { return String(localized: "そらだま --°") }
-        return "\(degrees(weather.temperature)) \(weather.kind.label)"
+        let prefix = entry.isCached ? "↻ " : ""
+        return "\(prefix)\(degrees(weather.temperature)) \(weather.kind.label)"
     }
 }
 

@@ -7,7 +7,7 @@ struct TemperatureChartCard: View {
     let units: UnitSystem
 
     private var points: [(date: Date, value: Double)] {
-        weather.hours.map { ($0.date, units.convert($0.temperature)) }
+        weather.upcomingHours().map { ($0.date, units.convert($0.temperature)) }
     }
 
     var body: some View {

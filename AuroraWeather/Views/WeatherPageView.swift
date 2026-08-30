@@ -95,15 +95,25 @@ struct WeatherPageView: View {
                     DetailsGrid(weather: weather, degrees: viewModel.degrees, units: viewModel.units)
                         .revealed(cardsAppeared, order: 2, reduceMotion: reduceMotion)
 
-                    RadarCardButton { showRadar = true }
-                        .revealed(cardsAppeared, order: 3, reduceMotion: reduceMotion)
+                    // 気象庁の高解像度レーダーは日本周辺限定。
+                    // 海外で利用できない機能を主要導線として見せない。
+                    if RadarService.isCovered(latitude: place.latitude, longitude: place.longitude) {
+                        RadarCardButton { showRadar = true }
+                            .revealed(cardsAppeared, order: 3, reduceMotion: reduceMotion)
+                    }
 
                     TemperatureChartCard(weather: weather, units: viewModel.units)
                         .revealed(cardsAppeared, order: 4, reduceMotion: reduceMotion)
                     DailyForecastCard(weather: weather, degrees: viewModel.degrees)
                         .revealed(cardsAppeared, order: 5, reduceMotion: reduceMotion)
 
-                    Text("データ提供: Open-Meteo.com / 気象庁")
+                    Group {
+                        if RadarService.isCovered(latitude: place.latitude, longitude: place.longitude) {
+                            Text("データ提供: Open-Meteo.com / 気象庁")
+                        } else {
+                            Text("データ提供: Open-Meteo.com")
+                        }
+                    }
                         .font(.caption2)
                         .foregroundStyle(.white.opacity(0.45))
                         .frame(maxWidth: .infinity)

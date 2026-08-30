@@ -2,15 +2,36 @@ import SwiftUI
 
 /// 都市検索 + 保存地点の管理シート
 struct CitySearchView: View {
+    enum Purpose: Equatable {
+        case browse
+        case choosePrimary
+    }
+
     @Bindable var viewModel: WeatherViewModel
+    /// オンボーディングから開いた場合だけ渡される。
+    /// シートを閉じただけでは呼ばず、ホーム地点が確定したときだけ呼ぶ。
+    let onPrimaryPlaceSelected: (() -> Void)?
+    let purpose: Purpose
     @Environment(\.dismiss) private var dismiss
 
     @State private var query = ""
     @State private var results: [GeoPlace] = []
     @State private var isSearching = false
+    @State private var isSelecting = false
     @State private var searchTask: Task<Void, Never>?
+    @State private var pendingPlaceChoice: SavedPlace?
 
     private let geocoding = GeocodingService()
+
+    init(
+        viewModel: WeatherViewModel,
+        purpose: Purpose = .browse,
+        onPrimaryPlaceSelected: (() -> Void)? = nil
+    ) {
+        self.viewModel = viewModel
+        self.purpose = purpose
+        self.onPrimaryPlaceSelected = onPrimaryPlaceSelected
+    }
 
     var body: some View {
         NavigationStack {
@@ -18,11 +39,24 @@ struct CitySearchView: View {
                 // 現在地
                 Section {
                     Button {
-                        dismiss()
-                        Task { await viewModel.useCurrentLocation() }
+                        chooseCurrentLocation()
                     } label: {
-                        Label("現在地を使う", systemImage: "location.fill")
-                            .foregroundStyle(Color.accentColor)
+                        HStack {
+                            Label("現在地を使う", systemImage: "location.fill")
+                                .foregroundStyle(Color.accentColor)
+                            Spacer()
+                            if isSelecting {
+                                ProgressView()
+                            }
+                        }
+                    }
+                    .disabled(isSelecting)
+
+                    if let message = viewModel.locationSelectionError {
+                        Text(message)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .accessibilityLabel(message)
                     }
                 }
 
@@ -99,6 +133,7 @@ struct CitySearchView: View {
                     }
                 }
             }
+            .disabled(isSelecting)
             .navigationTitle("地点を選ぶ")
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "都市名で検索(例: 大阪、Paris)")
@@ -111,6 +146,32 @@ struct CitySearchView: View {
                 }
             }
         }
+        .confirmationDialog(
+            "この都市をどう使いますか？",
+            isPresented: Binding(
+                get: { pendingPlaceChoice != nil },
+                set: { if !$0 { pendingPlaceChoice = nil } }
+            ),
+            titleVisibility: .visible
+        ) {
+            Button("自分の空に設定") {
+                guard let place = pendingPlaceChoice else { return }
+                pendingPlaceChoice = nil
+                selectAsPrimary(place)
+            }
+            Button("この都市の天気を見る") {
+                guard let place = pendingPlaceChoice else { return }
+                pendingPlaceChoice = nil
+                selectForBrowsing(place)
+            }
+            Button("キャンセル", role: .cancel) {
+                pendingPlaceChoice = nil
+            }
+        } message: {
+            if let place = pendingPlaceChoice {
+                Text("\(place.name)を自分の空にすると、空玉・通知・ウィジェット・Apple Watchもこの都市に変わります。")
+            }
+        }
     }
 
     private func isSaved(_ place: GeoPlace) -> Bool {
@@ -119,8 +180,43 @@ struct CitySearchView: View {
     }
 
     private func select(_ place: SavedPlace) {
-        dismiss()
-        Task { await viewModel.selectSearched(place) }
+        guard !isSelecting else { return }
+        if purpose == .browse {
+            pendingPlaceChoice = place
+            return
+        }
+        selectAsPrimary(place)
+    }
+
+    private func selectAsPrimary(_ place: SavedPlace) {
+        guard !isSelecting else { return }
+        isSelecting = true
+        Task {
+            await viewModel.selectPrimaryCity(place)
+            onPrimaryPlaceSelected?()
+            dismiss()
+        }
+    }
+
+    private func selectForBrowsing(_ place: SavedPlace) {
+        guard !isSelecting else { return }
+        isSelecting = true
+        Task {
+            await viewModel.selectSearched(place)
+            dismiss()
+        }
+    }
+
+    private func chooseCurrentLocation() {
+        guard !isSelecting else { return }
+        isSelecting = true
+        Task {
+            let succeeded = await viewModel.useCurrentLocation()
+            isSelecting = false
+            guard succeeded else { return }
+            onPrimaryPlaceSelected?()
+            dismiss()
+        }
     }
 
     /// 入力から 0.35 秒デバウンスして検索する

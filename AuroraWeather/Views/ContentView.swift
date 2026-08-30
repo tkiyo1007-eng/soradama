@@ -66,10 +66,9 @@ struct ContentView: View {
             }
 
             if !hasSeenOnboarding {
-                OnboardingView {
+                OnboardingView(viewModel: viewModel) {
                     withAnimation(.easeOut(duration: 0.4)) { hasSeenOnboarding = true }
-                    // ここではじめて位置情報の許可 → 初回読み込み → 最初の空玉の記録が走る
-                    Task { await viewModel.loadInitial() }
+                    // 地点の確定時に初回読み込みも開始済み。通信中でも選択は失われない。
                 }
                 .transition(.opacity)
                 .zIndex(10)
@@ -119,7 +118,10 @@ struct ContentView: View {
                 if activeSheet == .collection {
                     orbCollectionOpenedAt = Date()
                 }
-                Task { await viewModel.ensureLoaded(viewModel.selectionID) }
+                // 初回の地点選択前に東京フォールバックを裏で取得・記録しない。
+                if hasSeenOnboarding {
+                    Task { await viewModel.ensureLoaded(viewModel.selectionID) }
+                }
             } else {
                 pendingReviewEvent = nil
                 orbCollectionOpenedAt = nil
@@ -318,52 +320,59 @@ struct ContentView: View {
 private struct MiniOrbIcon: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    @ViewBuilder
     var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 20)) { timeline in
-            let breath = reduceMotion
-                ? 0.5
-                : (sin(timeline.date.timeIntervalSinceReferenceDate * 1.15) + 1) / 2
+        if reduceMotion {
+            // Reduce Motion時はTimelineView自体を生成せず、20fpsの更新も完全に止める。
+            icon(breath: 0.5)
+        } else {
+            TimelineView(.animation(minimumInterval: 1.0 / 20)) { timeline in
+                let breath = (sin(timeline.date.timeIntervalSinceReferenceDate * 1.15) + 1) / 2
+                icon(breath: breath)
+            }
+        }
+    }
+
+    private func icon(breath: Double) -> some View {
+        ZStack {
+            // 呼吸に合わせて外側へ広がるやわらかな光
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [Color(red: 0.55, green: 0.80, blue: 1.0).opacity(0.35 * breath), .clear],
+                        center: .center,
+                        startRadius: 2,
+                        endRadius: 16
+                    )
+                )
+                .frame(width: 34, height: 34)
+                .blendMode(.screen)
 
             ZStack {
-                // 呼吸に合わせて外側へ広がるやわらかな光
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Color(red: 0.35, green: 0.65, blue: 0.98), Color(red: 0.22, green: 0.30, blue: 0.72)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
                 Circle()
                     .fill(
                         RadialGradient(
-                            colors: [Color(red: 0.55, green: 0.80, blue: 1.0).opacity(0.35 * breath), .clear],
-                            center: .center,
-                            startRadius: 2,
-                            endRadius: 16
+                            colors: [.white.opacity(0.65 + 0.3 * breath), .clear],
+                            center: UnitPoint(x: 0.32, y: 0.25),
+                            startRadius: 0,
+                            endRadius: 8
                         )
                     )
-                    .frame(width: 34, height: 34)
-                    .blendMode(.screen)
-
-                ZStack {
-                    Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [Color(red: 0.35, green: 0.65, blue: 0.98), Color(red: 0.22, green: 0.30, blue: 0.72)],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                        )
-                    Circle()
-                        .fill(
-                            RadialGradient(
-                                colors: [.white.opacity(0.65 + 0.3 * breath), .clear],
-                                center: UnitPoint(x: 0.32, y: 0.25),
-                                startRadius: 0,
-                                endRadius: 8
-                            )
-                        )
-                    Circle()
-                        .strokeBorder(Color.white.opacity(0.45 + 0.25 * breath), lineWidth: 0.8)
-                }
-                .frame(width: 22, height: 22)
-                .scaleEffect(1 + 0.05 * breath)
+                Circle()
+                    .strokeBorder(Color.white.opacity(0.45 + 0.25 * breath), lineWidth: 0.8)
             }
-            .frame(width: 34, height: 34)
+            .frame(width: 22, height: 22)
+            .scaleEffect(1 + 0.05 * breath)
         }
+        .frame(width: 34, height: 34)
     }
 }
 

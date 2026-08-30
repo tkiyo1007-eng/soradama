@@ -7,11 +7,15 @@ struct WeatherEntry: TimelineEntry {
     let date: Date
     let placeName: String
     let weather: WeatherBundle?
+    let cachedAt: Date?
+
+    var isCached: Bool { cachedAt != nil }
 
     static let placeholder = WeatherEntry(
         date: .now,
         placeName: String(localized: "東京"),
-        weather: nil
+        weather: nil,
+        cachedAt: nil
     )
 }
 
@@ -39,8 +43,22 @@ struct WeatherTimelineProvider: TimelineProvider {
 
     private func makeEntry() async -> WeatherEntry {
         let place = SharedStore.lastPlace()
-        let weather = try? await service.fetch(latitude: place.latitude, longitude: place.longitude)
-        return WeatherEntry(date: Date(), placeName: place.name, weather: weather)
+        do {
+            let weather = try await service.fetch(
+                latitude: place.latitude,
+                longitude: place.longitude
+            )
+            WeatherSnapshotCache.save(weather, for: place)
+            return WeatherEntry(date: Date(), placeName: place.name, weather: weather, cachedAt: nil)
+        } catch {
+            let cached = WeatherSnapshotCache.loadSnapshot(for: place)
+            return WeatherEntry(
+                date: Date(),
+                placeName: place.name,
+                weather: cached?.weather,
+                cachedAt: cached?.savedAt
+            )
+        }
     }
 }
 
@@ -79,7 +97,20 @@ struct AuroraWeatherWidgetView: View {
         guard let weather = entry.weather else {
             return String(localized: "\(entry.placeName)、天気を取得できません")
         }
-        return String(localized: "\(entry.placeName)、\(weather.kind.label)、\(degrees(weather.temperature))")
+        let currentConditions = String(
+            localized: "\(entry.placeName)、\(weather.kind.label)、\(degrees(weather.temperature))"
+        )
+        guard entry.isCached else { return currentConditions }
+        return currentConditions + " · " + cachedStatusText
+    }
+
+    private var cachedStatusText: String {
+        guard let cachedAt = entry.cachedAt else { return "" }
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        return String(localized: "保存済みの天気")
+            + " · "
+            + formatter.localizedString(for: cachedAt, relativeTo: entry.date)
     }
 
     private var isAccessory: Bool {
@@ -162,10 +193,16 @@ struct AuroraWeatherWidgetView: View {
 
     private var rectangularView: some View {
         VStack(alignment: .leading, spacing: 1) {
-            Text(entry.placeName)
-                .font(.caption2)
-                .opacity(0.8)
-                .lineLimit(1)
+            HStack(spacing: 3) {
+                Text(entry.placeName)
+                    .lineLimit(1)
+                if entry.isCached {
+                    Image(systemName: "clock.arrow.circlepath")
+                        .accessibilityHidden(true)
+                }
+            }
+            .font(.caption2)
+            .opacity(0.8)
             HStack(spacing: 5) {
                 if entry.weather != nil {
                     WeatherIconView(kind: kind, isDay: isDay)
@@ -203,7 +240,11 @@ struct AuroraWeatherWidgetView: View {
             Text(weatherStatusText)
                 .font(.caption.weight(.medium))
                 .lineLimit(1)
-            if let weather = entry.weather {
+            if entry.isCached {
+                Label("保存済み", systemImage: "clock.arrow.circlepath")
+                    .font(.caption2)
+                    .lineLimit(1)
+            } else if let weather = entry.weather {
                 Text("最高\(degrees(weather.todayMax)) 最低\(degrees(weather.todayMin))")
                     .font(.caption2)
                     .opacity(0.85)
@@ -216,9 +257,16 @@ struct AuroraWeatherWidgetView: View {
     private var mediumView: some View {
         HStack(alignment: .center, spacing: 14) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(entry.placeName)
-                    .font(.footnote.weight(.semibold))
-                    .lineLimit(1)
+                HStack(spacing: 4) {
+                    Text(entry.placeName)
+                        .lineLimit(1)
+                    if entry.isCached {
+                        Label("保存済み", systemImage: "clock.arrow.circlepath")
+                            .font(.caption2)
+                            .lineLimit(1)
+                    }
+                }
+                .font(.footnote.weight(.semibold))
                 Text(degrees(entry.weather?.temperature))
                     .font(.system(size: 40, weight: .light))
                 if entry.weather != nil {
@@ -255,7 +303,7 @@ struct AuroraWeatherWidgetView: View {
 
     private func hourSample(_ weather: WeatherBundle) -> [HourForecast] {
         // 2 時間おきに 4 コマ
-        let candidates = weather.hours.dropFirst()
+        let candidates = weather.upcomingHours(from: entry.date).dropFirst()
         return Array(candidates.enumerated().filter { $0.offset % 2 == 0 }.map(\.element).prefix(4))
     }
 

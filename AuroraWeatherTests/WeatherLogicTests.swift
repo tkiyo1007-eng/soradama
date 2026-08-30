@@ -49,6 +49,46 @@ struct WeatherLogicTests {
         #expect(Self.bundle(hours: hours).maxPrecipitationProbability(withinHours: 5) == nil)
     }
 
+    @Test("オフライン予報は過去の時間と昨日を表示対象から除く")
+    func cachedForecastsExcludePastPeriods() throws {
+        let now = Date()
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC")!
+        let today = calendar.startOfDay(for: now)
+        let hours = [
+            HourForecast(id: 0, date: now.addingTimeInterval(-3 * 3600), temperature: 18, kind: .clear, isDay: true, precipitationProbability: 0),
+            HourForecast(id: 1, date: now.addingTimeInterval(-10 * 60), temperature: 19, kind: .clear, isDay: true, precipitationProbability: 0),
+            HourForecast(id: 2, date: now.addingTimeInterval(3600), temperature: 20, kind: .clear, isDay: true, precipitationProbability: 0),
+        ]
+        let days = [
+            DayForecast(id: 0, date: try #require(calendar.date(byAdding: .day, value: -1, to: today)), kind: .clear, tempMax: 17, tempMin: 9, precipitationProbability: 0),
+            DayForecast(id: 1, date: today, kind: .partlyCloudy, tempMax: 21, tempMin: 11, precipitationProbability: 10),
+            DayForecast(id: 2, date: try #require(calendar.date(byAdding: .day, value: 1, to: today)), kind: .rain, tempMax: 19, tempMin: 12, precipitationProbability: 70),
+        ]
+        let bundle = WeatherBundle(
+            fetchedAt: now.addingTimeInterval(-3 * 3600),
+            timeZoneID: "UTC",
+            temperature: 19,
+            apparentTemperature: 19,
+            kind: .clear,
+            isDay: true,
+            humidity: 50,
+            windSpeed: 3,
+            windDirection: 180,
+            pressure: 1013,
+            uvIndex: 2,
+            visibility: 10_000,
+            sunrise: today,
+            sunset: today.addingTimeInterval(43_200),
+            hours: hours,
+            days: days
+        )
+
+        #expect(bundle.upcomingHours(from: now).map(\.id) == [1, 2])
+        #expect(bundle.upcomingDays(from: now).map(\.id) == [1, 2])
+        #expect(bundle.dayForecast(for: now)?.id == 1)
+    }
+
     // MARK: - 一言と傘指数の食い違い
 
     /// 「☀️ 晴れ／空にひとつも雲がありません」の真下に「傘指数82% 傘が必須です」が
@@ -115,20 +155,29 @@ struct WeatherLogicTests {
         #expect(metric.distance(1000) == 1)
     }
 
+    @Test("初回の単位は端末の地域に合わせる")
+    func localeDefaultUnitSystem() {
+        #expect(UnitSystem.defaultSystem(for: .us) == .fahrenheit)
+        #expect(UnitSystem.defaultSystem(for: .metric) == .celsius)
+        #expect(UnitSystem.defaultSystem(for: .uk) == .celsius)
+    }
+
     // MARK: - 風向
 
     /// 負の角度や NaN が来ると配列外アクセスでクラッシュしていた。
     @Test("風向は負値・360超・NaN でもクラッシュしない")
     func windDirectionIsSafe() {
-        #expect(WindCompassView.directionName(0) == "北")
-        #expect(WindCompassView.directionName(90) == "東")
-        #expect(WindCompassView.directionName(180) == "南")
-        #expect(WindCompassView.directionName(270) == "西")
-        // 異常値でも落ちずに何かを返す
-        #expect(WindCompassView.directionName(-90) == "西")
-        #expect(WindCompassView.directionName(450) == "東")
-        _ = WindCompassView.directionName(.nan)
-        _ = WindCompassView.directionName(.infinity)
+        let cardinalDirections = [0.0, 90.0, 180.0, 270.0].map(WindCompassView.directionName)
+        let expectedDirections = ["北", "東", "南", "西"].map {
+            Bundle.main.localizedString(forKey: $0, value: $0, table: nil)
+        }
+        #expect(cardinalDirections == expectedDirections,
+                "0/90/180/270度が北/東/南/西に対応する")
+        #expect(WindCompassView.directionName(360) == WindCompassView.directionName(0))
+        #expect(WindCompassView.directionName(-90) == WindCompassView.directionName(270))
+        #expect(WindCompassView.directionName(450) == WindCompassView.directionName(90))
+        #expect(WindCompassView.directionName(.nan) == WindCompassView.directionName(0))
+        #expect(WindCompassView.directionName(.infinity) == WindCompassView.directionName(0))
     }
 
     // MARK: - WMO コードの対応
@@ -202,6 +251,7 @@ struct OrbLogicTests {
 
         #expect(orb.isMilestone == false)
         #expect(orb.timeOfDay == .day)
+        #expect(orb.hemisphere == .northern)
         #expect(orb.kind == .clear)
         #expect(orb.placeName == "東京")
     }
@@ -217,15 +267,20 @@ struct OrbLogicTests {
             precipProbability: 75.0,
             placeName: "大阪",
             isMilestone: true,
-            timeOfDay: .night
+            timeOfDay: .night,
+            hemisphere: .southern
         )
 
         let data = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(DailyOrb.self, from: data)
+        let json = String(decoding: data, as: UTF8.self)
 
         #expect(decoded == original)
         #expect(decoded.isMilestone)
         #expect(decoded.timeOfDay == .night)
+        #expect(decoded.hemisphere == .southern)
+        #expect(json.contains("\"hemisphere\":\"southern\""))
+        #expect(!json.contains("latitude"), "空玉JSONに正確な緯度は保存しない")
     }
 
     /// `String.hashValue` はプロセスごとに変わるため、再起動で模様が変わってしまった。
@@ -257,12 +312,70 @@ struct OrbLogicTests {
         #expect(Season.of(month: 12) == .winter)
     }
 
+    @Test("南半球では季節の視覚表現が北半球の半年後になる")
+    func southernHemisphereSeasonsAreReversed() {
+        #expect(Season.of(month: 4, hemisphere: .southern) == .autumn)
+        #expect(Season.of(month: 7, hemisphere: .southern) == .winter)
+        #expect(Season.of(month: 10, hemisphere: .southern) == .spring)
+        #expect(Season.of(month: 1, hemisphere: .southern) == .summer)
+    }
+
+    @Test("緯度は正確な座標を保存せず半球だけに変換する")
+    func latitudeDeterminesHemisphere() {
+        #expect(Hemisphere.at(latitude: 35.6762) == .northern)
+        #expect(Hemisphere.at(latitude: -33.8688) == .southern)
+        #expect(Hemisphere.at(latitude: 0) == .northern)
+        #expect(Hemisphere.at(latitude: nil) == .northern)
+        #expect(Hemisphere.at(latitude: .nan) == .northern)
+        #expect(Hemisphere.at(latitude: 91) == .northern)
+
+        #expect(Season.of(month: 7, latitude: -33.8688) == .winter)
+        #expect(Season.of(month: 7, latitude: 35.6762) == .summer)
+    }
+
+    @Test("空玉の季節だけを半球で反転し二十四節気と月相は保つ")
+    func dailyOrbLocalizesOnlyVisualSeason() {
+        let northern = DailyOrb(
+            dateKey: "2026-07-20",
+            kind: .clear,
+            tempMax: 30,
+            tempMin: 20,
+            humidity: 50,
+            precipProbability: nil,
+            placeName: "Tokyo",
+            timeOfDay: .night,
+            hemisphere: .northern
+        )
+        let southern = DailyOrb(
+            dateKey: northern.dateKey,
+            kind: northern.kind,
+            tempMax: northern.tempMax,
+            tempMin: northern.tempMin,
+            humidity: northern.humidity,
+            precipProbability: northern.precipProbability,
+            placeName: "Sydney",
+            timeOfDay: northern.timeOfDay,
+            hemisphere: .southern
+        )
+
+        #expect(northern.season == .summer)
+        #expect(southern.season == .winter)
+        #expect(northern.solarTerm == southern.solarTerm)
+        #expect(northern.moonPhase == southern.moonPhase)
+        #expect(northern.moonIllumination == southern.moonIllumination)
+    }
+
     @Test("空玉ずかんは天気8種 × 昼夜 の16マス")
     func zukanHasSixteenEntries() {
         #expect(SkyVariant.zukanEntries.count == 16)
         #expect(Set(SkyVariant.zukanEntries).count == 16, "ずかんに重複したマスがある")
         // 朝焼け・夕暮れはマジックアワー枠なので、ずかんの16マスには含めない
         #expect(!SkyVariant.zukanEntries.contains { $0.timeOfDay == .dawn || $0.timeOfDay == .dusk })
+
+        var collected = Set(SkyVariant.zukanEntries)
+        collected.insert(SkyVariant(kind: .clear, timeOfDay: .dawn))
+        collected.insert(SkyVariant(kind: .clear, timeOfDay: .dusk))
+        #expect(SkyVariant.zukanCollectedCount(in: collected) == 16)
     }
 
     /// 日の出・日の入りの前後1時間はマジックアワーとして扱う。

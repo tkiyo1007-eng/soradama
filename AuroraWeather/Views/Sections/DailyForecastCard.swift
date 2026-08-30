@@ -4,6 +4,7 @@ import SwiftUI
 struct DailyForecastCard: View {
     let weather: WeatherBundle
     let degrees: (Double) -> String
+    private var displayedDays: [DayForecast] { weather.upcomingDays() }
 
     /// キャッシュ表示中は先頭が昨日以前になりうるので、実日付で「今日」を判定する
     private func isToday(_ day: DayForecast) -> Bool {
@@ -12,13 +13,13 @@ struct DailyForecastCard: View {
         return calendar.isDate(day.date, inSameDayAs: Date())
     }
 
-    private var weekMin: Double { weather.days.map(\.tempMin).min() ?? 0 }
-    private var weekMax: Double { weather.days.map(\.tempMax).max() ?? 1 }
+    private var weekMin: Double { displayedDays.map(\.tempMin).min() ?? 0 }
+    private var weekMax: Double { displayedDays.map(\.tempMax).max() ?? 1 }
 
     var body: some View {
         GlassCard(title: "10日間予報", systemImage: "calendar") {
             VStack(spacing: 0) {
-                ForEach(Array(weather.days.enumerated()), id: \.element.id) { index, day in
+                ForEach(Array(displayedDays.enumerated()), id: \.element.id) { index, day in
                     DailyRow(
                         day: day,
                         isToday: isToday(day),
@@ -28,7 +29,7 @@ struct DailyForecastCard: View {
                         timeZone: weather.timeZone,
                         degrees: degrees
                     )
-                    if index < weather.days.count - 1 {
+                    if index < displayedDays.count - 1 {
                         Divider()
                             .overlay(Color.white.opacity(0.12))
                     }

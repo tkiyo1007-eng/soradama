@@ -4,11 +4,14 @@ import SwiftUI
 struct HourlyForecastCard: View {
     let weather: WeatherBundle
     let degrees: (Double) -> String
+    private var displayedHours: [HourForecast] { weather.upcomingHours() }
 
     /// 「今」と表示してよいコマ。オフラインでキャッシュを見ているときは
     /// 先頭が過去の時刻になっているので、配列の先頭かどうかで判断してはいけない。
     private var currentHourIndex: Int? {
-        Self.currentHourIndex(in: weather.hours, now: Date(), calendar: .current)
+        var calendar = Calendar.current
+        calendar.timeZone = weather.timeZone
+        return Self.currentHourIndex(in: displayedHours, now: Date(), calendar: calendar)
     }
 
     static func currentHourIndex(in hours: [HourForecast], now: Date, calendar: Calendar) -> Int? {
@@ -29,7 +32,7 @@ struct HourlyForecastCard: View {
         GlassCard(title: "時間ごとの予報", systemImage: "clock") {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 20) {
-                    ForEach(Array(weather.hours.enumerated()), id: \.element.id) { index, hour in
+                    ForEach(Array(displayedHours.enumerated()), id: \.element.id) { index, hour in
                         let isNow = index == currentHourIndex
                         VStack(spacing: 10) {
                             // 三項演算子の型は String に落ちるため、Text 任せでは翻訳されない。

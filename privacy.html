@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>そらだま(空玉)プライバシーポリシー</title>
+<link rel="canonical" href="https://tkiyo1007-eng.github.io/soradama/privacy.html">
+<link rel="alternate" hreflang="ja" href="https://tkiyo1007-eng.github.io/soradama/privacy.html">
+<link rel="alternate" hreflang="en" href="https://tkiyo1007-eng.github.io/soradama/privacy-en.html">
+<link rel="alternate" hreflang="x-default" href="https://tkiyo1007-eng.github.io/soradama/privacy-en.html">
 <style>
   body { font-family: -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
          max-width: 720px; margin: 0 auto; padding: 32px 20px 64px;
@@ -20,8 +24,6 @@
     .lang a { color: #7fb3f0; }
   }
 </style>
-<link rel="alternate" hreflang="ja" href="https://tkiyo1007-eng.github.io/soradama/privacy.html">
-<link rel="alternate" hreflang="en" href="https://tkiyo1007-eng.github.io/soradama/privacy-en.html">
 </head>
 <body>
 <p class="lang">日本語 · <a href="privacy-en.html" lang="en">English</a></p>
@@ -30,24 +32,24 @@
 <p>本ポリシーは、iOS / watchOS アプリ「そらだま(空玉)」(以下「本アプリ」)における利用者情報の取り扱いを定めるものです。</p>
 
 <h2>1. 収集する情報</h2>
-<p>本アプリは、利用者の個人情報を<strong>収集・保存・送信しません</strong>。アカウント登録は不要で、開発者が利用者のデータを取得するサーバーはありません。</p>
+<p>開発者は、利用者の氏名、メールアドレス、広告識別子、利用履歴などを収集・保存しません。アカウント登録は不要で、開発者が利用者データを受け取るサーバーもありません。天気取得に必要な位置情報の取り扱いは、次項のとおりです。</p>
 
 <h2>2. 位置情報について</h2>
-<p>現在地の天気を表示するため、利用者の許可を得た場合に限り端末の位置情報(緯度・経度)を利用します。位置情報は天気データの取得のために気象データ提供元へ座標として送信されるのみで、氏名等の個人を特定する情報と紐づけられることはなく、端末外に保存されることもありません。位置情報の利用はいつでも iOS の「設定」から無効にでき、その場合も都市名の検索でアプリをご利用いただけます。</p>
+<p>現在地の天気を表示するため、利用者の許可を得た場合に限り端末の位置情報(緯度・経度)を利用します。位置情報は天気データの取得のために気象データ提供元へ、現在地の地点名を取得するためにAppleの地点名取得サービスへ座標として送信されます。本アプリと開発者はその座標を氏名等の情報に紐づけず、開発者が管理するサーバーへ保存しません。外部サービスによる通信データの処理には、各提供元の方針が適用されます。位置情報の利用はいつでもiPhoneまたはApple Watchの「設定」から無効にでき、その場合もiPhoneでは都市名の検索でアプリをご利用いただけます。</p>
 
 <h2>3. 外部サービス</h2>
-<p>本アプリは天気データの取得に以下の外部サービスを利用します。送信されるのは天気取得に必要な座標・都市名のみです。</p>
+<p>本アプリは天気データの取得と地図表示に以下の外部サービスを利用します。アプリからのリクエストには天気取得に必要な座標または検索文字列が含まれ、通常のインターネット通信と同様に、提供元はIPアドレス等の接続情報を受け取る場合があります。</p>
 <ul>
   <li><a href="https://open-meteo.com/">Open-Meteo</a>(天気予報データ)</li>
   <li><a href="https://www.jma.go.jp/bosai/nowc/">気象庁 高解像度降水ナウキャスト</a>(雨雲レーダー画像)</li>
-  <li>Apple マップ(地図表示)</li>
+  <li>Apple マップ／地点名取得サービス(地図表示・現在地の地点名取得)</li>
 </ul>
 
 <h2>4. トラッキング・広告</h2>
 <p>本アプリは、広告の表示、行動トラッキング、解析ツールによる利用状況の収集を一切行いません。</p>
 
 <h2>5. データの保存</h2>
-<p>選択した都市や最後に取得した天気データは、利便性のために<strong>端末内にのみ</strong>保存されます。アプリを削除するとこれらのデータも削除されます。</p>
+<p>選択した都市、最後に使った地点の座標、表示単位、最後に取得した天気データ、集めた空玉は、利便性のために<strong>利用者自身のiPhoneおよびペアリング済みApple Watch内</strong>に保存されます。ホーム地点の座標と表示単位は、AppleのWatchConnectivityを使ってiPhoneからペアリング済みApple Watchへ端末間で直接同期され、開発者のサーバーを介しません。利用者がバックアップを書き出す操作をした場合に限り、利用者自身が選択した保存先へバックアップファイルを作成します。開発者がそのファイルを受信することはありません。各端末のアプリ内データは、その端末から対応するアプリを削除すると削除されます。</p>
 
 <h2>6. お問い合わせ</h2>
 <p>本ポリシーに関するお問い合わせは、App Store の「そらだま」ページに記載のサポート連絡先までお願いします。</p>
@@ -55,6 +57,6 @@
 <h2>7. 改定</h2>
 <p>本ポリシーを改定する場合は、本ページにて告知します。</p>
 
-<footer>制定日: 2026年7月5日</footer>
+<footer>制定日: 2026年7月5日／最終改定日: 2026年8月30日</footer>
 </body>
 </html>

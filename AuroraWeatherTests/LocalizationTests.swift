@@ -17,6 +17,12 @@ struct LocalizationTests {
         return value == "__missing__" ? nil : value
     }
 
+    /// `String(localized:)` が現在選んでいるアプリ言語での期待値。
+    /// 英語端末でも日本語端末でも、enumとString Catalogのキー対応を同じテストで検証する。
+    private func currentLocalization(_ key: String) -> String {
+        Bundle.main.localizedString(forKey: key, value: key, table: nil)
+    }
+
     @Test("英語リソースがアプリに同梱されている")
     func englishBundleExists() throws {
         let path = Bundle.main.path(forResource: "en", ofType: "lproj")
@@ -40,30 +46,60 @@ struct LocalizationTests {
     /// 二十四節気と月相は数が多く、追加時に訳を入れ忘れやすい。
     @Test("二十四節気はすべて英訳されている")
     func everySolarTermIsTranslated() throws {
-        for term in SolarTerm.allCases {
-            // label / poem はどちらも String(localized:) 経由なので、
-            // 日本語の原文をキーに英訳が引けるはず。
-            let ja = term.label
-            let value = try #require(english(ja), "節気「\(ja)」の英訳が無い")
-            #expect(value != ja, "節気「\(ja)」が未翻訳")
+        // `term.label` は端末言語で既に翻訳されるため、英語端末でも
+        // 検証できるようString Catalogの日本語キーを明示して照合する。
+        let entries: [(term: SolarTerm, key: String)] = [
+            (.risshun, "立春"), (.usui, "雨水"), (.keichitsu, "啓蟄"),
+            (.shunbun, "春分"), (.seimei, "清明"), (.kokuu, "穀雨"),
+            (.rikka, "立夏"), (.shoman, "小満"), (.boshu, "芒種"),
+            (.geshi, "夏至"), (.shosho, "小暑"), (.taisho, "大暑"),
+            (.risshu, "立秋"), (.shosho2, "処暑"), (.hakuro, "白露"),
+            (.shubun, "秋分"), (.kanro, "寒露"), (.soko, "霜降"),
+            (.ritto, "立冬"), (.shosetsu, "小雪"), (.taisetsu, "大雪"),
+            (.toji, "冬至"), (.shokan, "小寒"), (.daikan, "大寒"),
+        ]
+        #expect(entries.map { $0.term } == SolarTerm.allCases,
+                "節気caseの追加・並べ替え時は翻訳キー対応も更新する")
+        for (term, key) in entries {
+            let value = try #require(english(key), "節気「\(key)」の英訳が無い")
+            #expect(value != key, "節気「\(key)」が未翻訳")
+            #expect(term.label == currentLocalization(key),
+                    "節気 \(term.rawValue) が誤った翻訳キーに対応している")
         }
     }
 
     @Test("月相はすべて英訳されている")
     func everyMoonPhaseIsTranslated() throws {
-        for phase in MoonPhase.allCases {
-            let ja = phase.label
-            let value = try #require(english(ja), "月相「\(ja)」の英訳が無い")
-            #expect(value != ja, "月相「\(ja)」が未翻訳")
+        let entries: [(phase: MoonPhase, key: String)] = [
+            (.newMoon, "新月"), (.waxingCrescent, "三日月"),
+            (.firstQuarter, "上弦の月"), (.waxingGibbous, "十三夜"),
+            (.fullMoon, "満月"), (.waningGibbous, "寝待月"),
+            (.lastQuarter, "下弦の月"), (.waningCrescent, "有明月"),
+        ]
+        #expect(entries.map { $0.phase } == MoonPhase.allCases,
+                "月相caseの追加・並べ替え時は翻訳キー対応も更新する")
+        for (phase, key) in entries {
+            let value = try #require(english(key), "月相「\(key)」の英訳が無い")
+            #expect(value != key, "月相「\(key)」が未翻訳")
+            #expect(phase.label == currentLocalization(key),
+                    "月相 \(phase.rawValue) が誤った翻訳キーに対応している")
         }
     }
 
     @Test("天気の種類はすべて英訳されている")
     func everyWeatherKindIsTranslated() throws {
-        for kind in WeatherKind.allCases {
-            let ja = kind.label
-            let value = try #require(english(ja), "天気「\(ja)」の英訳が無い")
-            #expect(value != ja, "天気「\(ja)」が未翻訳")
+        let entries: [(kind: WeatherKind, key: String)] = [
+            (.clear, "晴れ"), (.partlyCloudy, "晴れ時々くもり"),
+            (.cloudy, "くもり"), (.fog, "霧"), (.drizzle, "霧雨"),
+            (.rain, "雨"), (.snow, "雪"), (.thunderstorm, "雷雨"),
+        ]
+        #expect(entries.map { $0.kind } == WeatherKind.allCases,
+                "天気caseの追加・並べ替え時は翻訳キー対応も更新する")
+        for (kind, key) in entries {
+            let value = try #require(english(key), "天気「\(key)」の英訳が無い")
+            #expect(value != key, "天気「\(key)」が未翻訳")
+            #expect(kind.label == currentLocalization(key),
+                    "天気 \(kind.rawValue) が誤った翻訳キーに対応している")
         }
     }
 
@@ -142,6 +178,22 @@ struct LocalizationTests {
             "「編集」または「＋」から「ウィジェットを追加」を選びます",
             "「空玉」を検索し、「今日の空玉」を追加します",
             "追加後にウィジェットをタップすると、空玉コレクションが開きます。",
+        ]
+        for key in keys {
+            let value = try #require(english(key), "「\(key)」の英訳が無い")
+            #expect(value != key, "「\(key)」が英語版でも日本語のまま")
+        }
+    }
+
+    @Test("初回の地点選択に英訳がある")
+    func primaryLocationChoiceStringsAreTranslated() throws {
+        let keys = [
+            "現在地を使うか、都市を選んで\nあなたの空を決められます(あとから変更できます)",
+            "現在地を使う",
+            "現在地を取得しています…",
+            "都市を選ぶ",
+            "位置情報は現在地の天気を取得するためにだけ使います",
+            "データ提供: Open-Meteo.com",
         ]
         for key in keys {
             let value = try #require(english(key), "「\(key)」の英訳が無い")

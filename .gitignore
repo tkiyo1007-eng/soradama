@@ -2,6 +2,7 @@
 xcuserdata/
 *.xcuserstate
 DerivedData/
+.derived-*/
 build/
 *.moved-aside
 *.xcarchive

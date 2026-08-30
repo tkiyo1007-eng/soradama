@@ -263,6 +263,16 @@
         }
       }
     },
+    "保存済みの天気": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved weather"
+          }
+        }
+      }
+    },
     "入道雲の空": {
       "localizations": {
         "en": {
@@ -820,6 +830,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "A month with some rare skies in it"
+          }
+        }
+      }
+    },
+    "現在地": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current Location"
           }
         }
       }

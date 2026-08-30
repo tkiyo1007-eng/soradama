@@ -39,7 +39,12 @@ PAGES = {
 EXPECTED_ALTERNATES = {
     "ja": BASE_URL,
     "en": f"{BASE_URL}en.html",
-    "x-default": BASE_URL,
+    "x-default": f"{BASE_URL}en.html",
+}
+
+PRIVACY_PAGES = {
+    "privacy.html": f"{BASE_URL}privacy.html",
+    "privacy-en.html": f"{BASE_URL}privacy-en.html",
 }
 
 
@@ -169,6 +174,51 @@ class WebMetadataTests(unittest.TestCase):
                 urls = url_pattern.findall(html)
                 self.assertGreaterEqual(len(urls), 4)
                 self.assertEqual(set(urls), {APP_STORE_URL})
+
+    def test_english_page_uses_english_screenshot_assets(self):
+        html, _, _ = load_page("en.html")
+        sources = re.findall(r'<figure class="shot reveal"><img src="([^"]+)"', html)
+        self.assertEqual(sources, [f"assets/en/shot{index}.jpg" for index in range(1, 5)])
+        for source in sources:
+            self.assertTrue((REPO_ROOT / source).is_file(), source)
+
+    def test_english_copy_names_solar_terms_accurately(self):
+        html, _, _ = load_page("en.html")
+        self.assertIn("24 traditional Japanese solar terms", html)
+        self.assertNotIn("24 traditional Japanese seasons", html)
+
+    def test_privacy_pages_are_canonical_and_do_not_contradict_weather_requests(self):
+        expected_alternates = {
+            "ja": f"{BASE_URL}privacy.html",
+            "en": f"{BASE_URL}privacy-en.html",
+            "x-default": f"{BASE_URL}privacy-en.html",
+        }
+        forbidden_claims = {
+            "privacy.html": "個人情報を収集・保存・送信しません",
+            "privacy-en.html": "not collect, store, or transmit any personal information",
+        }
+
+        for filename, canonical in PRIVACY_PAGES.items():
+            with self.subTest(page=filename):
+                html = (REPO_ROOT / filename).read_text(encoding="utf-8")
+                parser = HeadMetadataParser()
+                parser.feed(html)
+                canonical_links = links_with_rel(parser, "canonical")
+                self.assertEqual(len(canonical_links), 1)
+                self.assertEqual(canonical_links[0].get("href"), canonical)
+                alternates = {
+                    link.get("hreflang"): link.get("href")
+                    for link in links_with_rel(parser, "alternate")
+                }
+                self.assertEqual(alternates, expected_alternates)
+                self.assertNotIn(forbidden_claims[filename], html)
+                self.assertIn("Open-Meteo", html)
+                if filename.endswith("-en.html"):
+                    self.assertIn("latitude", html)
+                    self.assertIn("WatchConnectivity", html)
+                else:
+                    self.assertIn("緯度", html)
+                    self.assertIn("WatchConnectivity", html)
 
 
 if __name__ == "__main__":

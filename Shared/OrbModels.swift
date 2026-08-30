@@ -25,13 +25,48 @@ enum Season: String, Codable, CaseIterable {
         }
     }
 
-    static func of(month: Int) -> Season {
+    static func of(month: Int, hemisphere: Hemisphere = .northern) -> Season {
+        let northernSeason: Season
         switch month {
-        case 3...5:   return .spring
-        case 6...8:   return .summer
-        case 9...11:  return .autumn
-        default:      return .winter
+        case 3...5:   northernSeason = .spring
+        case 6...8:   northernSeason = .summer
+        case 9...11:  northernSeason = .autumn
+        default:      northernSeason = .winter
         }
+
+        guard hemisphere == .southern else { return northernSeason }
+        return northernSeason.opposite
+    }
+
+    /// 緯度から現地の季節を決める。緯度0度と不正値は、
+    /// 旧バージョンとの互換性を保つため北半球として扱う。
+    static func of(month: Int, latitude: Double?) -> Season {
+        of(month: month, hemisphere: Hemisphere.at(latitude: latitude))
+    }
+
+    private var opposite: Season {
+        switch self {
+        case .spring: return .autumn
+        case .summer: return .winter
+        case .autumn: return .spring
+        case .winter: return .summer
+        }
+    }
+}
+
+/// 季節の視覚表現に使う半球。
+/// 空玉には正確な座標を保存せず、季節を反転するための最小情報だけを残す。
+enum Hemisphere: String, Codable, CaseIterable {
+    case northern
+    case southern
+
+    static func at(latitude: Double?) -> Hemisphere {
+        guard let latitude,
+              latitude.isFinite,
+              (-90.0...90.0).contains(latitude) else {
+            return .northern
+        }
+        return latitude < 0 ? .southern : .northern
     }
 }
 
@@ -84,6 +119,11 @@ struct SkyVariant: Hashable, Identifiable {
         .filter { $0 == .day || $0 == .night }
         .flatMap { time in WeatherKind.allCases.map { SkyVariant(kind: $0, timeOfDay: time) } }
 
+    /// 図鑑の16マスだけを数える。朝焼け・夕暮れは別枠なので進捗へ加えない。
+    static func zukanCollectedCount(in collected: Set<SkyVariant>) -> Int {
+        zukanEntries.lazy.filter { collected.contains($0) }.count
+    }
+
     var label: String {
         // 連結すると翻訳対象にならず「夜のPartly cloudy」と混ざる。
         // 補間を含む1つのキーにして、英語では "Partly cloudy at night" と訳す。
@@ -108,6 +148,9 @@ struct DailyOrb: Codable, Identifiable, Equatable {
     var isMilestone: Bool = false
     /// 玉が記録された時間帯。1.4.0 で追加したため、それ以前のデータは「昼」として扱う。
     var timeOfDay: TimeOfDay = .day
+    /// 季節の見た目を現地化するための半球情報。
+    /// 1.8.0 より前の空玉は日本向けだったため、北半球として扱う。
+    var hemisphere: Hemisphere = .northern
 
     enum CodingKeys: String, CodingKey {
         case dateKey
@@ -119,6 +162,7 @@ struct DailyOrb: Codable, Identifiable, Equatable {
         case placeName
         case isMilestone
         case timeOfDay
+        case hemisphere
     }
 
     init(
@@ -130,7 +174,8 @@ struct DailyOrb: Codable, Identifiable, Equatable {
         precipProbability: Double?,
         placeName: String,
         isMilestone: Bool = false,
-        timeOfDay: TimeOfDay = .day
+        timeOfDay: TimeOfDay = .day,
+        hemisphere: Hemisphere = .northern
     ) {
         self.dateKey = dateKey
         self.kind = kind
@@ -141,6 +186,7 @@ struct DailyOrb: Codable, Identifiable, Equatable {
         self.placeName = placeName
         self.isMilestone = isMilestone
         self.timeOfDay = timeOfDay
+        self.hemisphere = hemisphere
     }
 
     init(from decoder: Decoder) throws {
@@ -154,16 +200,21 @@ struct DailyOrb: Codable, Identifiable, Equatable {
         placeName = try container.decode(String.self, forKey: .placeName)
         isMilestone = try container.decodeIfPresent(Bool.self, forKey: .isMilestone) ?? false
         timeOfDay = try container.decodeIfPresent(TimeOfDay.self, forKey: .timeOfDay) ?? .day
+        hemisphere = try container.decodeIfPresent(Hemisphere.self, forKey: .hemisphere) ?? .northern
     }
 
     var id: String { dateKey }
 
     var date: Date? { Self.keyFormatter.date(from: dateKey) }
 
-    /// 玉が生まれた季節。日付から決まるので過去のデータにもさかのぼって効く。
+    /// 玉が生まれた季節。日付と記録地の半球から決まる。
+    /// 二十四節気と月相は日本文化・天文要素として別に計算する。
     var season: Season {
         guard let date else { return .spring }
-        return Season.of(month: Calendar.current.component(.month, from: date))
+        return Season.of(
+            month: Calendar.current.component(.month, from: date),
+            hemisphere: hemisphere
+        )
     }
 
     /// その日が二十四節気にあたるなら、その節気。過去の玉にもさかのぼって効く。
@@ -262,6 +313,8 @@ final class OrbStore {
 
     private static let storageKey = "soradama.dailyOrbs"
     private(set) var orbs: [String: DailyOrb]
+    /// 復元のプレビュー後に新しい空玉が記録されたことを検出する世代番号。
+    private(set) var revision: UInt64 = 0
 
     private static var stores: [UserDefaults] {
         var result: [UserDefaults] = [.standard]
@@ -289,8 +342,31 @@ final class OrbStore {
 
     /// 今日の玉を記録(同じ日は最新の取得内容で上書き)。
     /// 現在地(先頭ページ)の取得成功時に呼ばれる。
+    @available(*, deprecated, message: "Use recordToday(from:placeName:latitude:) to localize the orb's season.")
     @discardableResult
     func recordToday(from bundle: WeatherBundle, placeName: String) -> OrbRecordResult {
+        recordToday(from: bundle, placeName: placeName, hemisphere: .northern)
+    }
+
+    /// 緯度から半球だけを導き、正確な座標は空玉に保存しない。
+    @discardableResult
+    func recordToday(
+        from bundle: WeatherBundle,
+        placeName: String,
+        latitude: Double
+    ) -> OrbRecordResult {
+        recordToday(
+            from: bundle,
+            placeName: placeName,
+            hemisphere: Hemisphere.at(latitude: latitude)
+        )
+    }
+
+    private func recordToday(
+        from bundle: WeatherBundle,
+        placeName: String,
+        hemisphere: Hemisphere
+    ) -> OrbRecordResult {
         let key = DailyOrb.key(for: Date())
         let isFirstToday = orbs[key] == nil
         let today = bundle.days.first
@@ -323,9 +399,11 @@ final class OrbStore {
                 sunrise: bundle.sunrise,
                 sunset: bundle.sunset,
                 isDay: bundle.isDay
-            )
+            ),
+            hemisphere: hemisphere
         )
         orbs[key] = orb
+        revision &+= 1
         persist()
         return OrbRecordResult(
             isFirstToday: isFirstToday,
@@ -397,6 +475,36 @@ final class OrbStore {
         orbs.values.filter { $0.kind == variant.kind && $0.timeOfDay == variant.timeOfDay }.count
     }
 
+    /// 空玉コレクションを利用者が保管できるJSONへ変換する。
+    func exportBackupData() throws -> Data {
+        try OrbBackupCodec.encode(orbs: orbs)
+    }
+
+    /// ファイルをまだ反映せず、追加・更新される件数だけを検証して返す。
+    /// UIはこの結果を利用者へ示し、確認後に `importBackupData` を呼ぶ。
+    func previewBackupImport(_ data: Data) throws -> OrbBackupImportResult {
+        let archive = try OrbBackupCodec.decode(data)
+        return try OrbBackupCodec.merging(existing: orbs, importing: archive.orbs).result
+    }
+
+    /// バックアップを既存コレクションへ安全にマージする。
+    /// 同じ日はバックアップ側を採用するが、バックアップに無い日は削除しない。
+    @discardableResult
+    func importBackupData(
+        _ data: Data,
+        expectedRevision: UInt64? = nil
+    ) throws -> OrbBackupImportResult {
+        if let expectedRevision, expectedRevision != revision {
+            throw OrbBackupError.collectionChanged
+        }
+        let archive = try OrbBackupCodec.decode(data)
+        let outcome = try OrbBackupCodec.merging(existing: orbs, importing: archive.orbs)
+        try persistImported(outcome.orbs)
+        orbs = outcome.orbs
+        revision &+= 1
+        return outcome.result
+    }
+
     /// 指定した月の振り返り。玉が1つも無い月は nil。
     func summary(forMonthOf date: Date) -> MonthSummary? {
         let monthOrbs = orbs(inMonthOf: date)
@@ -422,6 +530,29 @@ final class OrbStore {
         if let data = try? JSONEncoder().encode(orbs) {
             for store in Self.stores {
                 store.set(data, forKey: Self.storageKey)
+            }
+        }
+    }
+
+    /// 外部ファイル由来の復元では、全ストアへの書込みとread-backを確認してから
+    /// メモリ上のコレクションを切り替える。途中失敗時は書込み済みストアを戻す。
+    private func persistImported(_ importedOrbs: [String: DailyOrb]) throws {
+        let data = try JSONEncoder().encode(importedOrbs)
+        let stores = Self.stores
+        let previous = stores.map { $0.data(forKey: Self.storageKey) }
+
+        for (index, store) in stores.enumerated() {
+            store.set(data, forKey: Self.storageKey)
+            guard store.data(forKey: Self.storageKey) == data else {
+                for rollbackIndex in 0...index {
+                    let rollbackStore = stores[rollbackIndex]
+                    if let oldData = previous[rollbackIndex] {
+                        rollbackStore.set(oldData, forKey: Self.storageKey)
+                    } else {
+                        rollbackStore.removeObject(forKey: Self.storageKey)
+                    }
+                }
+                throw OrbBackupError.persistenceFailed
             }
         }
     }

@@ -426,19 +426,23 @@ struct OrbCollectionView: View {
 
     private var zukanSection: some View {
         let collected = store.collectedSkies
-        let total = SkyVariant.zukanEntries.count
+        let entries = SkyVariant.zukanEntries
+        let total = entries.count
+        // 朝焼け・夕暮れは下の「季節の空」で扱うため、16マスの進捗には含めない。
+        // 全時間帯を数えると 18/16 のような不正な表示になる。
+        let completed = SkyVariant.zukanCollectedCount(in: collected)
         return VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("空玉ずかん")
                     .font(.headline)
                     .foregroundStyle(.white)
                 Spacer()
-                Text("\(collected.count)/\(total) コンプリート")
+                Text("\(completed)/\(total) コンプリート")
                     .font(.caption.weight(.medium))
                     .foregroundStyle(.white.opacity(0.6))
             }
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 4), spacing: 14) {
-                ForEach(SkyVariant.zukanEntries) { variant in
+                ForEach(entries) { variant in
                     let has = collected.contains(variant)
                     Button {
                         guard has else { return }
