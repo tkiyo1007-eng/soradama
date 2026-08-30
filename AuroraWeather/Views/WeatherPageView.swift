@@ -107,18 +107,21 @@ struct WeatherPageView: View {
                     DailyForecastCard(weather: weather, degrees: viewModel.degrees)
                         .revealed(cardsAppeared, order: 5, reduceMotion: reduceMotion)
 
-                    Group {
-                        if RadarService.isCovered(latitude: place.latitude, longitude: place.longitude) {
-                            Text("データ提供: Open-Meteo.com / 気象庁")
-                        } else {
-                            Text("データ提供: Open-Meteo.com")
+                    VStack(spacing: 3) {
+                        Text("最終更新: \(weather.fetchedAt.timeLabel(in: weather.timeZone))")
+                        Group {
+                            if RadarService.isCovered(latitude: place.latitude, longitude: place.longitude) {
+                                Text("データ提供: Open-Meteo.com / 気象庁")
+                            } else {
+                                Text("データ提供: Open-Meteo.com")
+                            }
                         }
                     }
-                        .font(.caption2)
-                        .foregroundStyle(.white.opacity(0.45))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
-                        .revealed(cardsAppeared, order: 6, reduceMotion: reduceMotion)
+                    .font(.caption2)
+                    .foregroundStyle(.white.opacity(0.45))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .revealed(cardsAppeared, order: 6, reduceMotion: reduceMotion)
                 }
                 .padding(.horizontal, 16)
             }

@@ -1643,6 +1643,16 @@
         }
       }
     },
+    "今日の天気が、空玉になる": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's weather becomes an orb"
+          }
+        }
+      }
+    },
     "今日の空、指先まで冷たそう": {
       "localizations": {
         "en": {
@@ -1799,6 +1809,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your location is used only to get weather for where you are"
+          }
+        }
+      }
+    },
+    "位置情報は現在地の天気だけに使います。許可しなくても都市を選んで使えます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your location is used only for local weather. You can choose a city instead without allowing access."
           }
         }
       }
@@ -1979,6 +1999,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "H %@ / L %@"
+          }
+        }
+      }
+    },
+    "最終更新: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updated: %@"
           }
         }
       }
@@ -2410,6 +2440,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weather data: Open-Meteo.com\nRain radar: Source, Japan Meteorological Agency (High-resolution Precipitation Nowcasts)\nhttps://www.jma.go.jp/bosai/nowc/"
+          }
+        }
+      }
+    },
+    "天気を確認した日の空が、その日だけの\nガラス玉として残ります": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each day you check the weather, that sky becomes\na one-of-a-kind glass orb"
           }
         }
       }
@@ -3071,6 +3111,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "This is how much sky you've gathered"
+          }
+        }
+      }
+    },
+    "毎日の空をカレンダーで振り返り、\n今日の空玉をウィジェットで楽しめます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Look back on your skies in a calendar,\nand enjoy today's orb as a widget"
           }
         }
       }
@@ -4037,6 +4087,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skies collected"
+          }
+        }
+      }
+    },
+    "集めて、ホーム画面にも飾れる": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collect your skies and keep one on your Home Screen"
           }
         }
       }

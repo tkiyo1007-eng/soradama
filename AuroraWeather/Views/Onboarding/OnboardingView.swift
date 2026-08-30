@@ -26,15 +26,15 @@ struct OnboardingView: View {
                 TabView(selection: $page) {
                     pageView(
                         orbKind: .clear,
-                        title: "空玉(そらだま)へようこそ",
-                        message: "その日の空を、小さなガラス玉に\n閉じ込める天気アプリです"
+                        title: "今日の天気が、空玉になる",
+                        message: "天気を確認した日の空が、その日だけの\nガラス玉として残ります"
                     )
                     .tag(0)
 
                     pageView(
                         orbKind: .rain,
-                        title: "毎日ひとつ、空がたまる",
-                        message: "アプリを開いた日の空が玉になって残ります。\n晴れも雨も、集めると宝物になります"
+                        title: "集めて、ホーム画面にも飾れる",
+                        message: "毎日の空をカレンダーで振り返り、\n今日の空玉をウィジェットで楽しめます"
                     )
                     .tag(1)
 
@@ -118,7 +118,7 @@ struct OnboardingView: View {
             }
             .disabled(isLocating)
 
-            Text("位置情報は現在地の天気を取得するためにだけ使います")
+            Text("位置情報は現在地の天気だけに使います。許可しなくても都市を選んで使えます")
                 .font(.caption)
                 .foregroundStyle(.white.opacity(0.7))
                 .multilineTextAlignment(.center)
