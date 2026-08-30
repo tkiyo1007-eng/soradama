@@ -13,7 +13,9 @@ Apple Lookup APIおよび日本・米国のApp Storeで一般公開を確認。A
 - 旧Submission `8c389e36-4bc0-414a-bce3-e061f30e776d` はスクリーンショット更新のため取り下げ済み
 - 日本語・英語ともスクリーンショット5枚、プレビュー0本。順序は Today → Collection → Month → Catalog → Radar
 - 1.7.1後の品質改善は `codex/post-1.7.1-improvements` の1.7.2 (30)。既存フィーチャーノミネートの対象で、1.8.0の差分を後付けで混ぜない
-- 世界向け改善の統合先はローカルの `codex/global-growth-1.8.0`、version/buildは1.8.0 (31)。未push・未archive・App Store Connect未変更。実機QA完了前にアーカイブ/アップロードしない
+- 世界向け改善の統合先は `codex/global-growth-1.8.0`、version/buildは1.8.0 (31)、提出コミットは `31b8560`。同ブランチはGitHubへpush済み
+- 1.8.0 (31)はarchive/upload済み。日本語名・副題・説明・キーワード・5枚を更新し、2026-08-30 16:48 JSTにApp Reviewへ提出。現在は**審査待ち**、Submission ID `fca4e372-7844-4f3c-9fcd-9094c71dc284`
+- ASCの既存英語ローカリゼーションで更新内容が必須になったため、その欄だけ日本語の更新文を登録。既存英語説明・キーワード・5枚は変更していない
 - アーカイブ/アップロードは認証済みCLIまたはXcode Organizerを使い、処理後にASC上のversion/buildを再確認する
 
 ### リリース履歴と、そこで直した不具合
@@ -39,6 +41,7 @@ Apple Lookup APIおよび日本・米国のApp Storeで一般公開を確認。A
 | 1.6.0/1.6.1 | **英語対応(344件)**。1.6.0 は提出後にスクショ撮影で「August 2026の空」という混在を見つけ、自分で取り下げて 1.6.1 として出し直した |
 | 1.7.0 | **投げ銭(Tip Jar)**。消耗型3段階、機能はアンロックしない。Open-Meteo に直接問い合わせ、任意の寄付は非営利扱いという回答を得たため無料プランのまま提供できる(下の教訓メモ参照) |
 | 1.7.1 | 英語版に残っていた表示不具合5件を修正。日本語・英語のストアスクリーンショットを各5枚へ更新し、build 29を提出 |
+| 1.8.0 | 「毎日の天気を、その日だけのガラス玉として残し、ホーム画面にも飾れる」を日本語の訴求軸に統一。初回導線・位置情報拒否時の都市代替・更新時刻表示・日本語商品ページと5枚を改善し、build 31を提出 |
 
 ### App Store Connect 側で回答済みの申告(再質問されたとき用)
 
@@ -247,12 +250,13 @@ App Store Connect → アプリのプライバシー:
 - 既存のイベント送信基盤はない。新規SDKは追加せず、初回起動、地点設定完了、初回天気表示、Widget設置は今回の母集団計測対象外とする。実機QAでは各到達点を手動記録する
 - 名前・副題・最初の3枚を同時に変えるため、公開後4週間は追加の大幅な商品ページ変更を避け、比較期間を確保する
 
-### 1.8.0 (31) 提出前の残作業
+### 1.8.0 (31) 提出記録と公開前の残確認
 
-- 初回導線の日本語/英語、正常時の最終更新時刻、位置情報許可/拒否と都市代替を実機確認する
-- 上記5枚をbuild 31の最新UIで撮影し、1284×2778 PNG・alphaなし・重複なしを検査する
-- 位置情報、圏外、タイムゾーン/地域、Widget/Watch同期、複数端末、VoiceOver、Release buildを確認する
-- Archive、upload、ASCのversion/build選択、メタデータ更新、審査提出は、前項がすべて完了してから行う
+- 2026-08-30 16:48 JST、build 31をApp Reviewへ提出。Submission ID `fca4e372-7844-4f3c-9fcd-9094c71dc284`、状態は「審査待ち」
+- 日本語5枚は1284×2778 PNG・RGB・alphaなし・重複なし。ASCで順序と5枚/プレビュー0本を再確認済み
+- Release build/analyze、Archive/upload、配布IPA署名、4ターゲットのDistribution entitlements/Privacy manifest、バージョン1.8.0/build 31を確認済み
+- Simulatorでは日本語初回導線、位置情報拒否後の都市代替、天気/更新時刻、コレクション、月間、レーダー、現在天気Widget、再起動、VoiceOver構造を確認済み
+- 残確認は、物理iPhoneとApple Watchの複数端末同期、実機のTodayOrb Widget、圏外、JSON復元、VoiceOver実読み上げ。iOS 27 beta SimulatorではTodayOrbだけギャラリー列挙されないが、Bundle登録・コンパイル・appex収録は確認済みで、WidgetKit/chronod側のbeta不安定が最有力
 
 ---
 
