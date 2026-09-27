@@ -506,4 +506,11 @@ T = {
     '🔮 連続%1$lld日の記録が今日で途切れそうです': '🔮 Your %1$lld-day streak may end today',
     '🔮 連続%lld日の記録が今日で途切れそうです': '🔮 Your %lld-day streak may end today',
     'アプリを開くと今日の空玉を受け取れます。': "Open the app to collect today's sky orb.",
+    # 2026-09-25 ハロウィン期間と今日の空玉の共有導線
+    "ハロウィンの空玉は10月31日まで": "Halloween orbs through October 31",
+    "自分の空の天気を取得できた日は、その日の空玉に秋の灯りが添えられます。下に引くと、もう一度取得できます。": "On days the app fetches weather for My Sky, that day's orb gets a small autumn lantern. Pull down to fetch again.",
+    "ハロウィンの空玉・10月31日まで": "Halloween orb · through October 31",
+    "タップして今日の空玉を見る・共有する": "Tap to view and share today's orb",
+    "今日の空玉を開きます。共有もできます": "Opens today's orb, which you can also share",
+    "左上の玉からカレンダーを開くと、\n集めた空の振り返りと共有ができます": "Tap the orb at the top left to open your calendar,\nlook back on your skies, and share them",
 }

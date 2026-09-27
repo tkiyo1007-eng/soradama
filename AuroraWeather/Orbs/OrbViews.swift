@@ -52,11 +52,25 @@ enum OrbCalendarLayout {
     }
 }
 
+/// 詳細の共有画像を作り直す条件。別の日の玉に切り替えたときに加え、
+/// 開いたまま日付が変わる・前面復帰で期間が終わるなど季節の飾りの有無が変わったときも作り直し、
+/// 画面の見た目と共有される画像を一致させる。
+struct OrbShareImageKey: Hashable {
+    let dateKey: String
+    let isHalloween: Bool
+
+    init(orb: DailyOrb, seasonal: SeasonalContext) {
+        dateKey = orb.dateKey
+        isHalloween = seasonal.decorates(orb)
+    }
+}
+
 // MARK: - 空玉コレクション画面
 
 struct OrbCollectionView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.seasonalContext) private var seasonal
     @AppStorage(TodayOrbWidgetDiscovery.dismissedKey) private var isWidgetGuideDismissed = false
     @State private var displayedMonth = Date()
     @State private var selectedOrb: DailyOrb?
@@ -74,6 +88,12 @@ struct OrbCollectionView: View {
     @State private var showWidgetGuide = false
 
     private let store = OrbStore.shared
+
+    /// `initialSelectedOrb` を渡すと、その玉の詳細(共有ボタン付き)を開いた状態で表示する。
+    /// 天気画面の「今日の空玉」から、記録した玉を見て共有するまでを1タップにするため。
+    init(initialSelectedOrb: DailyOrb? = nil) {
+        _selectedOrb = State(initialValue: initialSelectedOrb)
+    }
 
     /// 設定で選ばれた気温の単位(摂氏/華氏)に合わせて表示する
     private static func degrees(_ celsius: Double) -> String {
@@ -342,6 +362,7 @@ struct OrbCollectionView: View {
                     selectedOrb = orb
                 } label: {
                     OrbView(orb: orb, size: 38)
+                        .halloweenOrbAccent(seasonal.decorates(orb), size: 38)
                 }
                 .buttonStyle(.plain)
             } else {
@@ -623,6 +644,7 @@ struct OrbCollectionView: View {
 
             VStack(spacing: 14) {
                 OrbView(orb: orb, size: 130)
+                    .halloweenOrbAccent(seasonal.decorates(orb), size: 130)
                     .padding(.top, 8)
                 VStack(spacing: 4) {
                     if let date = orb.date {
@@ -706,9 +728,11 @@ struct OrbCollectionView: View {
             )
             .padding(.horizontal, 44)
         }
-        .task(id: orb.dateKey) {
+        .task(id: OrbShareImageKey(orb: orb, seasonal: seasonal)) {
             orbShareImage = nil
-            let renderer = ImageRenderer(content: singleOrbShareCard(orb))
+            let renderer = ImageRenderer(
+                content: singleOrbShareCard(orb, isHalloween: seasonal.decorates(orb))
+            )
             renderer.scale = 3
             if let uiImage = renderer.uiImage {
                 orbShareImage = Image(uiImage: uiImage)
@@ -764,9 +788,10 @@ struct OrbCollectionView: View {
     }
 
     /// 1日ぶんの空玉をSNSに貼れる縦型カード
-    private func singleOrbShareCard(_ orb: DailyOrb) -> some View {
+    private func singleOrbShareCard(_ orb: DailyOrb, isHalloween: Bool) -> some View {
         VStack(spacing: 12) {
             OrbView(orb: orb, size: 120, animated: false)
+                .halloweenOrbAccent(isHalloween, size: 120)
                 .padding(.top, 6)
             if let date = orb.date {
                 Text(date.formatted(.dateTime.locale(Locale.current).year().month().day().weekday()))

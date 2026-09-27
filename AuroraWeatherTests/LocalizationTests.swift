@@ -163,10 +163,27 @@ struct LocalizationTests {
             "最初の空を集めました",
             "タップしてコレクションを見る",
             "空玉コレクションを開きます",
+            "タップして今日の空玉を見る・共有する",
+            "今日の空玉を開きます。共有もできます",
+            "左上の玉からカレンダーを開くと、\n集めた空の振り返りと共有ができます",
         ]
         for key in keys {
             let value = try #require(english(key), "「\(key)」の英訳が無い")
             #expect(value != key, "「\(key)」が英語版でも日本語のまま")
+        }
+    }
+
+    @Test("2026年ハロウィン期間の文言に英訳がある")
+    func halloween2026StringsAreTranslated() throws {
+        let keys = [
+            "ハロウィンの空玉・10月31日まで",
+            "ハロウィンの空玉は10月31日まで",
+            "自分の空の天気を取得できた日は、その日の空玉に秋の灯りが添えられます。下に引くと、もう一度取得できます。",
+        ]
+        for key in keys {
+            let value = try #require(english(key), "「\(key)」の英訳が無い")
+            #expect(value != key, "「\(key)」が英語版でも日本語のまま")
+            #expect(!value.contains { $0.isHiragana }, "「\(key)」の訳にひらがなが混じっている: \(value)")
         }
     }
 

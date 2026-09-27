@@ -14,6 +14,7 @@ struct WeatherPageView: View {
     @State private var cardsAppeared = false
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.seasonalContext) private var seasonal
 
     private var collapseProgress: Double {
         (Double(-scrollOffset) / 140).clamped(to: 0...1)
@@ -81,12 +82,20 @@ struct WeatherPageView: View {
                         TodayOrbCard(
                             orb: orb,
                             streak: OrbStore.shared.streak,
-                            isExpanded: !hasOpenedTodayOrbCard
+                            isExpanded: !hasOpenedTodayOrbCard,
+                            isHalloween: seasonal.decorates(orb)
                         ) {
                             hasOpenedTodayOrbCard = true
                             onOpenCollection()
                         }
                         .revealed(cardsAppeared, order: 0, reduceMotion: reduceMotion)
+                    } else if seasonal.isHalloween,
+                              place.id == viewModel.pages.first?.id,
+                              !viewModel.loadingIDs.contains(place.id) {
+                        // 期間中でも、今日の玉が無い(通信失敗・保存済みの天気だけ)日は
+                        // 記録済みと見せず、記録される条件と取り直し方だけを案内する。
+                        SeasonalRecordHint()
+                            .revealed(cardsAppeared, order: 0, reduceMotion: reduceMotion)
                     }
 
                     HourlyForecastCard(weather: weather, degrees: viewModel.degrees)
@@ -159,6 +168,8 @@ struct TodayOrbCard: View {
     let orb: DailyOrb
     let streak: Int
     let isExpanded: Bool
+    /// 開催中の今日の玉だけ true。期間の一言と控えめな光を添える。
+    var isHalloween: Bool = false
     let action: () -> Void
 
     var body: some View {
@@ -169,8 +180,9 @@ struct TodayOrbCard: View {
             ) {
                 OrbView(
                     orb: orb,
-                    size: dynamicTypeSize.isAccessibilitySize ? 50 : (isExpanded ? 68 : 50)
+                    size: orbSize
                 )
+                    .halloweenOrbAccent(isHalloween, size: orbSize)
                     .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: isExpanded ? 5 : 3) {
@@ -193,8 +205,15 @@ struct TodayOrbCard: View {
                         .font(.caption.weight(.medium))
                         .foregroundStyle(Color(red: 0.72, green: 0.86, blue: 1.0))
 
+                    if isHalloween {
+                        Text("ハロウィンの空玉・10月31日まで")
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(HalloweenPalette.text)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+
                     if isExpanded {
-                        Label("タップしてコレクションを見る", systemImage: "sparkles.rectangle.stack")
+                        Label("タップして今日の空玉を見る・共有する", systemImage: "square.and.arrow.up")
                             .font(.caption2.weight(.semibold))
                             .foregroundStyle(.white.opacity(0.82))
                             .padding(.top, 2)
@@ -213,24 +232,33 @@ struct TodayOrbCard: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(isExpanded ? 16 : 13)
             .background(
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.18, green: 0.20, blue: 0.42).opacity(0.92),
-                        Color(red: 0.12, green: 0.16, blue: 0.34).opacity(0.92),
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
+                isHalloween
+                    ? HalloweenPalette.cardBackground
+                    : LinearGradient(
+                        colors: [
+                            Color(red: 0.18, green: 0.20, blue: 0.42).opacity(0.92),
+                            Color(red: 0.12, green: 0.16, blue: 0.34).opacity(0.92),
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
                 in: RoundedRectangle(cornerRadius: 20, style: .continuous)
             )
             .overlay {
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .strokeBorder(Color.white.opacity(0.15), lineWidth: 0.8)
+                    .strokeBorder(
+                        isHalloween ? HalloweenPalette.pumpkin.opacity(0.6) : Color.white.opacity(0.15),
+                        lineWidth: isHalloween ? 1 : 0.8
+                    )
             }
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
-        .accessibilityHint("空玉コレクションを開きます")
+        .accessibilityHint("今日の空玉を開きます。共有もできます")
+    }
+
+    private var orbSize: CGFloat {
+        dynamicTypeSize.isAccessibilitySize ? 50 : (isExpanded ? 68 : 50)
     }
 }
 

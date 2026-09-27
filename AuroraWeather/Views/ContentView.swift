@@ -5,10 +5,14 @@ struct ContentView: View {
     private enum ActiveSheet: Hashable, Identifiable {
         case search
         case collection
+        /// 「今日の空玉」カードから開いたコレクション。今日の玉の詳細(共有付き)を最初に見せる。
+        case todayOrb
         case settings
         case wallpaper
 
         var id: Self { self }
+
+        var isCollection: Bool { self == .collection || self == .todayOrb }
     }
 
     @Environment(\.scenePhase) private var scenePhase
@@ -28,6 +32,8 @@ struct ContentView: View {
     /// シートを閉じてから依頼するまでの待機を識別し、途中のバックグラウンド移行で無効化する。
     @State private var reviewPromptToken: UUID?
     private let reviewPromptPolicy = ReviewPromptPolicy()
+    /// 期間限定の季節演出。日付の変化に追随させ、子の画面へ環境値で渡す。
+    @State private var seasonal = SeasonalContext.current()
 
     var body: some View {
         ZStack {
@@ -38,6 +44,11 @@ struct ContentView: View {
                 sunset: viewModel.currentBundle?.sunset
             )
 
+            if seasonal.isHalloween {
+                HalloweenSkyGlow()
+                    .transition(.opacity)
+            }
+
             // 初回案内の背後にある操作をVoiceOverの移動先に残さない。
             // ViewModelは保持し、地点選択が完了したら同じ状態で画面を表示する。
             if hasSeenOnboarding {
@@ -45,7 +56,7 @@ struct ContentView: View {
                     ForEach(viewModel.pages) { place in
                         WeatherPageView(place: place, viewModel: viewModel) {
                             Haptics.selection()
-                            activeSheet = .collection
+                            activeSheet = .todayOrb
                         }
                             .tag(place.id)
                     }
@@ -85,8 +96,10 @@ struct ContentView: View {
             case .search:
                 CitySearchView(viewModel: viewModel)
                     .presentationDetents([.large])
-            case .collection:
-                OrbCollectionView()
+            case .collection, .todayOrb:
+                OrbCollectionView(
+                    initialSelectedOrb: sheet == .todayOrb ? OrbStore.shared.orb(for: Date()) : nil
+                )
                     .onAppear {
                         orbCollectionOpenedAt = Date()
                         reviewPromptToken = nil
@@ -121,7 +134,7 @@ struct ContentView: View {
             // 前面復帰のたびに再取得を試みる(30分以内ならensureLoadedが弾く)
             if phase == .active {
                 // バックグラウンド滞在時間は「コレクションを見た時間」に含めない。
-                if activeSheet == .collection {
+                if activeSheet?.isCollection == true {
                     orbCollectionOpenedAt = Date()
                 }
                 // 初回の地点選択前に東京フォールバックを裏で取得・記録しない。
@@ -140,6 +153,8 @@ struct ContentView: View {
                 activeSheet = .collection
             }
         }
+        .environment(\.seasonalContext, seasonal)
+        .seasonalClock($seasonal)
         .onChange(of: viewModel.lastOrbEvent) { _, event in
             guard let event else { return }
             Haptics.success()
@@ -291,6 +306,7 @@ struct ContentView: View {
                 HStack(spacing: 10) {
                     if let orb = OrbStore.shared.orb(for: Date()) {
                         OrbView(orb: orb, size: 34)
+                            .halloweenOrbAccent(seasonal.decorates(orb), size: 34)
                     }
                     VStack(alignment: .leading, spacing: 1) {
                         Text(toastTitle(event))

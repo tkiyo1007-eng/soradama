@@ -88,7 +88,7 @@ struct OnboardingView: View {
             pageView(
                 orbKind: .rain,
                 title: "集めて、ホーム画面にも飾れる",
-                message: "毎日の空をカレンダーで振り返り、\n今日の空玉をウィジェットで楽しめます",
+                message: "左上の玉からカレンダーを開くと、\n集めた空の振り返りと共有ができます",
                 scrollable: scrollable
             )
         default:
