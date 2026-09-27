@@ -1,0 +1,67 @@
+JapaneseCityIndex.json — 日本の市区町村名のローカル検索補完
+
+原データ・出典
+GeoNames geographical database: https://www.geonames.org/
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+GeoNames は正確性・適時性・完全性を保証せず、データを現状有姿で提供しています。
+このファイルは GeoNames 原データを空玉用に抽出・加工したものであり、
+GeoNames による空玉の推奨・保証を意味しません。
+
+取得日: 2026-09-21
+入力ファイル（生成スクリプトは通信を行わず、取得済みZIPだけを読みます）:
+1. https://download.geonames.org/export/dump/JP.zip
+   SHA-256: 937e2ddc26aa90561317bf93f3ef6141367c0ca37bec91b4deb74cac477d4999
+2. https://download.geonames.org/export/dump/alternatenames/JP.zip
+   SHA-256: 395015a8ffb6f20f400434f2e8d78ce4ac89df8f5422d064dd57ff263de9ed67
+形式は各ZIP内 readme.txt の geoname / alternate names 表定義に従います。
+
+加工・抽出条件
+- 国コードJP、feature code ADM2/ADM3/ADM4を基準に、市・区・町・村で
+  終わる日本語別名を持つ行政レコードを抽出しました。郡、historic系の
+  feature code、親行政コードが欠落する孤立レコードは対象外です。
+- 日本語名・読みは、alternate names の言語コードjaで、historicや
+  colloquialが付かず、使用終了時期(to)が設定されていない日本語文字列のみ。
+  ローマ字・他言語表記・推測した読みは日本語検索aliasesに含めません。
+- 同じ行政コード内で正式日本語名（区以外は市町村の語尾を省いた名も）に
+  一致するPPL/PPLC/PPLA/PPLA2/PPLA3/PPLA4があれば、その実在レコードの
+  GeoNames ID・緯度・経度・人口を採用します。行政中心と居住地中心の混同を
+  減らすためで、座標や人口を新たに計算・推測していません。
+- 上越市は人口集中地点の GeoNames ID 6825489（37.14828, 138.23642）を採用。
+  行政レコード1860992の日本語表記・読みを検索用に併合しています。
+- 同名区を識別するため、区の表示名は親市付きの既存別名を使用します。
+  別名がない場合に限り、検証済みの行政コードによる親市名と区名を連結。
+  読みの推測ではありません。該当IDはJSON metadataに記録しています。
+- 英語表示はen別名、なければGeoNamesのnameを使用。区は親市名 / 区名で
+  表示を区別します。英語の名前から日本語・読みを作っていません。
+- 重複ID、同じ都道府県内の曖昧な表示名、不正座標は生成時に検証します。
+  JSONは決定的な順序で出力し、取得日・入力hash・件数をmetadataに保持します。
+
+収録範囲と制約
+この版は47都道府県の1,905行政地域（市792、町740、村182、区191）を収録。
+うち1,170件は対応する人口集中地点のID・座標を使用しています。
+これは公式の全国自治体台帳ではなく、完全網羅・最新の行政区分を保証しません。
+日本語ラベルのない地域、行政コード欠落地域、町丁目・集落・郡は対象外です。
+例: 原データの田尻町(1851189)・山添村(1848580)には採用条件を満たすja別名が
+ないため収録していません。検索自体は既存のオンライン検索で補われます。
+238件には採用できるかながなく、かな検索の網羅性も保証しません。
+GeoNamesでhistoricと分類されていない旧行政名が残る場合があります。
+浜松市の公式説明 https://www.city.hamamatsu.shizuoka.jp/kikaku/kuseido/ で
+2024年1月1日の区再編を確認し、元データにADM3として残る旧中区・東区・西区・
+南区・北区・浜北区の6レコードを明示除外しています。市と天竜区は保持。
+現行の中央区・浜名区は元データにないため、名称や座標を推測生成していません。
+除外ID: 1863291, 7418326, 7418329, 7506665, 7506666, 8739978。
+行政再編の反映を保証する用途・境界を判定する用途には使用できません。
+名称・人口・座標は生成時点のスナップショットです。APIの将来の更新と異なる
+ことがあり、位置の正確さ・現在の天気そのものをこの索引が保証するものではありません。
+
+再生成
+リポジトリルートで、同じ入力ZIPを使って以下を実行します:
+python3 scripts/build_japanese_city_index.py \
+  --places /path/to/JP.zip \
+  --alternate-names /path/to/JP-alternate.zip \
+  --acquired-date 2026-09-21 \
+  --output AuroraWeather/Resources/JapaneseCityIndex.json
+
+入力更新時は差分と自治体・同名区・代表地点・読みの検証を行ってください。
+日常のアプリ実行中にこの索引を取得・更新する外部通信はありません。

@@ -15,13 +15,10 @@ struct CitySearchView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var query = ""
-    @State private var results: [GeoPlace] = []
-    @State private var isSearching = false
+    @State private var search = CitySearchModel()
     @State private var isSelecting = false
-    @State private var searchTask: Task<Void, Never>?
+    @State private var locationSelectionTask: Task<Void, Never>?
     @State private var pendingPlaceChoice: SavedPlace?
-
-    private let geocoding = GeocodingService()
 
     init(
         viewModel: WeatherViewModel,
@@ -61,9 +58,9 @@ struct CitySearchView: View {
                 }
 
                 // 検索結果
-                if !results.isEmpty {
+                if !search.results.isEmpty {
                     Section("検索結果") {
-                        ForEach(results) { result in
+                        ForEach(search.results) { result in
                             Button {
                                 select(result.asSavedPlace)
                             } label: {
@@ -88,21 +85,30 @@ struct CitySearchView: View {
                                             .foregroundStyle(isSaved(result) ? Color.green : Color.accentColor)
                                     }
                                     .buttonStyle(.borderless)
+                                    .accessibilityIdentifier("citySearch.save.\(result.id)")
                                 }
                             }
+                            .accessibilityIdentifier("citySearch.result.\(result.id)")
                         }
                     }
-                } else if isSearching {
+                } else if search.isSearching {
                     Section {
                         HStack {
                             Spacer()
-                            ProgressView()
+                            ProgressView("検索中…")
                             Spacer()
                         }
                     }
+                } else if search.hasFailed {
+                    Section {
+                        Text("都市を検索できませんでした。通信状態を確認して、もう一度お試しください。")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                        Button("再試行") { search.search(query) }
+                    }
                 } else if !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     Section {
-                        Text("「\(query)」は見つかりませんでした。表記を変えるか、通信状態をご確認ください。")
+                        Text("「\(query)」は見つかりませんでした。別の表記や近くの都市名でお試しください。")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                     }
@@ -132,17 +138,27 @@ struct CitySearchView: View {
                         }
                     }
                 }
+                Section {
+                    WeatherAttributionFooter(showsCitySource: true)
+                }
             }
             .disabled(isSelecting)
             .navigationTitle("地点を選ぶ")
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "都市名で検索(例: 大阪、Paris)")
             .onChange(of: query) { _, newValue in
-                scheduleSearch(newValue)
+                search.search(newValue)
+            }
+            .onDisappear {
+                search.cancel()
+                cancelLocationSelection()
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("閉じる") { dismiss() }
+                    Button("閉じる") {
+                        cancelLocationSelection()
+                        dismiss()
+                    }
                 }
             }
         }
@@ -210,8 +226,11 @@ struct CitySearchView: View {
     private func chooseCurrentLocation() {
         guard !isSelecting else { return }
         isSelecting = true
-        Task {
+        locationSelectionTask = Task {
             let succeeded = await viewModel.useCurrentLocation()
+            // 取消済みの古い処理が、再表示後の状態や完了通知を変更しない。
+            guard !Task.isCancelled else { return }
+            locationSelectionTask = nil
             isSelecting = false
             guard succeeded else { return }
             onPrimaryPlaceSelected?()
@@ -219,25 +238,10 @@ struct CitySearchView: View {
         }
     }
 
-    /// 入力から 0.35 秒デバウンスして検索する
-    private func scheduleSearch(_ text: String) {
-        searchTask?.cancel()
-        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else {
-            results = []
-            isSearching = false
-            return
-        }
-        isSearching = true
-        searchTask = Task {
-            try? await Task.sleep(nanoseconds: 350_000_000)
-            guard !Task.isCancelled else { return }
-            let found = (try? await geocoding.search(trimmed)) ?? []
-            guard !Task.isCancelled else { return }
-            await MainActor.run {
-                results = found
-                isSearching = false
-            }
-        }
+    private func cancelLocationSelection() {
+        guard let locationSelectionTask else { return }
+        locationSelectionTask.cancel()
+        self.locationSelectionTask = nil
+        isSelecting = false
     }
 }

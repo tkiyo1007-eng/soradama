@@ -41,6 +41,13 @@
 			remoteGlobalIDString = A1000000000000000000000E;
 			remoteInfo = AuroraWeather;
 		};
+		F2000000000000000000000B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A10000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A1000000000000000000000E;
+			remoteInfo = AuroraWeather;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -85,6 +92,7 @@
 		C1000000000000000000000B /* SoradamaWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoradamaWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D10000000000000000000001 /* SoradamaWatchWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SoradamaWatchWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F10000000000000000000002 /* AuroraWeatherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AuroraWeatherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F20000000000000000000002 /* AuroraWeatherUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AuroraWeatherUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -164,6 +172,11 @@
 			path = AuroraWeatherTests;
 			sourceTree = "<group>";
 		};
+		F20000000000000000000003 /* AuroraWeatherUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AuroraWeatherUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +215,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F20000000000000000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -214,6 +234,7 @@
 				C1000000000000000000000A /* SoradamaWatch */,
 				D10000000000000000000002 /* SoradamaWatchWidget */,
 				F10000000000000000000003 /* AuroraWeatherTests */,
+				F20000000000000000000003 /* AuroraWeatherUITests */,
 				A1000000000000000000000C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -226,6 +247,7 @@
 				C1000000000000000000000B /* SoradamaWatch.app */,
 				D10000000000000000000001 /* SoradamaWatchWidgetExtension.appex */,
 				F10000000000000000000002 /* AuroraWeatherTests.xctest */,
+				F20000000000000000000002 /* AuroraWeatherUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -354,6 +376,29 @@
 			productReference = F10000000000000000000002 /* AuroraWeatherTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		F20000000000000000000001 /* AuroraWeatherUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F20000000000000000000007 /* Build configuration list for PBXNativeTarget "AuroraWeatherUITests" */;
+			buildPhases = (
+				F20000000000000000000004 /* Sources */,
+				F20000000000000000000005 /* Frameworks */,
+				F20000000000000000000006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F2000000000000000000000A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F20000000000000000000003 /* AuroraWeatherUITests */,
+			);
+			name = AuroraWeatherUITests;
+			packageProductDependencies = (
+			);
+			productName = AuroraWeatherUITests;
+			productReference = F20000000000000000000002 /* AuroraWeatherUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -372,6 +417,10 @@
 					};
 					C1000000000000000000000C = {
 						CreatedOnToolsVersion = 16.0;
+					};
+					F20000000000000000000001 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = A1000000000000000000000E;
 					};
 				};
 			};
@@ -395,6 +444,7 @@
 				C1000000000000000000000C /* SoradamaWatch */,
 				D10000000000000000000003 /* SoradamaWatchWidgetExtension */,
 				F10000000000000000000001 /* AuroraWeatherTests */,
+				F20000000000000000000001 /* AuroraWeatherUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -429,6 +479,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F10000000000000000000006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F20000000000000000000006 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -473,6 +530,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F20000000000000000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -495,6 +559,11 @@
 			isa = PBXTargetDependency;
 			target = A1000000000000000000000E /* AuroraWeather */;
 			targetProxy = F100000000000000000000B /* PBXContainerItemProxy */;
+		};
+		F2000000000000000000000A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A1000000000000000000000E /* AuroraWeather */;
+			targetProxy = F2000000000000000000000B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -626,7 +695,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -644,7 +713,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.8.2;
 				CODE_SIGN_ENTITLEMENTS = AuroraWeather/AuroraWeather.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -661,7 +730,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -679,7 +748,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.8.2;
 				CODE_SIGN_ENTITLEMENTS = AuroraWeather/AuroraWeather.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -694,7 +763,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 36;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AuroraWeatherWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "そらだま";
@@ -705,7 +774,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.8.2;
 				CODE_SIGN_ENTITLEMENTS = AuroraWeatherWidget/AuroraWeatherWidget.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -721,7 +790,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 36;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AuroraWeatherWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "そらだま";
@@ -732,7 +801,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.8.2;
 				CODE_SIGN_ENTITLEMENTS = AuroraWeatherWidget/AuroraWeatherWidget.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -749,7 +818,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 36;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "そらだま";
@@ -762,7 +831,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.8.2;
 				CODE_SIGN_ENTITLEMENTS = SoradamaWatch/SoradamaWatch.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -781,7 +850,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 36;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "そらだま";
@@ -794,7 +863,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.8.2;
 				CODE_SIGN_ENTITLEMENTS = SoradamaWatch/SoradamaWatch.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -811,7 +880,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SoradamaWatchWidget/Info.plist;
@@ -822,7 +891,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.8.2;
 				CODE_SIGN_ENTITLEMENTS = SoradamaWatchWidget/SoradamaWatchWidget.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -839,7 +908,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SoradamaWatchWidget/Info.plist;
@@ -850,7 +919,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.8.2;
 				CODE_SIGN_ENTITLEMENTS = SoradamaWatchWidget/SoradamaWatchWidget.entitlements;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.watchkitapp.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -868,11 +937,11 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -887,17 +956,59 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = 5TH5JWL3M4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AuroraWeather.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AuroraWeather";
+			};
+			name = Release;
+		};
+		F20000000000000000000008 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = iphonesimulator;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AuroraWeather;
+			};
+			name = Debug;
+		};
+		F20000000000000000000009 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.tkiyo1007.soradama.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = iphonesimulator;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AuroraWeather;
 			};
 			name = Release;
 		};
@@ -954,6 +1065,15 @@
 			buildConfigurations = (
 				F10000000000000000000008 /* Debug */,
 				F1000000000000000000009 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F20000000000000000000007 /* Build configuration list for PBXNativeTarget "AuroraWeatherUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F20000000000000000000008 /* Debug */,
+				F20000000000000000000009 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

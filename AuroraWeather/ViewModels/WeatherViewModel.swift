@@ -190,20 +190,22 @@ final class WeatherViewModel {
     /// 現在地をホームへ戻す。成功したときだけ選択モードも更新する。
     @discardableResult
     func useCurrentLocation() async -> Bool {
-        do {
-            let located = try await resolveCurrentLocation()
-            setPrimaryPlace(located, mode: .currentLocation)
-            locationSelectionError = nil
-            Task { await self.ensureLoaded(located.id, force: true) }
-            return true
-        } catch {
-            locationSelectionError = error.soradamaMessage
-            return false
-        }
+        await LocationSelectionOperation.perform(
+            resolve: { try await self.resolveCurrentLocation() },
+            commit: { located in
+                self.setPrimaryPlace(located, mode: .currentLocation)
+                self.locationSelectionError = nil
+                Task { await self.ensureLoaded(located.id, force: true) }
+            },
+            reportError: { self.locationSelectionError = $0.soradamaMessage }
+        )
     }
 
     private func resolveCurrentLocation() async throws -> SavedPlace {
+        try Task.checkCancellation()
         let location = try await locationService.currentLocation()
+        // 測位待ちで画面を閉じた場合、地点名を得るための追加取得も開始しない。
+        try Task.checkCancellation()
         var name = String(localized: "現在地")
         var detail = ""
         if let placemark = try? await CLGeocoderBox.reverseGeocode(location) {
@@ -212,6 +214,7 @@ final class WeatherViewModel {
                 ?? String(localized: "現在地")
             detail = placemark.country ?? ""
         }
+        try Task.checkCancellation()
         return SavedPlace(
             name: name,
             detail: detail,

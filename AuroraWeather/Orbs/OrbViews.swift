@@ -102,6 +102,9 @@ struct OrbCollectionView: View {
                 ScrollView {
                     VStack(spacing: 18) {
                         monthHeader
+                        OrbRecordingGuide(initiallyExpanded: store.orbs.isEmpty) {
+                            dismiss()
+                        }
                         weekdayHeader
                         orbGrid
                         statsRow
@@ -112,12 +115,10 @@ struct OrbCollectionView: View {
                         ) {
                             widgetDiscoveryCard
                         }
-                        Text("アプリを開いた日の空が、玉になって残ります")
-                            .font(.caption)
-                            .foregroundStyle(.white.opacity(0.55))
-                            .padding(.top, 6)
                         zukanSection
                             .padding(.top, 20)
+                        WeatherAttributionFooter()
+                            .tint(Color(red: 0.72, green: 0.86, blue: 1.0))
                     }
                     .padding(16)
                 }

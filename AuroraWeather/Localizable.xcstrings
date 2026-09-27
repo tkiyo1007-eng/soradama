@@ -1,6 +1,90 @@
 {
   "sourceLanguage": "ja",
   "strings": {
+    "傘指数、情報なし": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Umbrella index, no data" } } }
+    },
+    "洗濯指数、情報なし": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Laundry index, no data" } } }
+    },
+    "戻る": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Back" } } }
+    },
+    "%lld / 3": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "%lld / 3" } } }
+    },
+    "データの出典と利用条件": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Data Sources and Terms" } } }
+    },
+    "天気データ: Open-Meteo": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Weather data: Open-Meteo" } } }
+    },
+    "都市情報: Open-Meteo": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "City information: Open-Meteo" } } }
+    },
+    "地点データ: GeoNames": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Location data: GeoNames" } } }
+    },
+    "ライセンス: CC BY 4.0": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "License: CC BY 4.0" } } }
+    },
+    "Open-Meteoの利用条件": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Open-Meteo Terms of Use" } } }
+    },
+    "雨雲レーダー: 気象庁": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Rain radar: Japan Meteorological Agency" } } }
+    },
+    "気象庁の利用規約": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "JMA Terms of Use" } } }
+    },
+    "天気と地点データ": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Weather and Location Data" } } }
+    },
+    "雨雲レーダー（日本周辺）": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Rain Radar (Japan and Surrounding Areas)" } } }
+    },
+    "アプリ内での加工": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "How the App Uses the Data" } } }
+    },
+    "空玉では提供データを単位換算し、グラフ・各種指標・空玉として表示しています。提供元による推奨を示すものではありません。": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Soradama converts the supplied data into your chosen units and displays it as charts, indices, and sky orbs. This does not imply endorsement by the data providers." } } }
+    },
+    "気象庁の高解像度降水ナウキャストを地図に重ねて表示しています。": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The Japan Meteorological Agency's High-resolution Precipitation Nowcasts are displayed as an overlay on the map." } } }
+    },
+    "空玉はいつ残る？": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "When are orbs saved?" } } }
+    },
+    "アプリで自分の空の天気を取得できたとき、自動で記録されます。": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "An orb is saved automatically when the app successfully fetches weather for My Sky." } } }
+    },
+    "「自分の空」に設定した地点が対象です。別の都市を見るだけでは、記録する地点は変わりません。": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Orbs use the location set as My Sky. Viewing another city does not change the location used for your orbs." } } }
+    },
+    "端末の日付で1日1個。同じ日に天気を取り直すと、その日の空玉が更新されます。": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "One orb is kept per day, using your device's date. Fetching weather again on the same day updates that day's orb." } } }
+    },
+    "通信に失敗したときや、保存済みの天気を表示するだけでは、新しい空玉は記録されません。自分の空の天気画面を下に引くと、もう一度取得できます。": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "A failed request or viewing cached weather does not create a new orb. Pull down on the My Sky weather screen to fetch weather again." } } }
+    },
+    "カレンダーの玉をタップすると、その日の空を確認できます。玉がある月は「この月をふりかえる」からまとめを見られます。": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Tap an orb in the calendar to revisit that day's sky. For months with orbs, tap “Look back on this month” to see a summary." } } }
+    },
+    "天気に戻る": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Back to weather" } } }
+    },
+    "コレクションを閉じて天気画面に戻ります": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Closes the collection and returns to the weather screen" } } }
+    },
+    "検索中…": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Searching…" } } }
+    },
+    "都市を検索できませんでした。通信状態を確認して、もう一度お試しください。": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Couldn't search for cities. Check your connection and try again." } } }
+    },
+    "「%@」は見つかりませんでした。別の表記や近くの都市名でお試しください。": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "No results for “%@”. Try another spelling or a nearby city." } } }
+    },
     " ": {
       "localizations": {
         "en": {
@@ -1653,6 +1737,16 @@
         }
       }
     },
+    "天気を取得できた日が、空玉になる": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A successful weather update becomes an orb"
+          }
+        }
+      }
+    },
     "今日の空、指先まで冷たそう": {
       "localizations": {
         "en": {
@@ -1819,6 +1913,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your location is used only for local weather. You can choose a city instead without allowing access."
+          }
+        }
+      }
+    },
+    "位置情報は現在地の天気と地点名の取得に使います。許可しなくても都市を選んで使えます": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your location is used for local weather and its place name. You can choose a city instead without allowing access."
           }
         }
       }
@@ -2460,6 +2564,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn't load the forecast. Please try again in a moment."
+          }
+        }
+      }
+    },
+    "「自分の空」の天気を取得できたとき、端末の日付で1日1個の空玉が残ります": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When My Sky weather loads, one orb is saved for that device day"
           }
         }
       }

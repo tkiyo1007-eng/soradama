@@ -34,7 +34,10 @@ struct LocalizationTests {
           arguments: ["晴れ", "くもり", "雨", "雪",
                       "設定", "閉じる", "傘指数", "洗濯指数",
                       "時間ごとの予報", "雨雲レーダー", "空玉コレクション",
-                      "作者を応援する", "空玉(そらだま)へようこそ"])
+                      "作者を応援する", "空玉(そらだま)へようこそ",
+                      "天気を取得できた日が、空玉になる",
+                      "「自分の空」の天気を取得できたとき、端末の日付で1日1個の空玉が残ります",
+                      "位置情報は現在地の天気と地点名の取得に使います。許可しなくても都市を選んで使えます"])
     func coreStringsAreTranslated(key: String) throws {
         let value = try #require(english(key), "「\(key)」の英訳が無い")
         #expect(value != key, "「\(key)」が英語版でも日本語のまま")
@@ -188,15 +191,15 @@ struct LocalizationTests {
     @Test("初回の地点選択に英訳がある")
     func primaryLocationChoiceStringsAreTranslated() throws {
         let keys = [
-            "今日の天気が、空玉になる",
-            "天気を確認した日の空が、その日だけの\nガラス玉として残ります",
+            "天気を取得できた日が、空玉になる",
+            "「自分の空」の天気を取得できたとき、端末の日付で1日1個の空玉が残ります",
             "集めて、ホーム画面にも飾れる",
             "毎日の空をカレンダーで振り返り、\n今日の空玉をウィジェットで楽しめます",
             "現在地を使うか、都市を選んで\nあなたの空を決められます(あとから変更できます)",
             "現在地を使う",
             "現在地を取得しています…",
             "都市を選ぶ",
-            "位置情報は現在地の天気だけに使います。許可しなくても都市を選んで使えます",
+            "位置情報は現在地の天気と地点名の取得に使います。許可しなくても都市を選んで使えます",
             "最終更新: %@",
             "データ提供: Open-Meteo.com",
         ]
@@ -206,8 +209,35 @@ struct LocalizationTests {
         }
     }
 
+
+    @Test("空玉の記録条件と戻る操作に英訳がある")
+    func orbRecordingGuideStringsAreTranslated() throws {
+        let keys = [
+            "空玉はいつ残る？",
+            "アプリで自分の空の天気を取得できたとき、自動で記録されます。",
+            "「自分の空」に設定した地点が対象です。別の都市を見るだけでは、記録する地点は変わりません。",
+            "端末の日付で1日1個。同じ日に天気を取り直すと、その日の空玉が更新されます。",
+            "通信に失敗したときや、保存済みの天気を表示するだけでは、新しい空玉は記録されません。自分の空の天気画面を下に引くと、もう一度取得できます。",
+            "カレンダーの玉をタップすると、その日の空を確認できます。玉がある月は「この月をふりかえる」からまとめを見られます。",
+            "天気に戻る",
+            "コレクションを閉じて天気画面に戻ります",
+        ]
+        for key in keys {
+            let value = try #require(english(key))
+            #expect(value != key && !value.isEmpty)
+        }
+    }
+
     /// 時刻表示は書式ごと切り替わる必要がある。
     /// "H時" のような日本語専用の書式を直に指定していると、英語圏で "15時" と出てしまう。
+    @Test("欠測と初回案内の操作を英語でも正しく表示する")
+    func weatherAvailabilityAndOnboardingControlsAreTranslated() {
+        #expect(english("傘指数、情報なし") == "Umbrella index, no data")
+        #expect(english("洗濯指数、情報なし") == "Laundry index, no data")
+        #expect(english("戻る") == "Back")
+        #expect(english("%lld / 3") == "%lld / 3")
+    }
+
     @Test("時刻の書式がロケールに追従する")
     func hourLabelFollowsLocale() {
         let date = Date(timeIntervalSince1970: 1_800_000_000)

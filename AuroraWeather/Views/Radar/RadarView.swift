@@ -63,7 +63,7 @@ struct RadarSheet: View {
                 // 公共データ利用規約では出典の明示が求められている。
                 // ただし提供範囲外では気象庁のデータを一枚も使っていないので出さない。
                 if isCovered {
-                    Text("出典: 気象庁 高解像度降水ナウキャスト")
+                    Link("出典: 気象庁 高解像度降水ナウキャスト", destination: DataAttribution.jmaRadar)
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity)

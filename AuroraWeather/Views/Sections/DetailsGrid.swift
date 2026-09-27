@@ -114,6 +114,17 @@ struct UmbrellaIndexView: View {
     @ScaledMetric(relativeTo: .body) private var cardMinHeight: CGFloat = 96
     let probability: Double?
 
+    var valueText: String {
+        probability.map { String(Int($0.rounded())) } ?? "—"
+    }
+
+    var accessibilityText: String {
+        guard let probability else {
+            return String(localized: "傘指数、情報なし")
+        }
+        return String(localized: "これから数時間の降水確率\(Int(probability.rounded()))パーセント、\(judgement.0)")
+    }
+
     private var judgement: (String, Color) {
         guard let probability else { return (String(localized: "情報なし"), Color.white.opacity(0.6)) }
         switch probability {
@@ -126,12 +137,14 @@ struct UmbrellaIndexView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .firstTextBaseline, spacing: 2) {
-                Text("\(Int((probability ?? 0).rounded()))")
+                Text(verbatim: valueText)
                     .font(.system(.title, design: .rounded).weight(.semibold))
                     .foregroundStyle(.white)
-                Text("%")
-                    .font(.footnote.weight(.medium))
-                    .foregroundStyle(.white.opacity(0.7))
+                if probability != nil {
+                    Text("%")
+                        .font(.footnote.weight(.medium))
+                        .foregroundStyle(.white.opacity(0.7))
+                }
             }
             Text(judgement.0)
                 .font(.footnote.weight(.semibold))
@@ -140,7 +153,7 @@ struct UmbrellaIndexView: View {
         }
         .frame(minHeight: cardMinHeight, alignment: .topLeading)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("これから数時間の降水確率\(Int((probability ?? 0).rounded()))パーセント、\(judgement.0)")
+        .accessibilityLabel(accessibilityText)
     }
 }
 
@@ -152,16 +165,34 @@ struct LaundryIndexView: View {
     let windSpeed: Double
     let precipProbability: Double?
 
-    /// 0〜100 のスコア。降水確率が高い/湿度が高いほど下がり、風があると少し上がる。
-    private var score: Int {
+    /// 降水確率が欠測なら、外干しに適した天気と判断せず採点しない。
+    /// 値がある場合は従来どおり、湿度・風と合わせて0〜100で採点する。
+    static func score(humidity: Double, windSpeed: Double, precipProbability: Double?) -> Int? {
+        guard let precipProbability else { return nil }
         var value = 100.0
-        value -= (precipProbability ?? 0) * 0.9
+        value -= precipProbability * 0.9
         value -= max(0, humidity - 40) * 0.8
         value += min(windSpeed, 8) * 3
         return Int(value.clamped(to: 0...100).rounded())
     }
 
+    private var score: Int? {
+        Self.score(humidity: humidity, windSpeed: windSpeed, precipProbability: precipProbability)
+    }
+
+    var valueText: String {
+        score.map { String($0) } ?? "—"
+    }
+
+    var accessibilityText: String {
+        guard let score else {
+            return String(localized: "洗濯指数、情報なし")
+        }
+        return String(localized: "洗濯指数\(score)点、\(judgement.0)")
+    }
+
     private var judgement: (String, Color) {
+        guard let score else { return (String(localized: "情報なし"), Color.white.opacity(0.6)) }
         switch score {
         case 80...: return (String(localized: "よく乾きます"), Color(red: 0.55, green: 0.85, blue: 0.6))
         case 60..<80: return (String(localized: "外干しOK"), Color(red: 0.75, green: 0.88, blue: 0.55))
@@ -174,12 +205,14 @@ struct LaundryIndexView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .firstTextBaseline, spacing: 2) {
-                Text("\(score)")
+                Text(verbatim: valueText)
                     .font(.system(.title, design: .rounded).weight(.semibold))
                     .foregroundStyle(.white)
-                Text("点")
-                    .font(.footnote.weight(.medium))
-                    .foregroundStyle(.white.opacity(0.7))
+                if score != nil {
+                    Text("点")
+                        .font(.footnote.weight(.medium))
+                        .foregroundStyle(.white.opacity(0.7))
+                }
             }
             Text(judgement.0)
                 .font(.footnote.weight(.semibold))
@@ -188,7 +221,7 @@ struct LaundryIndexView: View {
         }
         .frame(minHeight: cardMinHeight, alignment: .topLeading)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("洗濯指数\(score)点、\(judgement.0)")
+        .accessibilityLabel(accessibilityText)
     }
 }
 

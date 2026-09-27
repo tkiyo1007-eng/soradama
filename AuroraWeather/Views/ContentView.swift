@@ -38,19 +38,23 @@ struct ContentView: View {
                 sunset: viewModel.currentBundle?.sunset
             )
 
-            TabView(selection: Bindable(viewModel).selectionID) {
-                ForEach(viewModel.pages) { place in
-                    WeatherPageView(place: place, viewModel: viewModel) {
-                        Haptics.selection()
-                        activeSheet = .collection
+            // 初回案内の背後にある操作をVoiceOverの移動先に残さない。
+            // ViewModelは保持し、地点選択が完了したら同じ状態で画面を表示する。
+            if hasSeenOnboarding {
+                TabView(selection: Bindable(viewModel).selectionID) {
+                    ForEach(viewModel.pages) { place in
+                        WeatherPageView(place: place, viewModel: viewModel) {
+                            Haptics.selection()
+                            activeSheet = .collection
+                        }
+                            .tag(place.id)
                     }
-                        .tag(place.id)
                 }
-            }
-            .tabViewStyle(.page(indexDisplayMode: viewModel.pages.count > 1 ? .automatic : .never))
-            .indexViewStyle(.page(backgroundDisplayMode: .never))
+                .tabViewStyle(.page(indexDisplayMode: viewModel.pages.count > 1 ? .automatic : .never))
+                .indexViewStyle(.page(backgroundDisplayMode: .never))
 
-            topBar
+                topBar
+            }
 
             if let toast = orbToast {
                 orbToastView(toast)
@@ -67,7 +71,9 @@ struct ContentView: View {
 
             if !hasSeenOnboarding {
                 OnboardingView(viewModel: viewModel) {
-                    withAnimation(.easeOut(duration: 0.4)) { hasSeenOnboarding = true }
+                    withAnimation(reduceMotion ? nil : .easeOut(duration: 0.4)) {
+                        hasSeenOnboarding = true
+                    }
                     // 地点の確定時に初回読み込みも開始済み。通信中でも選択は失われない。
                 }
                 .transition(.opacity)

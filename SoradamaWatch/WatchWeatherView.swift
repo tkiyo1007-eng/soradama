@@ -163,6 +163,16 @@ struct WatchWeatherView: View {
                     }
                     .buttonStyle(.bordered)
                     .tint(.white.opacity(0.4))
+
+                    VStack(spacing: 8) {
+                        Link("天気データ: Open-Meteo", destination: DataAttribution.openMeteo)
+                        Link("ライセンス: CC BY 4.0", destination: DataAttribution.creativeCommons)
+                        Link("Open-Meteoの利用条件", destination: DataAttribution.openMeteoLicence)
+                    }
+                    .font(.caption2)
+                    .buttonStyle(.plain)
+                    .multilineTextAlignment(.center)
+                    .padding(.vertical, 8)
                 }
                 .padding(.horizontal, 4)
             }

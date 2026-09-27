@@ -1,6 +1,45 @@
 {
   "sourceLanguage": "ja",
   "strings": {
+    "データの出典と利用条件": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Data Sources and Terms" } } }
+    },
+    "天気データ: Open-Meteo": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Weather data: Open-Meteo" } } }
+    },
+    "都市情報: Open-Meteo": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "City information: Open-Meteo" } } }
+    },
+    "地点データ: GeoNames": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Location data: GeoNames" } } }
+    },
+    "ライセンス: CC BY 4.0": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "License: CC BY 4.0" } } }
+    },
+    "Open-Meteoの利用条件": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Open-Meteo Terms of Use" } } }
+    },
+    "雨雲レーダー: 気象庁": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Rain radar: Japan Meteorological Agency" } } }
+    },
+    "気象庁の利用規約": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "JMA Terms of Use" } } }
+    },
+    "天気と地点データ": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Weather and Location Data" } } }
+    },
+    "雨雲レーダー（日本周辺）": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Rain Radar (Japan and Surrounding Areas)" } } }
+    },
+    "アプリ内での加工": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "How the App Uses the Data" } } }
+    },
+    "空玉では提供データを単位換算し、グラフ・各種指標・空玉として表示しています。提供元による推奨を示すものではありません。": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Soradama converts the supplied data into your chosen units and displays it as charts, indices, and sky orbs. This does not imply endorsement by the data providers." } } }
+    },
+    "気象庁の高解像度降水ナウキャストを地図に重ねて表示しています。": {
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The Japan Meteorological Agency's High-resolution Precipitation Nowcasts are displayed as an overlay on the map." } } }
+    },
     "%@の特別な空玉クリスタル、%@の%@、%@": {
       "localizations": {
         "en": {

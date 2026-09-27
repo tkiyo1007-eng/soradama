@@ -122,6 +122,11 @@ struct SettingsView: View {
                     Link(destination: Self.privacyURL) {
                         Label("プライバシーポリシー", systemImage: "hand.raised")
                     }
+                    NavigationLink {
+                        DataAttributionView()
+                    } label: {
+                        Label("データの出典と利用条件", systemImage: "info.circle")
+                    }
                 } header: {
                     Text("このアプリについて")
                 } footer: {

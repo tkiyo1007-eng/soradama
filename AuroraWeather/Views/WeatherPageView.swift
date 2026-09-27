@@ -109,12 +109,12 @@ struct WeatherPageView: View {
 
                     VStack(spacing: 3) {
                         Text("最終更新: \(weather.fetchedAt.timeLabel(in: weather.timeZone))")
-                        Group {
-                            if RadarService.isCovered(latitude: place.latitude, longitude: place.longitude) {
-                                Text("データ提供: Open-Meteo.com / 気象庁")
-                            } else {
-                                Text("データ提供: Open-Meteo.com")
-                            }
+                        WeatherAttributionFooter()
+                            .foregroundStyle(Color(red: 0.72, green: 0.86, blue: 1.0))
+                            .tint(Color(red: 0.72, green: 0.86, blue: 1.0))
+                        if RadarService.isCovered(latitude: place.latitude, longitude: place.longitude) {
+                            Link("雨雲レーダー: 気象庁", destination: DataAttribution.jmaRadar)
+                                .tint(Color(red: 0.72, green: 0.86, blue: 1.0))
                         }
                     }
                     .font(.caption2)
