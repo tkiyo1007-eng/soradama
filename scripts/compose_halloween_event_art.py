@@ -126,10 +126,11 @@ def main() -> None:
 
     detail = compose(
         (1080, 1920),
-        load_orb(args.orb, 1000),
-        orb_center=(540, 960),
-        moon=((800, 330), 120),
-        bats=[(250, 260, 130), (430, 520, 80), (860, 640, 95), (200, 1450, 90), (880, 1380, 75)],
+        # 詳細ページは下側に App Store の文字が重なるため、玉を上半分に置く。
+        load_orb(args.orb, 900),
+        orb_center=(540, 700),
+        moon=((830, 230), 105),
+        bats=[(220, 200, 120), (430, 120, 70), (900, 470, 85), (170, 900, 80), (880, 1030, 70)],
         stars_seed=11,
     )
     detail.save(args.output / "event-detail-1080x1920.png")
