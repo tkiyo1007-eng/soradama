@@ -29,20 +29,20 @@ LEGACY_INNER_SIZE = (890, 1925)
 
 COPY = {
     "ja": {
-        "hero": ("毎日の空が", "ガラス玉になる"),
-        "hero_caption": "天気予報アプリ「空玉」",
-        "collection": ("集めた空が", "カレンダーに並ぶ"),
-        "home": ("天気予報も", "ひと目でわかる"),
-        "month": ("ひと月の空を", "1枚で振り返る"),
-        "widget": ("ホーム画面に", "空玉を飾る"),
-        "radar": ("雨雲の動きを", "地図で確認"),
+        "hero": ("その日の空が", "ころんと玉になる"),
+        "hero_caption": "空を集める天気アプリ「空玉」",
+        "collection": ("ひと月つづけると", "こんなカレンダーに"),
+        "home": ("傘いる？いらない？", "開いてすぐわかる"),
+        "month": ("月末には", "ひと月の空をふりかえり"),
+        "widget": ("ホーム画面に", "今日の空玉を置いておく"),
+        "radar": ("雨雲が近づいたら", "地図でたしかめる"),
     },
     "en": {
-        "hero": ("Every day's sky", "becomes a glass orb"),
-        "hero_caption": "Soradama — a weather app",
-        "collection": ("Your skies,", "collected by day"),
-        "home": ("Clear forecasts,", "at a glance"),
-        "month": ("Look back on", "a month of skies"),
+        "hero": ("Today's sky,", "in a little glass orb"),
+        "hero_caption": "Soradama — collect your skies",
+        "collection": ("A month of days,", "one orb at a time"),
+        "home": ("Need an umbrella?", "Know in a second"),
+        "month": ("Look back on", "the month you had"),
     },
 }
 
@@ -112,6 +112,8 @@ def hero(orbs: Path, copy: dict, output: Path) -> None:
     face = font(60)
     text = copy["hero_caption"]
     box = draw.textbbox((0, 0), text, font=face)
+    if box[2] - box[0] > CANVAS[0] - 96:
+        raise ValueError(f"下の一文が横に収まらない: {text}")
     draw.text(((CANVAS[0] - (box[2] - box[0])) / 2, 2620), text, font=face, fill=(255, 255, 255, 200))
     canvas.convert("RGB").save(output, format="PNG", optimize=True)
 
