@@ -3,34 +3,38 @@ import Foundation
 @testable import AuroraWeather
 
 struct GrowthEngagementTests {
-    @Test("3日未満では評価依頼を予約しない")
-    func reviewPromptRequiresAStreak() {
+    @Test("今日の空玉がない日と2日未満では評価依頼を予約しない")
+    func reviewPromptRequiresTodayOrbAndStreak() {
         let defaults = Self.makeDefaults()
-        let policy = ReviewPromptPolicy(defaults: defaults, currentVersion: "1.8.0")
+        let policy = ReviewPromptPolicy(defaults: defaults, currentVersion: "1.8.5")
 
-        #expect(!policy.reserveIfEligible(for: Self.event(streak: 1)))
-        #expect(!policy.reserveIfEligible(for: Self.event(streak: 2)))
+        #expect(!policy.reserveIfEligible(todayOrb: nil, streak: 5))
+        #expect(!policy.reserveIfEligible(todayOrb: Self.orb(), streak: 1))
     }
 
-    @Test("3日目の通常記録で一度だけ評価依頼を予約する")
+    @Test("2日目以降は、その日何回目の起動でも一度だけ予約する")
     func reviewPromptIsReservedOncePerVersion() {
         let defaults = Self.makeDefaults()
-        let policy = ReviewPromptPolicy(defaults: defaults, currentVersion: "1.8.0")
-        let event = Self.event(streak: 3)
+        let policy = ReviewPromptPolicy(defaults: defaults, currentVersion: "1.8.5")
 
-        #expect(policy.reserveIfEligible(for: event))
-        #expect(!policy.reserveIfEligible(for: event))
+        #expect(policy.reserveIfEligible(todayOrb: Self.orb(), streak: 2))
+        #expect(!policy.reserveIfEligible(todayOrb: Self.orb(), streak: 2))
     }
 
-    @Test("同日の上書きと特別な演出中は評価依頼をしない")
-    func reviewPromptAvoidsBadMoments() {
+    @Test("お祝いの演出が出る日は評価依頼をしない")
+    func reviewPromptAvoidsCelebrationDays() throws {
         let defaults = Self.makeDefaults()
-        let policy = ReviewPromptPolicy(defaults: defaults, currentVersion: "1.8.0")
+        let policy = ReviewPromptPolicy(defaults: defaults, currentVersion: "1.8.5")
 
-        #expect(!policy.reserveIfEligible(for: Self.event(streak: 4, isFirstToday: false)))
-        #expect(!policy.reserveIfEligible(for: Self.event(streak: 7, isMilestone: true)))
-        #expect(!policy.reserveIfEligible(for: Self.event(streak: 4, isFullMoon: true)))
-        #expect(!policy.reserveIfEligible(for: Self.event(streak: 4, solarTerm: .risshun)))
+        #expect(!policy.reserveIfEligible(todayOrb: Self.orb(isMilestone: true), streak: 7))
+
+        let solarTermDay = Self.orb(dateKey: "2026-02-04")
+        try #require(solarTermDay.solarTerm != nil)
+        #expect(!policy.reserveIfEligible(todayOrb: solarTermDay, streak: 4))
+
+        let fullMoonNight = Self.orb(dateKey: "2026-09-26", timeOfDay: .night)
+        try #require(fullMoonNight.moonPhase == .fullMoon)
+        #expect(!policy.reserveIfEligible(todayOrb: fullMoonNight, streak: 4))
     }
 
     @Test("バージョンが変わっても120日間は再依頼しない")
@@ -39,24 +43,24 @@ struct GrowthEngagementTests {
         let start = Date(timeIntervalSince1970: 1_800_000_000)
         let first = ReviewPromptPolicy(
             defaults: defaults,
-            currentVersion: "1.8.0",
+            currentVersion: "1.8.5",
             now: { start }
         )
-        #expect(first.reserveIfEligible(for: Self.event(streak: 3)))
+        #expect(first.reserveIfEligible(todayOrb: Self.orb(), streak: 3))
 
         let tooSoon = ReviewPromptPolicy(
             defaults: defaults,
             currentVersion: "1.9.0",
             now: { start.addingTimeInterval(119 * 24 * 60 * 60) }
         )
-        #expect(!tooSoon.reserveIfEligible(for: Self.event(streak: 4)))
+        #expect(!tooSoon.reserveIfEligible(todayOrb: Self.orb(), streak: 4))
 
         let afterCooldown = ReviewPromptPolicy(
             defaults: defaults,
             currentVersion: "1.9.0",
             now: { start.addingTimeInterval(120 * 24 * 60 * 60) }
         )
-        #expect(afterCooldown.reserveIfEligible(for: Self.event(streak: 4)))
+        #expect(afterCooldown.reserveIfEligible(todayOrb: Self.orb(), streak: 4))
     }
 
     @Test("端末時計が巻き戻った場合は評価依頼を抑止する")
@@ -65,17 +69,17 @@ struct GrowthEngagementTests {
         let start = Date(timeIntervalSince1970: 1_800_000_000)
         let first = ReviewPromptPolicy(
             defaults: defaults,
-            currentVersion: "1.8.0",
+            currentVersion: "1.8.5",
             now: { start }
         )
-        #expect(first.reserveIfEligible(for: Self.event(streak: 3)))
+        #expect(first.reserveIfEligible(todayOrb: Self.orb(), streak: 3))
 
         let rolledBack = ReviewPromptPolicy(
             defaults: defaults,
             currentVersion: "2.0.0",
             now: { start.addingTimeInterval(-60) }
         )
-        #expect(!rolledBack.reserveIfEligible(for: Self.event(streak: 4)))
+        #expect(!rolledBack.reserveIfEligible(todayOrb: Self.orb(), streak: 4))
     }
 
     @Test("App Storeとレビューのリンクが正しい")
@@ -132,20 +136,21 @@ struct GrowthEngagementTests {
         ))
     }
 
-    private static func event(
-        streak: Int,
-        isFirstToday: Bool = true,
+    private static func orb(
+        dateKey: String = "2026-10-20",
         isMilestone: Bool = false,
-        isFullMoon: Bool = false,
-        solarTerm: SolarTerm? = nil
-    ) -> OrbRecordResult {
-        OrbRecordResult(
-            isFirstToday: isFirstToday,
-            streak: streak,
+        timeOfDay: TimeOfDay = .day
+    ) -> DailyOrb {
+        DailyOrb(
+            dateKey: dateKey,
+            kind: .clear,
+            tempMax: 22,
+            tempMin: 14,
+            humidity: 55,
+            precipProbability: 0,
+            placeName: "",
             isMilestone: isMilestone,
-            isNewKind: false,
-            solarTerm: solarTerm,
-            isFullMoon: isFullMoon
+            timeOfDay: timeOfDay
         )
     }
 

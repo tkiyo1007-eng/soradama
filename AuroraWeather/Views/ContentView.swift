@@ -26,8 +26,6 @@ struct ContentView: View {
     @State private var orbToast: OrbRecordResult?
     /// 節気・満月・連続記録の節目だけに出す、画面いっぱいのお祝い
     @State private var celebration: OrbRecordResult?
-    /// 通常の空玉を見終えたあとにだけ評価依頼を検討するため、その日の成功イベントを保持する。
-    @State private var pendingReviewEvent: OrbRecordResult?
     @State private var orbCollectionOpenedAt: Date?
     /// シートを閉じてから依頼するまでの待機を識別し、途中のバックグラウンド移行で無効化する。
     @State private var reviewPromptToken: UUID?
@@ -142,7 +140,6 @@ struct ContentView: View {
                     Task { await viewModel.ensureLoaded(viewModel.selectionID) }
                 }
             } else {
-                pendingReviewEvent = nil
                 orbCollectionOpenedAt = nil
                 reviewPromptToken = nil
             }
@@ -165,7 +162,6 @@ struct ContentView: View {
                 withAnimation(.easeIn(duration: 0.3)) { celebration = event }
             } else {
                 withAnimation(.spring(duration: 0.5)) { orbToast = event }
-                pendingReviewEvent = event
                 Task {
                     try? await Task.sleep(for: .seconds(4))
                     withAnimation(.easeOut(duration: 0.4)) {
@@ -183,8 +179,6 @@ struct ContentView: View {
         // 評価候補を消費せず、その後にコレクションを見る機会を残す。
         guard let openedAt = orbCollectionOpenedAt else { return }
         orbCollectionOpenedAt = nil
-        guard let event = pendingReviewEvent else { return }
-        pendingReviewEvent = nil
         let viewedLongEnough = Date().timeIntervalSince(openedAt) >= 3
         guard viewedLongEnough else { return }
 
@@ -198,7 +192,10 @@ struct ContentView: View {
                   hasSeenOnboarding,
                   activeSheet == nil,
                   celebration == nil,
-                  reviewPromptPolicy.reserveIfEligible(for: event) else {
+                  reviewPromptPolicy.reserveIfEligible(
+                      todayOrb: OrbStore.shared.orb(for: Date()),
+                      streak: OrbStore.shared.streak
+                  ) else {
                 return
             }
             reviewPromptToken = nil

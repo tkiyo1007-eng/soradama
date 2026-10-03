@@ -39,7 +39,7 @@ enum TodayOrbCardPolicy {
 /// 評価依頼は、使い始めではなく「空を集める習慣」ができた成功直後だけ候補にする。
 /// StoreKit側の表示回数制限に加え、アプリ側でも同一バージョン1回・120日間隔に抑える。
 struct ReviewPromptPolicy {
-    static let minimumStreak = 3
+    static let minimumStreak = 2
     static let cooldown: TimeInterval = 120 * 24 * 60 * 60
 
     private static let lastRequestedVersionKey = "soradama.reviewPrompt.lastRequestedVersion"
@@ -61,14 +61,16 @@ struct ReviewPromptPolicy {
         self.now = now
     }
 
-    /// 条件を満たした最初の呼び出しだけを予約し、同じ表示機会の二重発火を防ぐ。
+    /// コレクションで今日の空玉を眺め終えたときに呼ぶ。
+    /// 今日の空玉があり、2日以上続けて集めていて、お祝いの演出が出る日(節目・節気・満月)でなければ候補にする。
+    /// その日の何回目の起動かは問わない。条件を満たした最初の呼び出しだけを予約し、二重発火を防ぐ。
     @discardableResult
-    func reserveIfEligible(for event: OrbRecordResult) -> Bool {
-        guard event.isFirstToday,
-              event.streak >= Self.minimumStreak,
-              !event.isMilestone,
-              event.solarTerm == nil,
-              !event.isFullMoon else {
+    func reserveIfEligible(todayOrb: DailyOrb?, streak: Int) -> Bool {
+        guard let todayOrb,
+              streak >= Self.minimumStreak,
+              !todayOrb.isMilestone,
+              todayOrb.solarTerm == nil,
+              todayOrb.moonPhase != .fullMoon else {
             return false
         }
 
