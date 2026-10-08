@@ -45,6 +45,9 @@ struct ContentView: View {
             if seasonal.isHalloween {
                 HalloweenSkyGlow()
                     .transition(.opacity)
+            } else if seasonal.isChristmas {
+                ChristmasSkyGlow()
+                    .transition(.opacity)
             }
 
             // 初回案内の背後にある操作をVoiceOverの移動先に残さない。
@@ -303,7 +306,7 @@ struct ContentView: View {
                 HStack(spacing: 10) {
                     if let orb = OrbStore.shared.orb(for: Date()) {
                         OrbView(orb: orb, size: 34)
-                            .halloweenOrbAccent(seasonal.decorates(orb), size: 34)
+                            .seasonalOrbAccent(seasonal.decoration(for: orb), size: 34)
                     }
                     VStack(alignment: .leading, spacing: 1) {
                         Text(toastTitle(event))

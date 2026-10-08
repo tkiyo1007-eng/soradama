@@ -17,7 +17,7 @@ extension EnvironmentValues {
 // MARK: - 日付の追随
 
 /// 季節演出の判定を、前面復帰・日付変更・時刻/タイムゾーン変更・表示中の0時で作り直す。
-/// 起動時の値を持ち続けると、11月1日以降もハロウィン表示が残るため。
+/// 起動時の値を持ち続けると、期間が終わった後も演出が残るため。
 private struct SeasonalClock: ViewModifier {
     @Binding var context: SeasonalContext
     @Environment(\.scenePhase) private var scenePhase
@@ -83,6 +83,55 @@ extension View {
         modifier(SeasonalClock(context: context))
     }
 
+    /// 開催中の今日の空玉に、その行事の光の輪と小さな印を添える。nil なら何も足さない。
+    @ViewBuilder
+    func seasonalOrbAccent(_ event: SeasonalEvent?, size: CGFloat) -> some View {
+        switch event {
+        case .halloween2026:
+            halloweenOrbAccent(true, size: size)
+        case .christmas2026:
+            christmasOrbAccent(size: size)
+        case nil:
+            self
+        }
+    }
+
+    /// クリスマスの今日の空玉に、金と常緑の光の輪とオーナメントを添える。
+    /// ハロウィンと同じく、玉の中の天気の色・レイアウト・タップ領域・読み上げは変えない。
+    private func christmasOrbAccent(size: CGFloat) -> some View {
+        self
+            .background {
+                ZStack {
+                    Circle()
+                        .fill(
+                            RadialGradient(
+                                colors: [
+                                    ChristmasPalette.gold.opacity(0.7),
+                                    ChristmasPalette.pine.opacity(0.45),
+                                    .clear,
+                                ],
+                                center: .center,
+                                startRadius: size * 0.4,
+                                endRadius: size * 0.85
+                            )
+                        )
+                    Circle()
+                        .strokeBorder(ChristmasPalette.gold.opacity(0.9), lineWidth: max(1.5, size * 0.035))
+                        .frame(width: size * 1.12, height: size * 1.12)
+                }
+                .frame(width: size * 1.7, height: size * 1.7)
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+            }
+            .overlay(alignment: .bottomTrailing) {
+                OrnamentMark()
+                    .frame(width: max(14, size * 0.4), height: max(14, size * 0.4))
+                    .offset(x: size * 0.12, y: size * 0.1)
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+            }
+    }
+
     /// 開催中の今日の空玉だけに、オレンジと紫の光の輪とジャックオランタンを添える。
     /// 玉の中の天気の色には重ねず、レイアウト・タップ領域・読み上げは変えない。
     @ViewBuilder
@@ -125,6 +174,40 @@ extension View {
     }
 }
 
+// MARK: - 行事ごとの文言と色
+
+extension SeasonalEvent {
+    /// 今日の空玉カードに添える期間の一言。
+    var cardLabel: String {
+        switch self {
+        case .halloween2026: String(localized: "ハロウィンの空玉・10月31日まで")
+        case .christmas2026: String(localized: "クリスマスの空玉・12月25日まで")
+        }
+    }
+
+    /// 暗いカードの上で読める、行事の色の短い見出し用の色。
+    var textColor: Color {
+        switch self {
+        case .halloween2026: HalloweenPalette.text
+        case .christmas2026: ChristmasPalette.text
+        }
+    }
+
+    var cardBackground: LinearGradient {
+        switch self {
+        case .halloween2026: HalloweenPalette.cardBackground
+        case .christmas2026: ChristmasPalette.cardBackground
+        }
+    }
+
+    var cardStroke: Color {
+        switch self {
+        case .halloween2026: HalloweenPalette.pumpkin.opacity(0.6)
+        case .christmas2026: ChristmasPalette.gold.opacity(0.6)
+        }
+    }
+}
+
 // MARK: - 色と印
 
 enum HalloweenPalette {
@@ -144,6 +227,90 @@ enum HalloweenPalette {
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
+}
+
+enum ChristmasPalette {
+    static let gold = Color(red: 1.0, green: 0.82, blue: 0.40)
+    static let pine = Color(red: 0.20, green: 0.62, blue: 0.42)
+    static let berry = Color(red: 0.86, green: 0.18, blue: 0.24)
+    static let night = Color(red: 0.06, green: 0.12, blue: 0.30)
+    /// 濃い紺・深緑のカード上で読める明るさの金色(本文ではなく短い見出しに使う)
+    static let text = Color(red: 1.0, green: 0.88, blue: 0.60)
+
+    /// 期間中のカード背景。白い文字が読める暗さを保つ。
+    static let cardBackground = LinearGradient(
+        colors: [
+            Color(red: 0.10, green: 0.16, blue: 0.38).opacity(0.94),
+            Color(red: 0.06, green: 0.30, blue: 0.24).opacity(0.94),
+        ],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+}
+
+/// 空玉オリジナルのオーナメント。赤い玉に金の口金と吊りひも、ガラスの照り。
+struct OrnamentMark: View {
+    var body: some View {
+        GeometryReader { proxy in
+            let w = proxy.size.width
+            let h = proxy.size.height
+            ZStack {
+                // 吊りひも
+                Circle()
+                    .stroke(ChristmasPalette.gold, lineWidth: max(1, w * 0.06))
+                    .frame(width: w * 0.2, height: w * 0.2)
+                    .offset(y: -h * 0.42)
+                // 口金
+                RoundedRectangle(cornerRadius: w * 0.04)
+                    .fill(ChristmasPalette.gold)
+                    .frame(width: w * 0.3, height: h * 0.14)
+                    .offset(y: -h * 0.29)
+                // 玉
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [Color(red: 1.0, green: 0.45, blue: 0.45), ChristmasPalette.berry, Color(red: 0.52, green: 0.06, blue: 0.12)],
+                            center: UnitPoint(x: 0.35, y: 0.3),
+                            startRadius: 0,
+                            endRadius: w * 0.42
+                        )
+                    )
+                    .frame(width: w * 0.74, height: w * 0.74)
+                    .offset(y: h * 0.1)
+                // 金の帯
+                Capsule()
+                    .fill(ChristmasPalette.gold.opacity(0.9))
+                    .frame(width: w * 0.7, height: max(1, h * 0.07))
+                    .offset(y: h * 0.12)
+                // 照り
+                Ellipse()
+                    .fill(.white.opacity(0.75))
+                    .frame(width: w * 0.16, height: w * 0.1)
+                    .rotationEffect(.degrees(-30))
+                    .offset(x: -w * 0.15, y: -h * 0.06)
+            }
+            .frame(width: w, height: h)
+            .shadow(color: ChristmasPalette.gold.opacity(0.6), radius: w * 0.18)
+        }
+    }
+}
+
+/// 4本の光が伸びる小さな星。
+private struct SparkleShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        let c = CGPoint(x: rect.midX, y: rect.midY)
+        let r = min(rect.width, rect.height) / 2
+        let inner = r * 0.22
+        var path = Path()
+        for index in 0..<8 {
+            let angle = Double(index) * .pi / 4 - .pi / 2
+            let radius = index.isMultiple(of: 2) ? r : inner
+            let point = CGPoint(x: c.x + CGFloat(cos(angle)) * radius, y: c.y + CGFloat(sin(angle)) * radius)
+            if index == 0 { path.move(to: point) } else { path.addLine(to: point) }
+        }
+        path.closeSubpath()
+        return path
+    }
 }
 
 /// 空玉オリジナルのジャックオランタン。かぼちゃの実に、光る目と口をくり抜いた形。
@@ -332,22 +499,125 @@ struct HalloweenSkyGlow: View {
     }
 }
 
+/// クリスマス期間の空。天気の空の上に冬の夜の紺と、地平の金色の灯りを重ね、
+/// 星と、ゆっくり漂う金色の光の粒を置く。天気アイコン・数値・文字はこの上に描かれるため、天気の意味は変わらない。
+/// 雪を降らせると、晴れの日にも雪が降っているように見えて実際の天気と食い違う。
+/// そのため降水と見間違えない暖色の光にし、落とさずにゆっくり上へ昇らせる。
+/// 星も光の粒も点滅させない。「動きを減らす」では光の粒を止めて描く。
+struct ChristmasSkyGlow: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        ZStack {
+            LinearGradient(
+                stops: [
+                    .init(color: ChristmasPalette.night.opacity(0.6), location: 0.0),
+                    .init(color: ChristmasPalette.night.opacity(0.28), location: 0.45),
+                    .init(color: ChristmasPalette.pine.opacity(0.16), location: 0.78),
+                    .init(color: ChristmasPalette.gold.opacity(0.3), location: 1.0),
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+
+            GeometryReader { proxy in
+                let size = proxy.size
+                star
+                    .frame(width: 46, height: 46)
+                    .position(x: size.width - 58, y: 178)
+                ForEach(Array(Self.smallStars.enumerated()), id: \.offset) { _, star in
+                    SparkleShape()
+                        .fill(.white.opacity(star.opacity))
+                        .frame(width: star.size, height: star.size)
+                        .position(x: size.width * star.x, y: star.y)
+                }
+
+                if reduceMotion {
+                    lights(size: size, time: 0)
+                } else {
+                    TimelineView(.animation(minimumInterval: 1.0 / 20.0)) { timeline in
+                        lights(size: size, time: timeline.date.timeIntervalSinceReferenceDate)
+                    }
+                }
+            }
+        }
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+
+    private static let smallStars: [(x: Double, y: Double, size: Double, opacity: Double)] = [
+        (0.12, 112, 10, 0.75), (0.30, 160, 7, 0.6), (0.52, 104, 9, 0.7),
+        (0.68, 238, 6, 0.55), (0.22, 262, 8, 0.6), (0.44, 300, 6, 0.5),
+    ]
+
+    /// 右上の大きな星。ハロウィンの月と同じ位置に置き、見出しの気温と重ならないようにする。
+    private var star: some View {
+        SparkleShape()
+            .fill(
+                RadialGradient(
+                    colors: [.white, ChristmasPalette.gold],
+                    center: .center,
+                    startRadius: 1,
+                    endRadius: 22
+                )
+            )
+            .shadow(color: ChristmasPalette.gold.opacity(0.85), radius: 16)
+    }
+
+    /// 光の粒がそれぞれの速さで下から上へ昇り、左右にゆるく揺れる。
+    /// 画面の上と下の端では薄くして、出入りで急に現れたり消えたりしないようにする。
+    /// time = 0 は静止画用の固定配置。
+    private func lights(size: CGSize, time: TimeInterval) -> some View {
+        let height = Double(size.height) + 40
+        return ZStack {
+            ForEach(0..<Self.lightCount, id: \.self) { index in
+                let seed = Double(index)
+                let x = (seed * 0.618 + 0.05).truncatingRemainder(dividingBy: 1)
+                let speed = 6 + (seed * 5).truncatingRemainder(dividingBy: 8)
+                let radius = 3.0 + (seed * 3).truncatingRemainder(dividingBy: 3)
+                let rise = (time * speed + (seed * 0.37).truncatingRemainder(dividingBy: 1) * height)
+                    .truncatingRemainder(dividingBy: height)
+                let y = height - rise - 20
+                let edgeFade = min(1, max(0, min(y, Double(size.height) - y) / 120))
+                let sway = sin(time * 0.35 + seed * 1.7) * 16
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [Color(red: 1.0, green: 0.95, blue: 0.78), ChristmasPalette.gold.opacity(0.6), .clear],
+                            center: .center,
+                            startRadius: 0,
+                            endRadius: radius * 2
+                        )
+                    )
+                    .frame(width: radius * 4, height: radius * 4)
+                    .opacity((0.45 + (seed * 0.13).truncatingRemainder(dividingBy: 0.35)) * edgeFade)
+                    .position(x: Double(size.width) * x + sway, y: y)
+            }
+        }
+    }
+
+    private static let lightCount = 16
+}
+
 // MARK: - 未記録の日の期間案内
 
 /// 開催中に今日の空玉がまだ無いとき(取得中・通信失敗・保存済みの天気だけ)に出す。
 /// 記録済みとは言わず、記録される条件と取り直す操作だけを伝える。
 struct SeasonalRecordHint: View {
+    let event: SeasonalEvent
+
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            JackOLanternMark()
+            mark
                 .frame(width: 30, height: 30)
                 .padding(.top, 2)
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 4) {
-                Text("ハロウィンの空玉は10月31日まで")
+                Text(title)
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(HalloweenPalette.text)
-                Text("自分の空の天気を取得できた日は、その日の空玉に秋の灯りが添えられます。下に引くと、もう一度取得できます。")
+                    .foregroundStyle(event.textColor)
+                Text(message)
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.82))
             }
@@ -355,11 +625,35 @@ struct SeasonalRecordHint: View {
             Spacer(minLength: 0)
         }
         .padding(14)
-        .background(HalloweenPalette.cardBackground, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .background(event.cardBackground, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .strokeBorder(HalloweenPalette.pumpkin.opacity(0.55), lineWidth: 1)
+                .strokeBorder(event.cardStroke, lineWidth: 1)
         }
         .accessibilityElement(children: .combine)
+    }
+
+    @ViewBuilder
+    private var mark: some View {
+        switch event {
+        case .halloween2026: JackOLanternMark()
+        case .christmas2026: OrnamentMark()
+        }
+    }
+
+    private var title: String {
+        switch event {
+        case .halloween2026: String(localized: "ハロウィンの空玉は10月31日まで")
+        case .christmas2026: String(localized: "クリスマスの空玉は12月25日まで")
+        }
+    }
+
+    private var message: String {
+        switch event {
+        case .halloween2026:
+            String(localized: "自分の空の天気を取得できた日は、その日の空玉に秋の灯りが添えられます。下に引くと、もう一度取得できます。")
+        case .christmas2026:
+            String(localized: "自分の空の天気を取得できた日は、その日の空玉に小さなオーナメントが付きます。下に引くと、もう一度取得できます。")
+        }
     }
 }

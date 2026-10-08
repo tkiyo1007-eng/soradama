@@ -1,6 +1,6 @@
 import XCTest
 
-/// 2026年ハロウィン期間の画面確認用。通常のテスト実行では skip する。
+/// 2026年の季節演出(ハロウィン・クリスマス)の画面確認用。通常のテスト実行では skip する。
 /// 専用Simulatorで `TEST_RUNNER_SORADAMA_QA_SCREENSHOTS=1` を付けたときだけ動き、
 /// 初回案内で公開都市(上越市)を自分の空に選んで天気を1回取得し、その日の空玉を記録する。
 /// DEBUGビルドの `-SoradamaQASeasonalDate` は期間判定だけを差し替え、記録日は変えない。
@@ -21,7 +21,7 @@ final class SeasonalQAScreenshotTests: XCTestCase {
 
         for language in ["ja", "en"] {
             captureOnboardingSecondPage(language: language)
-            for date in ["2026-09-30", "2026-10-15", "2026-11-01"] {
+            for date in ["2026-09-30", "2026-10-15", "2026-11-01", "2026-12-10", "2026-12-26"] {
                 let app = launchMain(language: language, seasonalDate: date)
                 waitForTodayOrbCard(in: app, language: language)
                 screenshot(app, name: "\(language)-main-\(date)")
@@ -38,8 +38,17 @@ final class SeasonalQAScreenshotTests: XCTestCase {
         screenshot(large, name: "ja-main-2026-10-15-accessibility-large")
         large.terminate()
 
-        for language in ["ja", "en"] {
-            let app = launchMain(language: language, seasonalDate: "2026-10-15")
+        let largeChristmas = launchMain(
+            language: "ja",
+            seasonalDate: "2026-12-10",
+            extra: ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityL"]
+        )
+        waitForTodayOrbCard(in: largeChristmas, language: "ja")
+        screenshot(largeChristmas, name: "ja-main-2026-12-10-accessibility-large")
+        largeChristmas.terminate()
+
+        for (language, date) in [("ja", "2026-10-15"), ("en", "2026-10-15"), ("ja", "2026-12-10"), ("en", "2026-12-10")] {
+            let app = launchMain(language: language, seasonalDate: date)
             let card = waitForTodayOrbCard(in: app, language: language)
             card.tap()
             let share = app.buttons[language == "ja" ? "共有" : "Share"].firstMatch
@@ -49,7 +58,7 @@ final class SeasonalQAScreenshotTests: XCTestCase {
                     .firstMatch.waitForExistence(timeout: 10) || share.waitForExistence(timeout: 1),
                 "今日の空玉カードから共有ボタン付きの詳細が開く"
             )
-            screenshot(app, name: "\(language)-today-orb-detail-2026-10-15")
+            screenshot(app, name: "\(language)-today-orb-detail-\(date)")
             app.terminate()
         }
     }

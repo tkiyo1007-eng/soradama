@@ -83,18 +83,18 @@ struct WeatherPageView: View {
                             orb: orb,
                             streak: OrbStore.shared.streak,
                             isExpanded: !hasOpenedTodayOrbCard,
-                            isHalloween: seasonal.decorates(orb)
+                            decoration: seasonal.decoration(for: orb)
                         ) {
                             hasOpenedTodayOrbCard = true
                             onOpenCollection()
                         }
                         .revealed(cardsAppeared, order: 0, reduceMotion: reduceMotion)
-                    } else if seasonal.isHalloween,
+                    } else if let event = seasonal.event,
                               place.id == viewModel.pages.first?.id,
                               !viewModel.loadingIDs.contains(place.id) {
                         // 期間中でも、今日の玉が無い(通信失敗・保存済みの天気だけ)日は
                         // 記録済みと見せず、記録される条件と取り直し方だけを案内する。
-                        SeasonalRecordHint()
+                        SeasonalRecordHint(event: event)
                             .revealed(cardsAppeared, order: 0, reduceMotion: reduceMotion)
                     }
 
@@ -168,8 +168,8 @@ struct TodayOrbCard: View {
     let orb: DailyOrb
     let streak: Int
     let isExpanded: Bool
-    /// 開催中の今日の玉だけ true。期間の一言と控えめな光を添える。
-    var isHalloween: Bool = false
+    /// 開催中の今日の玉だけ、その行事。期間の一言と控えめな光を添える。
+    var decoration: SeasonalEvent? = nil
     let action: () -> Void
 
     var body: some View {
@@ -182,7 +182,7 @@ struct TodayOrbCard: View {
                     orb: orb,
                     size: orbSize
                 )
-                    .halloweenOrbAccent(isHalloween, size: orbSize)
+                    .seasonalOrbAccent(decoration, size: orbSize)
                     .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: isExpanded ? 5 : 3) {
@@ -205,10 +205,10 @@ struct TodayOrbCard: View {
                         .font(.caption.weight(.medium))
                         .foregroundStyle(Color(red: 0.72, green: 0.86, blue: 1.0))
 
-                    if isHalloween {
-                        Text("ハロウィンの空玉・10月31日まで")
+                    if let decoration {
+                        Text(decoration.cardLabel)
                             .font(.caption2.weight(.semibold))
-                            .foregroundStyle(HalloweenPalette.text)
+                            .foregroundStyle(decoration.textColor)
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
@@ -232,9 +232,8 @@ struct TodayOrbCard: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(isExpanded ? 16 : 13)
             .background(
-                isHalloween
-                    ? HalloweenPalette.cardBackground
-                    : LinearGradient(
+                decoration?.cardBackground
+                    ?? LinearGradient(
                         colors: [
                             Color(red: 0.18, green: 0.20, blue: 0.42).opacity(0.92),
                             Color(red: 0.12, green: 0.16, blue: 0.34).opacity(0.92),
@@ -247,8 +246,8 @@ struct TodayOrbCard: View {
             .overlay {
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .strokeBorder(
-                        isHalloween ? HalloweenPalette.pumpkin.opacity(0.6) : Color.white.opacity(0.15),
-                        lineWidth: isHalloween ? 1 : 0.8
+                        decoration?.cardStroke ?? Color.white.opacity(0.15),
+                        lineWidth: decoration == nil ? 0.8 : 1
                     )
             }
         }

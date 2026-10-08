@@ -1,6 +1,36 @@
 {
   "sourceLanguage": "ja",
   "strings": {
+    "クリスマスの空玉は12月25日まで": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Christmas orbs through December 25"
+          }
+        }
+      }
+    },
+    "自分の空の天気を取得できた日は、その日の空玉に小さなオーナメントが付きます。下に引くと、もう一度取得できます。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On days the app fetches weather for My Sky, that day's orb gets a small ornament. Pull down to fetch again."
+          }
+        }
+      }
+    },
+    "クリスマスの空玉・12月25日まで": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Christmas orb · through December 25"
+          }
+        }
+      }
+    },
     "ハロウィンの空玉は10月31日まで": {
       "localizations": {
         "en": {

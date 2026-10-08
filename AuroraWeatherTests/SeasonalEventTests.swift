@@ -2,8 +2,8 @@ import Testing
 import Foundation
 @testable import AuroraWeather
 
-/// 2026年のハロウィン演出は、端末ローカルのグレゴリオ暦で10月1日〜31日だけ有効。
-/// 11月1日に自動で戻り、他の年には開催しないことを固定する。
+/// 2026年の季節演出は、端末ローカルのグレゴリオ暦で、ハロウィンは10月1日〜31日、
+/// クリスマスは12月1日〜25日だけ有効。期間後に自動で戻り、他の年には開催しないことを固定する。
 struct SeasonalEventTests {
     private func calendar(_ identifier: String, kind: Calendar.Identifier = .gregorian) -> Calendar {
         var calendar = Calendar(identifier: kind)
@@ -127,8 +127,8 @@ struct SeasonalEventTests {
         let lastDay = orb("2026-10-31")
         let before = OrbShareImageKey(orb: lastDay, seasonal: context("2026-10-31 23:59:59"))
         let after = OrbShareImageKey(orb: lastDay, seasonal: context("2026-11-01 00:00:00"))
-        #expect(before.isHalloween)
-        #expect(!after.isHalloween)
+        #expect(before.decoration == .halloween2026)
+        #expect(after.decoration == nil)
         #expect(before != after)
 
         // 期間中の通常の日付変更: 前日の玉は「今日の玉」でなくなり飾りが外れる
@@ -142,5 +142,74 @@ struct SeasonalEventTests {
                 == OrbShareImageKey(orb: orb("2026-10-20"), seasonal: now))
         #expect(OrbShareImageKey(orb: orb("2026-10-20"), seasonal: now)
                 != OrbShareImageKey(orb: orb("2026-10-19"), seasonal: now))
+    }
+
+    // MARK: - クリスマス
+
+    @Test("11月30日と12月1日の境界", arguments: ["Asia/Tokyo", "America/Los_Angeles", "UTC"])
+    func christmasStartBoundary(zone: String) {
+        let calendar = calendar(zone)
+        #expect(SeasonalEvent.active(at: date("2026-11-30 23:59:59", in: zone), calendar: calendar) == nil)
+        #expect(SeasonalEvent.active(at: date("2026-12-01 00:00:00", in: zone), calendar: calendar) == .christmas2026)
+    }
+
+    @Test("12月25日と12月26日の境界", arguments: ["Asia/Tokyo", "America/Los_Angeles", "UTC"])
+    func christmasEndBoundary(zone: String) {
+        let calendar = calendar(zone)
+        #expect(SeasonalEvent.active(at: date("2026-12-25 23:59:59", in: zone), calendar: calendar) == .christmas2026)
+        #expect(SeasonalEvent.active(at: date("2026-12-26 00:00:00", in: zone), calendar: calendar) == nil)
+        #expect(SeasonalEvent.active(at: date("2026-12-31 12:00:00", in: zone), calendar: calendar) == nil)
+    }
+
+    @Test("ハロウィンとクリスマスの間の11月は開催なし。他の年の12月も開催しない")
+    func christmasOnlyIn2026() {
+        let calendar = calendar("Asia/Tokyo")
+        #expect(SeasonalEvent.active(at: date("2026-11-15 12:00:00", in: "Asia/Tokyo"), calendar: calendar) == nil)
+        for year in [2025, 2027] {
+            #expect(SeasonalEvent.active(at: date("\(year)-12-10 12:00:00", in: "Asia/Tokyo"), calendar: calendar) == nil)
+        }
+        #expect(SeasonalEvent.active(at: date("2027-01-01 00:00:00", in: "Asia/Tokyo"), calendar: calendar) == nil)
+    }
+
+    @Test("和暦・仏暦の端末でもクリスマスはグレゴリオ暦の日付で判定する")
+    func christmasNonGregorianDeviceCalendar() {
+        for kind in [Calendar.Identifier.japanese, .buddhist] {
+            let calendar = calendar("Asia/Tokyo", kind: kind)
+            #expect(SeasonalEvent.active(at: date("2026-12-24 20:00:00", in: "Asia/Tokyo"), calendar: calendar) == .christmas2026)
+            #expect(SeasonalEvent.active(at: date("2026-12-26 00:00:00", in: "Asia/Tokyo"), calendar: calendar) == nil)
+        }
+    }
+
+    @Test("クリスマスの飾りも開催中の今日の玉だけ")
+    func christmasDecoratesOnlyToday() {
+        let calendar = calendar("Asia/Tokyo")
+        func orb(_ key: String) -> DailyOrb {
+            DailyOrb(dateKey: key, kind: .snow, tempMax: 5, tempMin: -1, humidity: 70,
+                     precipProbability: nil, placeName: "")
+        }
+        let during = SeasonalContext.live(now: date("2026-12-24 09:00:00", in: "Asia/Tokyo"), calendar: calendar)
+        #expect(during.isChristmas)
+        #expect(!during.isHalloween)
+        #expect(during.decoration(for: orb("2026-12-24")) == .christmas2026)
+        #expect(during.decoration(for: orb("2026-12-23")) == nil)
+        #expect(during.decoration(for: orb("2000-12-15")) == nil)
+
+        let after = SeasonalContext.live(now: date("2026-12-26 00:00:00", in: "Asia/Tokyo"), calendar: calendar)
+        #expect(!after.isChristmas)
+        #expect(after.decoration(for: orb("2026-12-26")) == nil)
+
+        // 12月25日の詳細を開いたまま26日になると、共有画像を作り直す
+        let lastDay = orb("2026-12-25")
+        let before = OrbShareImageKey(
+            orb: lastDay,
+            seasonal: .live(now: date("2026-12-25 23:59:59", in: "Asia/Tokyo"), calendar: calendar)
+        )
+        let next = OrbShareImageKey(
+            orb: lastDay,
+            seasonal: .live(now: date("2026-12-26 00:00:00", in: "Asia/Tokyo"), calendar: calendar)
+        )
+        #expect(before.decoration == .christmas2026)
+        #expect(next.decoration == nil)
+        #expect(before != next)
     }
 }

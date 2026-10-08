@@ -57,11 +57,11 @@ enum OrbCalendarLayout {
 /// 画面の見た目と共有される画像を一致させる。
 struct OrbShareImageKey: Hashable {
     let dateKey: String
-    let isHalloween: Bool
+    let decoration: SeasonalEvent?
 
     init(orb: DailyOrb, seasonal: SeasonalContext) {
         dateKey = orb.dateKey
-        isHalloween = seasonal.decorates(orb)
+        decoration = seasonal.decoration(for: orb)
     }
 }
 
@@ -362,7 +362,7 @@ struct OrbCollectionView: View {
                     selectedOrb = orb
                 } label: {
                     OrbView(orb: orb, size: 38)
-                        .halloweenOrbAccent(seasonal.decorates(orb), size: 38)
+                        .seasonalOrbAccent(seasonal.decoration(for: orb), size: 38)
                 }
                 .buttonStyle(.plain)
             } else {
@@ -644,7 +644,7 @@ struct OrbCollectionView: View {
 
             VStack(spacing: 14) {
                 OrbView(orb: orb, size: 130)
-                    .halloweenOrbAccent(seasonal.decorates(orb), size: 130)
+                    .seasonalOrbAccent(seasonal.decoration(for: orb), size: 130)
                     .padding(.top, 8)
                 VStack(spacing: 4) {
                     if let date = orb.date {
@@ -731,7 +731,7 @@ struct OrbCollectionView: View {
         .task(id: OrbShareImageKey(orb: orb, seasonal: seasonal)) {
             orbShareImage = nil
             let renderer = ImageRenderer(
-                content: singleOrbShareCard(orb, isHalloween: seasonal.decorates(orb))
+                content: singleOrbShareCard(orb, decoration: seasonal.decoration(for: orb))
             )
             renderer.scale = 3
             if let uiImage = renderer.uiImage {
@@ -788,10 +788,10 @@ struct OrbCollectionView: View {
     }
 
     /// 1日ぶんの空玉をSNSに貼れる縦型カード
-    private func singleOrbShareCard(_ orb: DailyOrb, isHalloween: Bool) -> some View {
+    private func singleOrbShareCard(_ orb: DailyOrb, decoration: SeasonalEvent?) -> some View {
         VStack(spacing: 12) {
             OrbView(orb: orb, size: 120, animated: false)
-                .halloweenOrbAccent(isHalloween, size: 120)
+                .seasonalOrbAccent(decoration, size: 120)
                 .padding(.top, 6)
             if let date = orb.date {
                 Text(date.formatted(.dateTime.locale(Locale.current).year().month().day().weekday()))
