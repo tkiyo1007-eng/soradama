@@ -18,8 +18,18 @@ enum SoradamaShareContent {
         String(localized: "毎日の空を、小さなガラス玉に残せる天気アプリです。")
     }
 
+    /// 共有先で同じ投稿をたどれるようにするハッシュタグ。
+    static var hashtag: String {
+        String(localized: "#空玉")
+    }
+
     static var messageWithStoreLink: String {
-        "\(message)\n\(AppStoreLinks.app.absoluteString)"
+        "\(message) \(hashtag)\n\(AppStoreLinks.app.absoluteString)"
+    }
+
+    /// 共有画像の下に描く一言。画像だけが転載されても、URLを打たずに検索で見つけられるようにする。
+    static var imageFooter: String {
+        String(localized: "App Storeで「空玉」と検索 · \(hashtag)")
     }
 }
 

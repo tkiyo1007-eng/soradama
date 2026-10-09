@@ -124,9 +124,9 @@ struct MonthSummaryView: View {
                 Text("空玉 — 空を集める天気アプリ")
                     .font(.caption2)
                     .foregroundStyle(.white.opacity(0.55))
-                Text("apps.apple.com/app/id6788443049")
-                    .font(.system(size: 9))
-                    .foregroundStyle(.white.opacity(0.4))
+                Text(SoradamaShareContent.imageFooter)
+                    .font(.system(size: 10))
+                    .foregroundStyle(.white.opacity(0.5))
             }
         }
         .padding(22)

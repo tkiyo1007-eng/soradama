@@ -1,6 +1,26 @@
 {
   "sourceLanguage": "ja",
   "strings": {
+    "#空玉": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "#Soradama"
+          }
+        }
+      }
+    },
+    "App Storeで「空玉」と検索 · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search “Soradama” on the App Store · %@"
+          }
+        }
+      }
+    },
     "クリスマスの空玉は12月25日まで": {
       "localizations": {
         "en": {

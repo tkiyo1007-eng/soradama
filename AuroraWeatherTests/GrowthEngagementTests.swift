@@ -96,6 +96,8 @@ struct GrowthEngagementTests {
         #expect(!SoradamaShareContent.message.isEmpty)
         #expect(SoradamaShareContent.messageWithStoreLink.contains(SoradamaShareContent.message))
         #expect(SoradamaShareContent.messageWithStoreLink.contains(AppStoreLinks.app.absoluteString))
+        #expect(SoradamaShareContent.messageWithStoreLink.contains(SoradamaShareContent.hashtag))
+        #expect(SoradamaShareContent.imageFooter.contains(SoradamaShareContent.hashtag))
     }
 
     @Test("今日の空玉Widget用URLスキームがアプリに登録されている")
