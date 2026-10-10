@@ -788,7 +788,7 @@ struct OrbCollectionView: View {
     }
 
     /// 1日ぶんの空玉をSNSに貼れる縦型カード
-    private func singleOrbShareCard(_ orb: DailyOrb, decoration: SeasonalEvent?) -> some View {
+    func singleOrbShareCard(_ orb: DailyOrb, decoration: SeasonalEvent?) -> some View {
         VStack(spacing: 12) {
             OrbView(orb: orb, size: 120, animated: false)
                 .seasonalOrbAccent(decoration, size: 120)

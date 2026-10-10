@@ -81,6 +81,21 @@ struct EventArtRenderTests {
         try await write(OrbView(orb: daikan, size: size, animated: false), to: "\(folder)/orb-daikan.png")
     }
 
+    /// 共有画像の見た目の確認用。SORADAMA_RENDER_SHARE_CARDS に出力先のフォルダを渡す。
+    /// テストの言語(xcodebuild -testLanguage)ごとに、飾りなし・クリスマスの2枚を書き出す。
+    @Test("1日ぶんの共有カードを書き出す（指定時のみ）")
+    func renderShareCards() async throws {
+        guard let folder = ProcessInfo.processInfo.environment["SORADAMA_RENDER_SHARE_CARDS"] else { return }
+        let lang = Locale.current.language.languageCode?.identifier ?? "xx"
+        let orb = DailyOrb(
+            dateKey: "2026-12-10", kind: .clear, tempMax: 9, tempMin: 2, humidity: 55,
+            precipProbability: 10, placeName: "上越市", timeOfDay: .night
+        )
+        let view = OrbCollectionView()
+        try await write(view.singleOrbShareCard(orb, decoration: nil), to: "\(folder)/share-\(lang)-plain.png")
+        try await write(view.singleOrbShareCard(orb, decoration: .christmas2026), to: "\(folder)/share-\(lang)-christmas.png")
+    }
+
     /// ImageRenderer は大きなぼかしの影を段状に描くため、画面と同じ経路
     /// (ウィンドウに載せて drawHierarchy)で書き出す。背景は透明にする。
     private func write(_ content: some View, to output: String) async throws {
