@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""App Store のアプリ内イベント「冬のはじまりの空玉」「クリスマスの空玉」の画像を作る。
+"""App Store のアプリ内イベント「冬のはじまりの空玉」「クリスマスの空玉」「冬至から大寒の空玉」の画像を作る。
 
-アプリと同じ描画で書き出した空玉(EventArtRenderTests.renderWinterOrbs が出力)を、
+アプリと同じ描画で書き出した空玉(EventArtRenderTests.renderWinterOrbs / renderMidwinterOrbs が出力)を、
 アプリ内と近い配色の空に重ねる。文字は入れない(App Store 側がイベント名を重ねて表示するため)。
 天気の演出と見間違えないよう、雪や雨は描かない。
 
@@ -127,15 +127,44 @@ def christmas(orbs: Path, output: Path) -> None:
     detail.convert("RGB").save(output / "event-detail-1080x1920.png")
 
 
+# 冬至から大寒: 夜の紺から、冬至の夕暮れの淡い橙へ
+MIDWINTER_SKY = [(0.0, (10, 18, 52)), (0.55, (36, 50, 104)), (0.85, (120, 110, 150)), (1.0, (226, 160, 128))]
+
+
+def midwinter(orbs: Path, output: Path) -> None:
+    output.mkdir(parents=True, exist_ok=True)
+    card = gradient((1920, 1080), MIDWINTER_SKY)
+    add_stars(card, 260, seed=21)
+    add_orb(card, orbs / "orb-toji.png", (420, 590), 940, (255, 190, 160))
+    add_orb(card, orbs / "orb-fullmoon-dec.png", (960, 470), 940, (255, 240, 200))
+    add_orb(card, orbs / "orb-daikan.png", (1500, 590), 940, (255, 205, 190))
+    card.convert("RGB").save(output / "event-card-1920x1080.png")
+
+    detail = gradient((1080, 1920), MIDWINTER_SKY)
+    add_stars(detail, 260, seed=23)
+    # 詳細ページは下側に App Store の文字が重なるため、玉を上半分に置く。
+    add_orb(detail, orbs / "orb-fullmoon-dec.png", (540, 400), 950, (255, 240, 200))
+    add_orb(detail, orbs / "orb-toji.png", (300, 860), 950, (255, 190, 160))
+    add_orb(detail, orbs / "orb-daikan.png", (780, 860), 950, (255, 205, 190))
+    detail.convert("RGB").save(output / "event-detail-1080x1920.png")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--orbs", type=Path, required=True,
+    parser.add_argument("--orbs", type=Path,
                         help="Folder written by EventArtRenderTests (SORADAMA_RENDER_WINTER_ORBS)")
-    parser.add_argument("--winter-output", type=Path, required=True)
-    parser.add_argument("--christmas-output", type=Path, required=True)
+    parser.add_argument("--winter-output", type=Path)
+    parser.add_argument("--christmas-output", type=Path)
+    parser.add_argument("--midwinter-orbs", type=Path,
+                        help="Folder written by EventArtRenderTests (SORADAMA_RENDER_MIDWINTER_ORBS)")
+    parser.add_argument("--midwinter-output", type=Path)
     args = parser.parse_args()
-    winter(args.orbs, args.winter_output)
-    christmas(args.orbs, args.christmas_output)
+    if args.orbs and args.winter_output:
+        winter(args.orbs, args.winter_output)
+    if args.orbs and args.christmas_output:
+        christmas(args.orbs, args.christmas_output)
+    if args.midwinter_orbs and args.midwinter_output:
+        midwinter(args.midwinter_orbs, args.midwinter_output)
 
 
 if __name__ == "__main__":

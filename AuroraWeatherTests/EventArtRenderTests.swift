@@ -56,6 +56,31 @@ struct EventArtRenderTests {
         )
     }
 
+    /// 冬至から大寒のイベント用。SORADAMA_RENDER_MIDWINTER_ORBS に出力先のフォルダを渡す。
+    @Test("イベント画像用の冬至・満月・大寒の空玉を書き出す（指定時のみ）")
+    func renderMidwinterOrbs() async throws {
+        guard let folder = ProcessInfo.processInfo.environment["SORADAMA_RENDER_MIDWINTER_ORBS"] else { return }
+        let size: CGFloat = 300
+        let toji = DailyOrb(
+            dateKey: "2026-12-22", kind: .clear, tempMax: 8, tempMin: 1, humidity: 50,
+            precipProbability: nil, placeName: "", timeOfDay: .dusk
+        )
+        let fullMoon = DailyOrb(
+            dateKey: "2026-12-24", kind: .clear, tempMax: 7, tempMin: 0, humidity: 50,
+            precipProbability: nil, placeName: "", timeOfDay: .night
+        )
+        let daikan = DailyOrb(
+            dateKey: "2027-01-20", kind: .clear, tempMax: 4, tempMin: -2, humidity: 45,
+            precipProbability: nil, placeName: "", timeOfDay: .dawn
+        )
+        #expect(toji.solarTerm == .toji)
+        #expect(fullMoon.moonPhase == .fullMoon)
+        #expect(daikan.solarTerm == .daikan)
+        try await write(OrbView(orb: toji, size: size, animated: false), to: "\(folder)/orb-toji.png")
+        try await write(OrbView(orb: fullMoon, size: size, animated: false), to: "\(folder)/orb-fullmoon-dec.png")
+        try await write(OrbView(orb: daikan, size: size, animated: false), to: "\(folder)/orb-daikan.png")
+    }
+
     /// ImageRenderer は大きなぼかしの影を段状に描くため、画面と同じ経路
     /// (ウィンドウに載せて drawHierarchy)で書き出す。背景は透明にする。
     private func write(_ content: some View, to output: String) async throws {
