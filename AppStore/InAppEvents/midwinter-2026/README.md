@@ -32,6 +32,8 @@ python3 scripts/compose_winter_event_art.py --midwinter-orbs /path/orbs2 --midwi
 
 ## ノミネートの文案（新しいコンテンツ、公開日 2026-12-22〜2027-01-22、iPhone）
 
+**2026-10-11 に提出済み**（ID `cd9e558d-c56e-482b-93a7-ce01acea37c9`、「新しいアプリ内イベントを提出する予定」にチェック、補足資料は紹介サイト）。
+
 - 名前: 空玉 冬至から大寒の空玉（2026年12月〜2027年1月）
 - 説明:
 
