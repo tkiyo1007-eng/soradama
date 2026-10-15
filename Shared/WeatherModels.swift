@@ -125,7 +125,9 @@ struct WeatherBundle: Codable {
     let windSpeed: Double
     let windDirection: Double
     let pressure: Double
-    let uvIndex: Double
+    /// nil は欠測。0(弱い)という正常値と区別するため、取れなかったときに 0 を入れない。
+    /// Codable は省略可能として扱うので、1.8.5 以前が保存した数値入りのキャッシュもそのまま読める。
+    let uvIndex: Double?
     let visibility: Double?
 
     let sunrise: Date

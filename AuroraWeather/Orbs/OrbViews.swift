@@ -71,6 +71,7 @@ struct OrbCollectionView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.seasonalContext) private var seasonal
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AppStorage(TodayOrbWidgetDiscovery.dismissedKey) private var isWidgetGuideDismissed = false
     @State private var displayedMonth = Date()
     @State private var selectedOrb: DailyOrb?
@@ -277,6 +278,8 @@ struct OrbCollectionView: View {
                     .frame(width: 44, height: 44)
                     .background(Color.white.opacity(0.10), in: Circle())
             }
+            // 記号だけのボタンは VoiceOver が名前を読めないので、意味を付ける
+            .accessibilityLabel("前の月")
             Spacer()
             Text(Self.monthTitleFormatter.string(from: displayedMonth))
                 .font(.title3.weight(.semibold))
@@ -291,6 +294,7 @@ struct OrbCollectionView: View {
                     .frame(width: 44, height: 44)
                     .background(Color.white.opacity(0.10), in: Circle())
             }
+            .accessibilityLabel("次の月")
             .disabled(!canGoForward)
         }
     }
@@ -355,29 +359,39 @@ struct OrbCollectionView: View {
     private func daySlot(_ day: Date) -> some View {
         let dayNumber = calendar.component(.day, from: day)
         let isFuture = day > Date()
-        VStack(spacing: 3) {
-            if let orb = store.orb(for: day) {
-                Button {
-                    Haptics.selection()
-                    selectedOrb = orb
-                } label: {
+        if let orb = store.orb(for: day) {
+            // 玉だけ(38pt)を押させず、日付の数字まで含めたマス全体(44pt 以上)を押せるようにする
+            Button {
+                Haptics.selection()
+                selectedOrb = orb
+            } label: {
+                VStack(spacing: 3) {
                     OrbView(orb: orb, size: 38)
                         .seasonalOrbAccent(seasonal.decoration(for: orb), size: 38)
+                    Text("\(dayNumber)")
+                        .font(.caption2)
+                        .foregroundStyle(.white.opacity(0.6))
+                        // 日付は玉の読み上げ名に入っているので重ねて読まない
+                        .accessibilityHidden(true)
                 }
-                .buttonStyle(.plain)
-            } else {
+                .frame(minWidth: 44, minHeight: 52)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+        } else {
+            VStack(spacing: 3) {
                 Circle()
                     .strokeBorder(
                         Color.white.opacity(isFuture ? 0.06 : 0.18),
                         style: StrokeStyle(lineWidth: 1, dash: [3, 3])
                     )
                     .frame(width: 38, height: 38)
+                Text("\(dayNumber)")
+                    .font(.caption2)
+                    .foregroundStyle(.white.opacity(isFuture ? 0.25 : 0.6))
             }
-            Text("\(dayNumber)")
-                .font(.caption2)
-                .foregroundStyle(.white.opacity(isFuture ? 0.25 : 0.6))
+            .frame(height: 52)
         }
-        .frame(height: 52)
     }
 
     // MARK: 統計
@@ -396,12 +410,14 @@ struct OrbCollectionView: View {
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "sparkles.rectangle.stack")
+                            .accessibilityHidden(true)
                         Text("この月をふりかえる")
                             .font(.subheadline.weight(.semibold))
                         Spacer()
                         Image(systemName: "chevron.right")
                             .font(.caption.weight(.semibold))
                             .opacity(0.6)
+                            .accessibilityHidden(true)
                     }
                     .foregroundStyle(.white)
                     .padding(.horizontal, 16)
@@ -503,7 +519,8 @@ struct OrbCollectionView: View {
             }
             Text("同じ天気でも、昼と夜では別の玉になります")
                 .font(.caption2)
-                .foregroundStyle(.white.opacity(0.45))
+                // 0.45 では紺の背景とのコントラストが 4.5:1 を下回るので少し明るくする
+                .foregroundStyle(.white.opacity(0.6))
 
             Divider().overlay(Color.white.opacity(0.15))
 
@@ -533,7 +550,8 @@ struct OrbCollectionView: View {
                                 .frame(width: 40, height: 40)
                         }
                         Text(has ? season.skyName : season.label)
-                            .font(.system(size: 9, weight: .medium))
+                            // 固定サイズだと文字を大きくする設定が効かないので、可変の最小サイズにする
+                            .font(.caption2.weight(.medium))
                             .foregroundStyle(.white.opacity(has ? 0.7 : 0.3))
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)
@@ -562,7 +580,7 @@ struct OrbCollectionView: View {
             }
             Text("日の出・日の入りの前後1時間に開くと、特別な空が残ります")
                 .font(.caption2)
-                .foregroundStyle(.white.opacity(0.45))
+                .foregroundStyle(.white.opacity(0.6))
         }
     }
 
@@ -642,82 +660,17 @@ struct OrbCollectionView: View {
                 .ignoresSafeArea()
                 .onTapGesture { selectedOrb = nil }
 
-            VStack(spacing: 14) {
-                OrbView(orb: orb, size: 130)
-                    .seasonalOrbAccent(seasonal.decoration(for: orb), size: 130)
-                    .padding(.top, 8)
-                VStack(spacing: 4) {
-                    if let date = orb.date {
-                        Text(date.formatted(.dateTime.locale(Locale.current).year().month().day().weekday()))
-                            .font(.headline)
-                            .foregroundStyle(.white)
+            // 大きな文字では内容が画面に収まらないので、縦にスクロールできる形にする
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    ScrollView {
+                        orbDetailContent(orb)
                     }
-                    Text("\(orb.placeName)・\(orb.kind.label)")
-                        .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.8))
-                    Text("最高 \(Self.degrees(orb.tempMax)) / 最低 \(Self.degrees(orb.tempMin))")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.white.opacity(0.9))
-                    HStack(spacing: 10) {
-                        Label("\(Int(orb.humidity))%", systemImage: "humidity")
-                        if let probability = orb.precipProbability {
-                            Label("\(Int(probability))%", systemImage: "umbrella")
-                        }
-                    }
-                    .font(.caption)
-                    .foregroundStyle(.white.opacity(0.65))
-                    .padding(.top, 2)
+                    .scrollIndicators(.hidden)
+                } else {
+                    orbDetailContent(orb)
                 }
-
-                // その日が節気・満月なら、それを主役として見せる
-                if let term = orb.solarTerm {
-                    VStack(spacing: 2) {
-                        Text(term.label)
-                            .font(.system(.title3, design: .serif).weight(.semibold))
-                            .foregroundStyle(Color(red: term.accent.r, green: term.accent.g, blue: term.accent.b))
-                        Text(term.poem)
-                            .font(.caption)
-                            .foregroundStyle(.white.opacity(0.7))
-                            .multilineTextAlignment(.center)
-                    }
-                } else if let phase = orb.moonPhase, phase != .newMoon {
-                    Text(phase.label)
-                        .font(.system(.subheadline, design: .serif).weight(.medium))
-                        .foregroundStyle(Color(red: 1.0, green: 0.95, blue: 0.8))
-                }
-
-                Text("「\(OrbVoice.line(for: orb))」")
-                    .font(.footnote)
-                    .foregroundStyle(.white.opacity(0.75))
-                    .multilineTextAlignment(.center)
-
-                HStack(spacing: 10) {
-                    if let image = orbShareImage {
-                        ShareLink(
-                            item: image,
-                            subject: Text(SoradamaShareContent.subject),
-                            message: Text(SoradamaShareContent.messageWithStoreLink),
-                            preview: SharePreview("\(orb.dateKey)の空玉", image: image)
-                        ) {
-                            Label("共有", systemImage: "square.and.arrow.up")
-                                .font(.callout.weight(.semibold))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 22)
-                                .padding(.vertical, 9)
-                                .background(Color.white.opacity(0.15), in: Capsule())
-                        }
-                        .accessibilityLabel(Self.singleOrbShareAccessibilityLabel(for: orb))
-                    }
-                    Button("閉じる") { selectedOrb = nil }
-                        .font(.callout.weight(.semibold))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 22)
-                        .padding(.vertical, 9)
-                        .background(Color.white.opacity(0.15), in: Capsule())
-                }
-                .padding(.bottom, 8)
             }
-            .padding(22)
             .background(
                 LinearGradient(
                     colors: [Color(red: 0.10, green: 0.12, blue: 0.28), Color(red: 0.18, green: 0.17, blue: 0.40)],
@@ -726,7 +679,8 @@ struct OrbCollectionView: View {
                 ),
                 in: RoundedRectangle(cornerRadius: 28, style: .continuous)
             )
-            .padding(.horizontal, 44)
+            .padding(.horizontal, dynamicTypeSize.isAccessibilitySize ? 16 : 44)
+            .padding(.vertical, dynamicTypeSize.isAccessibilitySize ? 24 : 0)
         }
         .task(id: OrbShareImageKey(orb: orb, seasonal: seasonal)) {
             orbShareImage = nil
@@ -738,6 +692,102 @@ struct OrbCollectionView: View {
                 orbShareImage = Image(uiImage: uiImage)
             }
         }
+    }
+
+    /// 詳細の横並びの行。大きな文字のときだけ縦並びにする。
+    private var detailRowLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: 10))
+            : AnyLayout(HStackLayout(spacing: 10))
+    }
+
+    /// 玉の詳細の中身。文字が折り返せるよう、1行に固定しない。
+    private func orbDetailContent(_ orb: DailyOrb) -> some View {
+        VStack(spacing: 14) {
+            OrbView(orb: orb, size: 130)
+                .seasonalOrbAccent(seasonal.decoration(for: orb), size: 130)
+                .padding(.top, 8)
+            VStack(spacing: 4) {
+                if let date = orb.date {
+                    Text(date.formatted(.dateTime.locale(Locale.current).year().month().day().weekday()))
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                }
+                Text("\(orb.placeName)・\(orb.kind.label)")
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.8))
+                Text("最高 \(Self.degrees(orb.tempMax)) / 最低 \(Self.degrees(orb.tempMin))")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.white.opacity(0.9))
+                // 大きな文字では横に2つ並べると数字と%が割れるので、縦に並べる
+                detailRowLayout {
+                    Label("\(Int(orb.humidity))%", systemImage: "humidity")
+                    if let probability = orb.precipProbability {
+                        Label("\(Int(probability))%", systemImage: "umbrella")
+                    }
+                }
+                .font(.caption)
+                .foregroundStyle(.white.opacity(0.65))
+                .padding(.top, 2)
+            }
+
+            // その日が節気・満月なら、それを主役として見せる
+            if let term = orb.solarTerm {
+                VStack(spacing: 2) {
+                    Text(term.label)
+                        .font(.system(.title3, design: .serif).weight(.semibold))
+                        .foregroundStyle(Color(red: term.accent.r, green: term.accent.g, blue: term.accent.b))
+                    Text(term.poem)
+                        .font(.caption)
+                        .foregroundStyle(.white.opacity(0.7))
+                        .multilineTextAlignment(.center)
+                }
+            } else if let phase = orb.moonPhase, phase != .newMoon {
+                Text(phase.label)
+                    .font(.system(.subheadline, design: .serif).weight(.medium))
+                    .foregroundStyle(Color(red: 1.0, green: 0.95, blue: 0.8))
+            }
+
+            Text("「\(OrbVoice.line(for: orb))」")
+                .font(.footnote)
+                .foregroundStyle(.white.opacity(0.75))
+                .multilineTextAlignment(.center)
+
+            detailRowLayout {
+                if let image = orbShareImage {
+                    ShareLink(
+                        item: image,
+                        subject: Text(SoradamaShareContent.subject),
+                        message: Text(SoradamaShareContent.messageWithStoreLink),
+                        preview: SharePreview("\(orb.dateKey)の空玉", image: image)
+                    ) {
+                        Label("共有", systemImage: "square.and.arrow.up")
+                            .font(.callout.weight(.semibold))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 22)
+                            // 押せる範囲を 44pt 以上にする
+                            .frame(minHeight: 44)
+                            .background(Color.white.opacity(0.15), in: Capsule())
+                    }
+                    .accessibilityLabel(Self.singleOrbShareAccessibilityLabel(for: orb))
+                }
+                Button {
+                    selectedOrb = nil
+                } label: {
+                    // 余白と背景をラベルの側に付ける。Button の外側に付けると、
+                    // カプセルの見た目のうち文字の部分しか押せなくなる
+                    Text("閉じる")
+                        .font(.callout.weight(.semibold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 22)
+                        .frame(minHeight: 44)
+                        .background(Color.white.opacity(0.15), in: Capsule())
+                        .contentShape(Capsule())
+                }
+            }
+            .padding(.bottom, 8)
+        }
+        .padding(22)
     }
 
     /// ずかんのマスをタップしたときの詳細(初めて出会った日と収集数)
@@ -766,13 +816,18 @@ struct OrbCollectionView: View {
                 Text("これまでに \(count) 個")
                     .font(.footnote)
                     .foregroundStyle(.white.opacity(0.75))
-                Button("閉じる") { selectedVariant = nil }
-                    .font(.callout.weight(.semibold))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 26)
-                    .padding(.vertical, 9)
-                    .background(Color.white.opacity(0.15), in: Capsule())
-                    .padding(.top, 2)
+                Button {
+                    selectedVariant = nil
+                } label: {
+                    Text("閉じる")
+                        .font(.callout.weight(.semibold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 26)
+                        .frame(minHeight: 44)
+                        .background(Color.white.opacity(0.15), in: Capsule())
+                        .contentShape(Capsule())
+                }
+                .padding(.top, 2)
             }
             .padding(22)
             .background(
@@ -792,7 +847,8 @@ struct OrbCollectionView: View {
         VStack(spacing: 12) {
             OrbView(orb: orb, size: 120, animated: false)
                 .seasonalOrbAccent(decoration, size: 120)
-                .padding(.top, 6)
+                // 季節の光の輪は玉の外側まで広がるので、飾りのある日だけ上を空けて切れないようにする
+                .padding(.top, decoration == nil ? 6 : 24)
             if let date = orb.date {
                 Text(date.formatted(.dateTime.locale(Locale.current).year().month().day().weekday()))
                     .font(.subheadline.weight(.semibold))

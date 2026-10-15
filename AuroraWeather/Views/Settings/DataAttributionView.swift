@@ -45,8 +45,14 @@ struct WeatherAttributionFooter: View {
                 sourceLink("天気データ: Open-Meteo", destination: DataAttribution.openMeteo)
             }
             sourceLink("ライセンス: CC BY 4.0", destination: DataAttribution.creativeCommons)
-            Button("データの出典と利用条件") { showsDetails = true }
-                .frame(minHeight: 44)
+            Button {
+                showsDetails = true
+            } label: {
+                // リンクと同じく、文字が折り返せて押せる範囲が 44pt 以上の形にする
+                Text("データの出典と利用条件")
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .contentShape(Rectangle())
+            }
         }
         .font(.caption)
         .buttonStyle(.borderless)

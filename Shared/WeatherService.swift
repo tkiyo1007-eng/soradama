@@ -240,15 +240,16 @@ struct WeatherService {
             ))
         }
 
-        // UV / 視程は current に無い場合、直近の毎時データで補完する
+        // UV / 視程は current に無い場合、直近の毎時データで補完する。
+        // それでも無ければ欠測(nil)のまま渡す。0 にすると「弱い」という正常値に見えてしまう。
         let nearestHourIndex = hourly.time.indices.min { lhs, rhs in
             abs(hourly.time[lhs] - response.current.time) < abs(hourly.time[rhs] - response.current.time)
         }
-        var uv = response.current.uvIndex ?? 0
+        var uv: Double? = response.current.uvIndex
         var visibility: Double?
         if let index = nearestHourIndex {
-            if response.current.uvIndex == nil, let values = hourly.uvIndex, values.indices.contains(index) {
-                uv = values[index] ?? 0
+            if uv == nil, let values = hourly.uvIndex, values.indices.contains(index) {
+                uv = values[index]
             }
             if let values = hourly.visibility, values.indices.contains(index) {
                 visibility = values[index]

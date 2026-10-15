@@ -92,7 +92,67 @@ struct WeatherServiceTests {
         #expect(!WeatherService.usesJMAModel(latitude: 37.98, longitude: 23.72))   // アテネ
     }
 
+    // MARK: - UV 指数の欠測
+
+    /// 0 は「弱い」という正常値なので、取れなかったときに 0 を入れると
+    /// 欠測が夜の 0 と見分けられなくなる。欠測は nil のまま画面へ渡す。
+    @Test("UVが current にも毎時にも無ければ欠測(nil)のまま、0 にしない")
+    func uvMissingStaysNil() {
+        let bundle = WeatherService.bundle(from: Self.forecast(currentUV: nil, hourlyUV: nil))
+        #expect(bundle.uvIndex == nil)
+    }
+
+    @Test("UVが current に無くても直近の毎時データがあれば使う")
+    func uvFallsBackToNearestHour() {
+        // current.time は毎時の先頭と同じ時刻なので、添字 0 が最も近い
+        let bundle = WeatherService.bundle(from: Self.forecast(currentUV: nil, hourlyUV: [4.5, 6, 7]))
+        #expect(bundle.uvIndex == 4.5)
+    }
+
+    @Test("直近の毎時データが null なら欠測のまま")
+    func uvNearestHourNullStaysNil() {
+        let bundle = WeatherService.bundle(from: Self.forecast(currentUV: nil, hourlyUV: [nil, 6, 7]))
+        #expect(bundle.uvIndex == nil)
+    }
+
+    @Test("UVが 0 のときは 0 のまま(夜の 0 は欠測ではない)")
+    func uvZeroIsKept() {
+        let bundle = WeatherService.bundle(from: Self.forecast(currentUV: 0, hourlyUV: [5, 6, 7]))
+        #expect(bundle.uvIndex == 0)
+    }
+
     // MARK: - 補助
+
+    /// UV の有無を切り替えられる版。current と毎時の uv_index を別々に指定する。
+    private static func forecast(currentUV: Double?, hourlyUV: [Double?]?) -> ForecastResponse {
+        let times: [Double] = [1_000, 4_600, 8_200]
+        let currentPart = currentUV.map { ", \"uv_index\": \($0)" } ?? ""
+        let hourlyPart = hourlyUV.map { values -> String in
+            let parts = values.map { $0.map { String($0) } ?? "null" }.joined(separator: ",")
+            return ", \"uv_index\": [\(parts)]"
+        } ?? ""
+        let json = """
+        {
+          "latitude": 35.68, "longitude": 139.76, "timezone": "Asia/Tokyo",
+          "current": {
+            "time": \(times[0]), "temperature_2m": 20, "relative_humidity_2m": 50,
+            "apparent_temperature": 20, "is_day": 1, "precipitation": 0, "weather_code": 0,
+            "wind_speed_10m": 3, "wind_direction_10m": 180, "pressure_msl": 1013\(currentPart)
+          },
+          "hourly": {
+            "time": \(times),
+            "temperature_2m": \(times.map { _ in 20.0 }),
+            "weather_code": \(times.map { _ in 0 })\(hourlyPart)
+          },
+          "daily": {
+            "time": [\(times[0])],
+            "weather_code": [0], "temperature_2m_max": [25], "temperature_2m_min": [15],
+            "sunrise": [\(times[0])], "sunset": [\(times[0] + 43_200)]
+          }
+        }
+        """
+        return try! JSONDecoder().decode(ForecastResponse.self, from: Data(json.utf8))
+    }
 
     private static func forecast(hourlyTimes: [Double], precipitation: [Double?]?) -> ForecastResponse {
         let json = """

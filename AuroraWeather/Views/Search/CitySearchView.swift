@@ -41,11 +41,16 @@ struct CitySearchView: View {
                         HStack {
                             Label("現在地を使う", systemImage: "location.fill")
                                 .foregroundStyle(Color.accentColor)
+                                // 大きな文字でも1行に押し込まず折り返す
+                                .fixedSize(horizontal: false, vertical: true)
+                                .multilineTextAlignment(.leading)
                             Spacer()
                             if isSelecting {
                                 ProgressView()
                             }
                         }
+                        // 行の押せる範囲を 44pt 以上にする
+                        .frame(minHeight: 44)
                     }
                     .disabled(isSelecting)
 
@@ -155,10 +160,19 @@ struct CitySearchView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("閉じる") {
+                    Button {
                         cancelLocationSelection()
                         dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.body.weight(.semibold))
+                            // 文字のボタンだと押せる範囲が 44pt に満たず、大きな文字では切れる。
+                            // シートの標準的な「×」にして、読み上げは「閉じる」のままにする
+                            .frame(width: 44, height: 44)
+                            .contentShape(Rectangle())
                     }
+                    .accessibilityLabel("閉じる")
+                    .accessibilityIdentifier("citySearch.close")
                 }
             }
         }

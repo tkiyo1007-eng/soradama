@@ -21,6 +21,8 @@ struct GlassCard<Content: View>: View {
                     if let systemImage {
                         Image(systemName: systemImage)
                             .font(.footnote.weight(.semibold))
+                            // 記号名(chart.xyaxis.line など)を VoiceOver に読ませない。見出しの文字で足りる
+                            .accessibilityHidden(true)
                     }
                     Text(title)
                         .font(.footnote.weight(.semibold))

@@ -143,10 +143,10 @@ struct MonthSummaryView: View {
     private func stat(value: String, label: LocalizedStringKey) -> some View {
         VStack(spacing: 1) {
             Text(value)
-                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .font(.system(.title2, design: .rounded).weight(.bold))
                 .foregroundStyle(.white)
             Text(label)
-                .font(.system(size: 10))
+                .font(.caption2)
                 .foregroundStyle(.white.opacity(0.6))
         }
         .frame(maxWidth: .infinity)

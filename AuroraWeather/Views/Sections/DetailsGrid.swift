@@ -365,9 +365,10 @@ struct WindCompassView: View {
 /// (Apple 純正「天気」アプリの横棒ゲージとは異なるリング表現)
 struct UVGaugeView: View {
     @ScaledMetric(relativeTo: .body) private var cardMinHeight: CGFloat = 96
-    let value: Double
+    /// nil は欠測。0(弱い)と同じ見た目にせず「データなし」と伝える。
+    let value: Double?
 
-    private var level: (String, Color) {
+    static func level(for value: Double) -> (String, Color) {
         switch value {
         case ..<3:  return (String(localized: "低い"), Color(red: 0.45, green: 0.85, blue: 0.55))
         case 3..<6: return (String(localized: "中程度"), Color(red: 1.0, green: 0.85, blue: 0.40))
@@ -377,8 +378,25 @@ struct UVGaugeView: View {
         }
     }
 
+    private var level: (String, Color) {
+        guard let value else {
+            return (String(localized: "データなし"), Color.white.opacity(0.6))
+        }
+        return Self.level(for: value)
+    }
+
     private var ringProgress: Double {
-        (value / 11).clamped(to: 0...1)
+        guard let value else { return 0 }
+        return (value / 11).clamped(to: 0...1)
+    }
+
+    /// 読み上げ用。欠測のときは数値を言わず「データなし」とだけ伝える。
+    static func accessibilityText(value: Double?) -> String {
+        let title = String(localized: "UV指数")
+        guard let value else {
+            return "\(title)、\(String(localized: "データなし"))"
+        }
+        return "\(title)、\(Int(value.rounded()))、\(level(for: value).0)"
     }
 
     var body: some View {
@@ -390,7 +408,7 @@ struct UVGaugeView: View {
                     .trim(from: 0, to: ringProgress)
                     .stroke(level.1, style: StrokeStyle(lineWidth: 6, lineCap: .round))
                     .rotationEffect(.degrees(-90))
-                Text("\(Int(value.rounded()))")
+                Text(value.map { String(Int($0.rounded())) } ?? "—")
                     .font(.system(.title3, design: .rounded).weight(.semibold))
                     .foregroundStyle(.white)
             }
@@ -407,6 +425,8 @@ struct UVGaugeView: View {
             Spacer(minLength: 0)
         }
         .frame(minHeight: cardMinHeight, alignment: .leading)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Self.accessibilityText(value: value))
     }
 }
 

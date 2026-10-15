@@ -122,12 +122,18 @@ struct WeatherPageView: View {
                             .foregroundStyle(Color(red: 0.72, green: 0.86, blue: 1.0))
                             .tint(Color(red: 0.72, green: 0.86, blue: 1.0))
                         if RadarService.isCovered(latitude: place.latitude, longitude: place.longitude) {
-                            Link("雨雲レーダー: 気象庁", destination: DataAttribution.jmaRadar)
-                                .tint(Color(red: 0.72, green: 0.86, blue: 1.0))
+                            Link(destination: DataAttribution.jmaRadar) {
+                                Text("雨雲レーダー: 気象庁")
+                                    // 文字だけだと高さ 13pt で押しにくい
+                                    .frame(maxWidth: .infinity, minHeight: 44)
+                                    .contentShape(Rectangle())
+                            }
+                            .tint(Color(red: 0.72, green: 0.86, blue: 1.0))
                         }
                     }
                     .font(.caption2)
-                    .foregroundStyle(.white.opacity(0.45))
+                    // 出典と更新時刻は読めてほしいので、紺の空でも 4.5:1 を保つ明るさにする
+                    .foregroundStyle(.white.opacity(0.6))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
                     .revealed(cardsAppeared, order: 6, reduceMotion: reduceMotion)
@@ -324,6 +330,7 @@ struct RadarCardButton: View {
                     Image(systemName: "chevron.right")
                         .font(.footnote.weight(.semibold))
                         .foregroundStyle(.white.opacity(0.6))
+                        .accessibilityHidden(true)
                 }
             }
         }
